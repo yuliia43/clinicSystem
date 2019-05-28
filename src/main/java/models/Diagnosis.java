@@ -4,17 +4,35 @@ import java.util.List;
 
 public class Diagnosis {
     private int id;
+    private int cardId;
     private String diagnosis;
-    private ClinicStaff setBy;
+    private int doctorId;
     private boolean isFinal;
     private List<Appointed> recomedations;
 
-    public Diagnosis(int id, String diagnosis, ClinicStaff setBy, boolean isFinal, List<Appointed> recomedations) {
+
+    public Diagnosis(int id, int cardId, String diagnosis, int doctorId, boolean isFinal) {
         this.id = id;
+        this.cardId = cardId;
         this.diagnosis = diagnosis;
-        this.setBy = setBy;
+        this.doctorId = doctorId;
         this.isFinal = isFinal;
-        this.recomedations = recomedations;
+    }
+
+    public int getCardId() {
+        return cardId;
+    }
+
+    public void setCardId(int cardId) {
+        this.cardId = cardId;
+    }
+
+    public int getDoctorId() {
+        return doctorId;
+    }
+
+    public void setDoctorId(int doctorId) {
+        this.doctorId = doctorId;
     }
 
     public int getId() {
@@ -31,14 +49,6 @@ public class Diagnosis {
 
     public void setDiagnosis(String diagnosis) {
         this.diagnosis = diagnosis;
-    }
-
-    public ClinicStaff getSetBy() {
-        return setBy;
-    }
-
-    public void setSetBy(ClinicStaff setBy) {
-        this.setBy = setBy;
     }
 
     public List<Appointed> getRecomedations() {

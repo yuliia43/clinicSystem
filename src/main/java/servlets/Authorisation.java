@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class Authorisation extends HttpServlet {
-    private static final Logger logger = Logger.getLogger(MainPage.class);
+    private static final Logger logger = Logger.getLogger(Authorisation.class);
     private static final ClinicStaffRepository repository = new ClinicStaffRepository();
 
     @Override
@@ -25,15 +25,16 @@ public class Authorisation extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = (String) req.getParameter("email");
         String password = (String) req.getParameter("password");
-        logger.info("Set request with email: " + email + " password " + password);
         if (email != null && password != null) {
             ClinicStaff staff = null;
             try {
                 staff = repository.checkAuthorization(email, password);
             } catch (SQLException e) {
+                logger.error("Sql error occured!");
                 req.getRequestDispatcher("errorPages/SQlError.html").forward(req, resp);
             }
             if (staff != null) {
+                logger.info("User with id " + staff.getId() + " authorised");
                 req.getSession().setAttribute("user", staff);
                 req.getRequestDispatcher("pages/userPage.jsp").forward(req, resp);
             } else {

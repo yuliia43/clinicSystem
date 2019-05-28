@@ -4,15 +4,16 @@ import java.util.List;
 
 public class Appointed {
     private int id;
+    private int diagnosisId;
     private String type;
     private String details;
     private List<AppointingTimeAndPerson> schedule;
 
-    public Appointed(int id, String type, String details, List<AppointingTimeAndPerson> schedule) {
+    public Appointed(int id, int diagnosisId, String type, String details) {
         this.id = id;
+        this.diagnosisId = diagnosisId;
         this.type = type;
         this.details = details;
-        this.schedule = schedule;
     }
 
     public int getId() {
@@ -37,6 +38,14 @@ public class Appointed {
 
     public void setDetails(String details) {
         this.details = details;
+    }
+
+    public int getDiagnosisId() {
+        return diagnosisId;
+    }
+
+    public void setDiagnosisId(int diagnosisId) {
+        this.diagnosisId = diagnosisId;
     }
 
     public List<AppointingTimeAndPerson> getSchedule() {
