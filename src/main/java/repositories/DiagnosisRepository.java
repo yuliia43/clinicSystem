@@ -8,15 +8,15 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DiagnosisRepository<T> implements Repository<Diagnosis> {
+public class DiagnosisRepository implements Repository<Diagnosis> {
 
     private static final Logger logger = Logger.getLogger(DiagnosisRepository.class);
 
     @Override
     public void add(Diagnosis item) throws SQLException {
         String sqlAddDiagnosis = "INSERT INTO " +
-                "diagnosis(patient_card_id, doctor_id, diagnosis, is_final_diagnosis)" +
-                "VALUES(?, ? , ?, ?);";
+                "diagnosis(patient_card_id, doctor_id, diagnosis, is_final_diagnosis, set_date)" +
+                "VALUES(?, ? , ?, ?, CURDATE());";
         Connection connection = ConnectionPoolHolder.getConnection();
         PreparedStatement statement = connection.prepareStatement(sqlAddDiagnosis);
         statement.setInt(1, item.getCardId());
@@ -90,8 +90,9 @@ public class DiagnosisRepository<T> implements Repository<Diagnosis> {
             int cardId = resultSet.getInt(2);
             int doctorId = resultSet.getInt(3);
             String diagnosis = resultSet.getString(4);
-            boolean is_final = resultSet.getBoolean(5);
-            diagnoses.add(new Diagnosis(id, cardId, diagnosis, doctorId, is_final));
+            Date date = resultSet.getDate(5);
+            boolean is_final = resultSet.getBoolean(6);
+            diagnoses.add(new Diagnosis(id, cardId, diagnosis, doctorId, date, is_final));
         }
 
         return diagnoses;
@@ -115,5 +116,20 @@ public class DiagnosisRepository<T> implements Repository<Diagnosis> {
         if(diagnoses.size() == 0)
             return null;
         return diagnoses.get(0);
+    }
+
+    public List<Diagnosis> getAllLastDiagnosesForPatient(int patientId) throws SQLException {
+        String sqlSelect = "SELECT * FROM diagnosis WHERE patient_card_id = ? " +
+                "and diagnosis_id > (SELECT MAX(diagnosis_id)  FROM diagnosis " +
+                "WHERE patient_card_id = ? and is_final_diagnosis = 1) " +
+                "Order by diagnosis_id desc;";
+        Connection connection = ConnectionPoolHolder.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlSelect);
+        preparedStatement.setInt(1, patientId);
+        preparedStatement.setInt(2, patientId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<Diagnosis> diagnoses = getDiagnosis(resultSet);
+        connection.close();
+        return diagnoses;
     }
 }
