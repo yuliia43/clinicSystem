@@ -4,14 +4,16 @@ import java.sql.Timestamp;
 
 public class AppointingTimeAndPerson {
     private int id;
+    private int appointedId;
     private Timestamp time;
-    private ClinicStaff appointer;
+    private int performerId;
     private boolean wasAppointed;
 
-    public AppointingTimeAndPerson(int id, Timestamp time, ClinicStaff appointer, boolean wasAppointed) {
+    public AppointingTimeAndPerson(int id, int appointerId, Timestamp time, int performerId, boolean wasAppointed) {
         this.id = id;
+        this.appointedId = appointerId;
         this.time = time;
-        this.appointer = appointer;
+        this.performerId = performerId;
         this.wasAppointed = wasAppointed;
     }
 
@@ -23,6 +25,14 @@ public class AppointingTimeAndPerson {
         this.id = id;
     }
 
+    public int getPerformerId() {
+        return performerId;
+    }
+
+    public void setPerformerId(int performerId) {
+        this.performerId = performerId;
+    }
+
     public Timestamp getTime() {
         return time;
     }
@@ -31,12 +41,12 @@ public class AppointingTimeAndPerson {
         this.time = time;
     }
 
-    public ClinicStaff getAppointer() {
-        return appointer;
+    public int getAppointedId() {
+        return appointedId;
     }
 
-    public void setAppointer(ClinicStaff appointer) {
-        this.appointer = appointer;
+    public void setAppointedId(int appointedId) {
+        this.appointedId = appointedId;
     }
 
     public boolean isWasAppointed() {

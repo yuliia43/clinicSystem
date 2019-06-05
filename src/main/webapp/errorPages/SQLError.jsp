@@ -1,4 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<fmt:setLocale value="${locale}"/>
+<fmt:setBundle basename="${bundle}"/>
 
 <jsp:include page = '../pages/mainPage.jsp'/>
 <html>
@@ -7,6 +11,6 @@
     <title>Error</title>
 </head>
 <body>
-<p>SOME ERROR OCCURED WHILE FETCHING DATA FROM SQL! TRY YOUR REQUEST LATER!</p>
+<p><fmt:message key="error.sql"/></p>
 </body>
 </html>

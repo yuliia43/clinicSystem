@@ -2,6 +2,7 @@ package repositories;
 
 import jdbc.ConnectionPoolHolder;
 import models.PatientCard;
+import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,6 +10,16 @@ import java.util.List;
 
 public class PatientCardsRepository implements Repository<PatientCard> {
 
+    private static final Logger logger = Logger.getLogger(PatientCardsRepository.class);
+    private static final PatientCardsRepository patientCardsRepository =
+            new PatientCardsRepository();
+    private PatientCardsRepository(){
+
+    }
+
+    public static PatientCardsRepository getPatientCardsRepository() {
+        return patientCardsRepository;
+    }
 
     @Override
     public void add(PatientCard item) throws SQLException {
@@ -22,6 +33,7 @@ public class PatientCardsRepository implements Repository<PatientCard> {
         statement.setDate(3, Date.valueOf(item.getBirthday_date().toString()));
         statement.setString(4, ""+item.getSex());
         statement.executeUpdate();
+        logger.info("Added new patient card");
         connection.close();
     }
 
@@ -45,17 +57,19 @@ public class PatientCardsRepository implements Repository<PatientCard> {
         statement.setString(4, ""+item.getSex());
         statement.setInt(5, item.getId());
         statement.executeUpdate();
+        logger.info("Updated patient card with id " + item.getId());
         connection.close();
     }
 
     @Override
     public void remove(PatientCard item) throws SQLException {
-        String sqlUpdatePatient = "DELETE from patients_cards where patient_card_id = ?";
+        String sqlRemovePatient = "DELETE from patients_cards where patient_card_id = ?";
 
         Connection connection = ConnectionPoolHolder.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(sqlUpdatePatient);
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlRemovePatient);
         preparedStatement.setInt(1, item.getId());
         preparedStatement.executeUpdate();
+        logger.info("Removed patient card with id " + item.getId());
         connection.close();
     }
 
@@ -100,15 +114,28 @@ public class PatientCardsRepository implements Repository<PatientCard> {
 
     public List<PatientCard> getAllByDoctorId(int id) throws SQLException {
         String sqlSearchPatients = "SELECT * FROM patients_cards WHERE patient_card_id in\n" +
-                " (SELECT  patient_card_id  FROM diagnosis WHERE doctor_id = 2 and is_final_diagnosis = 0\n" +
+                " (SELECT  patient_card_id  FROM diagnosis WHERE doctor_id = ? and is_final_diagnosis = 0\n" +
                 " and diagnosis_id in (Select MAX(diagnosis_id) FROM  diagnosis GROUP BY(patient_card_id)));\n";
         Connection connection = ConnectionPoolHolder.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(sqlSearchPatients);
+        preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<PatientCard> patientCards = getPatientCards(resultSet);
         connection.close();
         return patientCards;
     }
 
-
+    @Override
+    public PatientCard getOneById(int id) throws SQLException {
+        String sqlSelect = "SELECT * from patients_cards WHERE patient_card_id = ?;";
+        Connection connection = ConnectionPoolHolder.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlSelect);
+        preparedStatement.setInt(1, id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<PatientCard> patientCards = getPatientCards(resultSet);
+        connection.close();
+        if(patientCards.size() == 0)
+            return null;
+        return patientCards.get(0);
+    }
 }

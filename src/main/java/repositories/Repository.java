@@ -17,4 +17,6 @@ public interface Repository<T> {
     List<T> query(String query) throws SQLException;
 
     List<T> getAll() throws SQLException;
+
+    T getOneById(int id) throws SQLException;
 }

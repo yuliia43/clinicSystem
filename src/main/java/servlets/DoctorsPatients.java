@@ -3,6 +3,7 @@ package servlets;
 
 import models.ClinicStaff;
 import models.PatientCard;
+import org.apache.log4j.Logger;
 import repositories.PatientCardsRepository;
 
 import javax.servlet.ServletException;
@@ -15,6 +16,7 @@ import java.util.List;
 
 public class DoctorsPatients extends HttpServlet {
 
+    private static final Logger logger = Logger.getLogger(DoctorsPatients.class);
     private PatientCardsRepository patientCardsRepository = new PatientCardsRepository();
 
     @Override
@@ -31,6 +33,7 @@ public class DoctorsPatients extends HttpServlet {
                     req.setAttribute("patients", cards);
                     req.getRequestDispatcher("pages/DoctorsPatients.jsp").forward(req, resp);
                 } catch (SQLException e) {
+                    logger.error("Sql error occured!");
                     req.getRequestDispatcher("errorPages/SQlError.jsp")
                             .forward(req,resp);
                 }
