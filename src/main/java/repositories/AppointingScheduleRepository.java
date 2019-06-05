@@ -8,8 +8,17 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppointingScheduleRepository<T> implements Repository<AppointingTimeAndPerson> {
+public class AppointingScheduleRepository implements Repository<AppointingTimeAndPerson> {
     private static final Logger logger = Logger.getLogger(AppointingScheduleRepository.class);
+    private static final AppointingScheduleRepository appointingScheduleRepository =
+            new AppointingScheduleRepository();
+    private AppointingScheduleRepository(){
+
+    }
+
+    public static AppointingScheduleRepository getAppointingScheduleRepository() {
+        return appointingScheduleRepository;
+    }
 
     @Override
     public void add(AppointingTimeAndPerson item) throws SQLException {
@@ -118,5 +127,13 @@ public class AppointingScheduleRepository<T> implements Repository<AppointingTim
         if(patientCards.size() == 0)
             return null;
         return patientCards.get(0);
+    }
+
+    public List<AppointingTimeAndPerson> getAllByPerformerIdAndTypeForToday(int performerId, String type){
+        String sqlSelect = "SELECT schedule_id, pursuance_time, details\n" +
+                "FROM appointing_schedule" +
+                " WHERE date(pursuance_time) = CURDATE()" +
+                "AND performer_id=? AND `type`=?;";
+        return null;
     }
 }

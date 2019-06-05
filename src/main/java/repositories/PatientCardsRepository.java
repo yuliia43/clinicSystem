@@ -11,6 +11,15 @@ import java.util.List;
 public class PatientCardsRepository implements Repository<PatientCard> {
 
     private static final Logger logger = Logger.getLogger(PatientCardsRepository.class);
+    private static final PatientCardsRepository patientCardsRepository =
+            new PatientCardsRepository();
+    private PatientCardsRepository(){
+
+    }
+
+    public static PatientCardsRepository getPatientCardsRepository() {
+        return patientCardsRepository;
+    }
 
     @Override
     public void add(PatientCard item) throws SQLException {

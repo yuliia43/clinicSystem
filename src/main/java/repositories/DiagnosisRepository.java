@@ -11,6 +11,15 @@ import java.util.List;
 public class DiagnosisRepository implements Repository<Diagnosis> {
 
     private static final Logger logger = Logger.getLogger(DiagnosisRepository.class);
+    private static final DiagnosisRepository diagnosisRepository =
+            new DiagnosisRepository();
+    private DiagnosisRepository(){
+
+    }
+
+    public static DiagnosisRepository getDiagnosisRepository() {
+        return diagnosisRepository;
+    }
 
     @Override
     public void add(Diagnosis item) throws SQLException {

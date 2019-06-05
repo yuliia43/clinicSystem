@@ -8,8 +8,16 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppointedRepository<T> implements Repository<Appointed> {
+public class AppointedRepository implements Repository<Appointed> {
     private static final Logger logger = Logger.getLogger(AppointedRepository.class);
+    private static final AppointedRepository appointedRepository = new AppointedRepository();
+    private AppointedRepository(){
+
+    }
+
+    public static AppointedRepository getAppointedRepository() {
+        return appointedRepository;
+    }
 
     @Override
     public void add(Appointed item) throws SQLException {

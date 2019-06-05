@@ -9,9 +9,18 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClinicStaffRepository<T> implements Repository<ClinicStaffWithPasswords> {
+public class ClinicStaffRepository implements Repository<ClinicStaffWithPasswords> {
 
     private static final Logger logger = Logger.getLogger(ClinicStaffRepository.class);
+    private static final ClinicStaffRepository clinicStaffRepository =
+            new ClinicStaffRepository();
+    private ClinicStaffRepository(){
+
+    }
+
+    public static ClinicStaffRepository getClinicStaffRepository() {
+        return clinicStaffRepository;
+    }
 
     @Override
     public void add(ClinicStaffWithPasswords item) throws SQLException {
