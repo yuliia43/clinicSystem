@@ -17,6 +17,9 @@ public class ClinicStaffWithPasswords {
         this.password = password;
     }
 
+    public ClinicStaffWithPasswords() {
+    }
+
     public int getId() {
         return id;
     }

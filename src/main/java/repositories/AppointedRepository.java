@@ -120,4 +120,15 @@ public class AppointedRepository implements Repository<Appointed> {
         }
         return patientCards;
     }
+
+    public List<Appointed> getAllByDiagnosisId(int diagnosisId) throws SQLException {
+        String sqlSelect = "SELECT * from appointed WHERE diagnosis_id = ?;";
+        Connection connection = ConnectionPoolHolder.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlSelect);
+        preparedStatement.setInt(1, diagnosisId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<Appointed> appointedList = getAppointedList(resultSet);
+        connection.close();
+        return appointedList;
+    }
 }

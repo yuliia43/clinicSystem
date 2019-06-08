@@ -13,7 +13,7 @@ import java.sql.SQLException;
 
 public class Authorisation extends HttpServlet {
     private static final Logger logger = Logger.getLogger(Authorisation.class);
-    private static final ClinicStaffRepository repository = new ClinicStaffRepository();
+    private static final ClinicStaffRepository repository = ClinicStaffRepository.getClinicStaffRepository();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

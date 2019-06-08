@@ -59,6 +59,5 @@ public class LocalizationFilter implements Filter {
 
     @Override
     public void destroy() {
-
     }
 }

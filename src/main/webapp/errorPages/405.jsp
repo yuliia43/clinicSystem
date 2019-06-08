@@ -5,8 +5,10 @@
 <fmt:setBundle basename="${bundle}"/>
 
 <jsp:include page='../pages/mainPage.jsp'/>
+
 <html>
 <body>
-<h1><fmt:message key="error.notAuthorised"/>!</h1>
+<h1>Page can not be reached!</h1>
+<a href="/main">Go to main page</a>
 </body>
 </html>

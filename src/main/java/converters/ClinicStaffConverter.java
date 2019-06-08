@@ -1,6 +1,7 @@
-package facades;
+package converters;
 
 import dtos.ClinicStaffWithPasswords;
+import enums.AppointedTypes;
 import models.ClinicStaff;
 
 public class ClinicStaffConverter {
@@ -9,3 +10,4 @@ public class ClinicStaffConverter {
                 cswp.getTitle(), cswp.getEmail());
     }
 }
+

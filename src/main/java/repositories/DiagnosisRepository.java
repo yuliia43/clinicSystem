@@ -25,13 +25,12 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
     public void add(Diagnosis item) throws SQLException {
         String sqlAddDiagnosis = "INSERT INTO " +
                 "diagnosis(patient_card_id, doctor_id, diagnosis, is_final_diagnosis, set_date)" +
-                "VALUES(?, ? , ?, ?, CURDATE());";
+                "VALUES(?, ? , ?, false, CURDATE());";
         Connection connection = ConnectionPoolHolder.getConnection();
         PreparedStatement statement = connection.prepareStatement(sqlAddDiagnosis);
         statement.setInt(1, item.getCardId());
         statement.setInt(2, item.getDoctorId());
         statement.setString(3, item.getDiagnosis());
-        statement.setBoolean(4, item.isFinal());
         statement.executeUpdate();
         logger.info("Added diagnosis for card " + item.getCardId());
         connection.close();
@@ -129,8 +128,8 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
 
     public List<Diagnosis> getAllLastDiagnosesForPatient(int patientId) throws SQLException {
         String sqlSelect = "SELECT * FROM diagnosis WHERE patient_card_id = ? " +
-                "and diagnosis_id > (SELECT MAX(diagnosis_id)  FROM diagnosis " +
-                "WHERE patient_card_id = ? and is_final_diagnosis = 1) " +
+                "and (diagnosis_id > (SELECT MAX(diagnosis_id) FROM diagnosis " +
+                "WHERE patient_card_id = ? and is_final_diagnosis = 1) or diagnosis_id>0)" +
                 "Order by diagnosis_id desc;";
         Connection connection = ConnectionPoolHolder.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(sqlSelect);

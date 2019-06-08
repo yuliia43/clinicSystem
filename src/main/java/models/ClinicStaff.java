@@ -15,6 +15,9 @@ public class ClinicStaff {
         this.email = email;
     }
 
+    public ClinicStaff() {
+    }
+
     public int getId() {
         return id;
     }

@@ -1,5 +1,7 @@
 package repositories;
 
+import dtos.AppointedSchedule;
+import enums.AppointedTypes;
 import jdbc.ConnectionPoolHolder;
 import models.AppointingTimeAndPerson;
 import org.apache.log4j.Logger;
@@ -48,15 +50,14 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
     @Override
     public void update(AppointingTimeAndPerson item) throws SQLException {
         String sqlUpdateSchedule = "UPDATE appointing_schedule " +
-                "SET appointed_id = ?, pursuance_time = ?, performer_id = ?, is_performed = ?" +
-                "where schedule_id = ?;";
+                "SET pursuance_time = ?, performer_id = ?, is_performed = ? " +
+                "WHERE schedule_id = ?;";
         Connection connection = ConnectionPoolHolder.getConnection();
         PreparedStatement statement = connection.prepareStatement(sqlUpdateSchedule);
-        statement.setInt(1, item.getAppointedId());
-        statement.setTimestamp(2, item.getTime());
-        statement.setInt(3, item.getPerformerId());
-        statement.setBoolean(4, item.isWasAppointed());
-        statement.setInt(5, item.getId());
+        statement.setTimestamp(1, item.getTime());
+        statement.setInt(2, item.getPerformerId());
+        statement.setBoolean(3, item.isWasAppointed());
+        statement.setInt(4, item.getId());
         statement.executeUpdate();
         logger.info("Updated appointed schedule with id " + item.getId());
         connection.close();
@@ -135,5 +136,55 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
                 " WHERE date(pursuance_time) = CURDATE()" +
                 "AND performer_id=? AND `type`=?;";
         return null;
+    }
+
+    public List<AppointedSchedule> searchScheduleForToday(int performerId, AppointedTypes type) throws SQLException {
+        String typeString = type.toString().toLowerCase();
+        String sqlSelect = "SELECT schedule_id, time(pursuance_time), details, concat(patient_surname, ' ', patient_name)\n" +
+                "FROM appointing_schedule, appointed, patients_cards\n" +
+                "WHERE appointing_schedule.appointed_id = appointed.appointed_id\n" +
+                "AND date(pursuance_time) = CURDATE()\n" +
+                "AND is_performed=0 AND performer_id=? AND `type`=?\n" +
+                "AND patient_card_id = (SELECT patient_card_id FROM diagnosis \n" +
+                "WHERE diagnosis.diagnosis_id = appointed.diagnosis_id);";
+        Connection connection = ConnectionPoolHolder.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlSelect);
+        preparedStatement.setInt(1, performerId);
+        preparedStatement.setString(2, typeString);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<AppointedSchedule> schedules = new ArrayList<>();
+        while(resultSet.next()){
+            int scheduleId = resultSet.getInt(1);
+            Time pursuanceTime = Time.valueOf(resultSet.getString(2));
+            String details = resultSet.getString(3);
+            String patient = resultSet.getString(4);
+            schedules.add(new AppointedSchedule(scheduleId, performerId, pursuanceTime, details, patient));
+        }
+        return schedules;
+    }
+
+    public void doAppointment(int id) throws SQLException {
+        String sqlUpdateSchedule = "UPDATE appointing_schedule " +
+                "SET is_performed = 1 " +
+                "WHERE schedule_id = ?;";
+        Connection connection = ConnectionPoolHolder.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sqlUpdateSchedule);
+        statement.setInt(1, id);
+        statement.executeUpdate();
+        logger.info("Performed appointment for schedule with id " + id);
+        connection.close();
+    }
+
+    public int cancelAppointed(int appointedId) throws SQLException {
+        String sqlUpdateSchedule = "DELETE FROM appointing_schedule " +
+                "WHERE appointed_id = ? AND is_performed <> 1 " +
+                "AND pursuance_time > current_time();";
+        Connection connection = ConnectionPoolHolder.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sqlUpdateSchedule);
+        statement.setInt(1, appointedId);
+        int num = statement.executeUpdate();
+        logger.info("Cancelled appointment with id " + appointedId);
+        connection.close();
+        return num;
     }
 }

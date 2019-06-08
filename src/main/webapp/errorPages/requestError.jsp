@@ -4,9 +4,10 @@
 <fmt:setLocale value="${locale}"/>
 <fmt:setBundle basename="${bundle}"/>
 
+
 <jsp:include page='../pages/mainPage.jsp'/>
 <html>
 <body>
-<h1><fmt:message key="error.notAuthorised"/>!</h1>
+<h1>Request error!</h1>
 </body>
 </html>

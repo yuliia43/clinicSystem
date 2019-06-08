@@ -10,7 +10,7 @@ public class Diagnosis {
     private int doctorId;
     private Date setDate;
     private boolean isFinal;
-    private List<Appointed> recomedations;
+    private List<Appointed> recommendations;
 
 
     public Diagnosis(int id, int cardId, String diagnosis, int doctorId, Date set_date, boolean isFinal) {
@@ -20,6 +20,9 @@ public class Diagnosis {
         this.doctorId = doctorId;
         this.setDate = set_date;
         this.isFinal = isFinal;
+    }
+
+    public Diagnosis() {
     }
 
     public Date getSetDate() {
@@ -62,12 +65,12 @@ public class Diagnosis {
         this.diagnosis = diagnosis;
     }
 
-    public List<Appointed> getRecomedations() {
-        return recomedations;
+    public List<Appointed> getRecommendations() {
+        return recommendations;
     }
 
-    public void setRecomedations(List<Appointed> recomedations) {
-        this.recomedations = recomedations;
+    public void setRecommendations(List<Appointed> recommendations) {
+        this.recommendations = recommendations;
     }
 
     public boolean isFinal() {

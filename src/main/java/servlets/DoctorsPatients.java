@@ -17,16 +17,11 @@ import java.util.List;
 public class DoctorsPatients extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(DoctorsPatients.class);
-    private PatientCardsRepository patientCardsRepository = new PatientCardsRepository();
+    private PatientCardsRepository patientCardsRepository = PatientCardsRepository.getPatientCardsRepository();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ClinicStaff staff = (ClinicStaff) req.getSession().getAttribute("user");
-        if(staff == null)
-            req.getRequestDispatcher("errorPages/notAuthorisedError.jsp")
-                    .forward(req,resp);
-        else{
-
             if(staff.getTitle().equals("doctor")){
                 try {
                     List<PatientCard> cards = patientCardsRepository.getAllByDoctorId(staff.getId());
@@ -40,8 +35,7 @@ public class DoctorsPatients extends HttpServlet {
             }
             else {
                 req.getRequestDispatcher("errorPages/accessError.jsp")
-                        .forward(req,resp);
+                        .forward(req, resp);
             }
-        }
     }
 }

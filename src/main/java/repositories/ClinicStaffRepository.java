@@ -114,7 +114,12 @@ public class ClinicStaffRepository implements Repository<ClinicStaffWithPassword
 
     @Override
     public List<ClinicStaffWithPasswords> getAll() throws SQLException {
-        String sqlSelect = "SELECT * FROM patients_cards;";
+        String sqlSelect = "SELECT * FROM clinic_staff;";
+        return query(sqlSelect);
+    }
+
+    public List<ClinicStaffWithPasswords> getAllDoctors() throws SQLException {
+        String sqlSelect = "SELECT * FROM clinic_staff WHERE title='doctor';";
         return query(sqlSelect);
     }
 

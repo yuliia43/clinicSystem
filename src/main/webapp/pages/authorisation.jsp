@@ -12,12 +12,9 @@
 	<form action="/authorisation" method="POST">
 	<fmt:message key="authorisation.email"/>:<input type="text" name="email"><br>
 	<fmt:message key="authorisation.password"/>:<input type="password" name="password"><br>
-	<script type="text/javascript">
-	if("${fail}"){
-	document.writeln(<div><fmt:message key = "entrance.fail"/></div>);
-	alert("Incorrect data!");
-	}
-	</script>
+	<c:if test="${fail}">
+	<div><fmt:message key = "entrance.fail"/></div>
+	</c:if>
 	<button onclick="this.form.submit()">
 	<fmt:message key="authorisation.check"/>
 	</button>

@@ -5,9 +5,9 @@
 <fmt:setBundle basename="${bundle}"/>
 
 
-<jsp:include page = '../pages/mainPage.jsp'/>
+<jsp:include page='../pages/mainPage.jsp'/>
 <html>
 <body>
-<h1><fmt:message key = "error.accessError"/>!</h1>
+<h1><fmt:message key="error.accessError"/>!</h1>
 </body>
 </html>

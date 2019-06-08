@@ -23,6 +23,8 @@ public class MainPage extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("pages/mainPage.jsp").
                 forward(req,resp);
+        ClinicStaff staff = new ClinicStaff(2, "Samwell", "Tarly", "doctor", "sam@gmail.com");
+        req.getSession().setAttribute("user", staff);
     }
 
 }
