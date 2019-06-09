@@ -33,16 +33,17 @@ public class DiagnosisRepositoryTest {
 
 
     @Test
-    public void checkIfConnectionIsClosedAfterGetAllLastDiagnosesForPatient() {
+    public void checkIfGetAllLastDiagnosesForPatientWorksCorrectly() {
         try {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             when(preparedStatement.executeQuery()).thenReturn(resultSet);
             repository.getAllLastDiagnosesForPatient(1, connection);
-            verify(connection).close();
         } catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
         } catch (NullPointerException e) {
             fail(CommonlyUsedStrings.TESTING_NPE);
         }
     }
+
+
 }

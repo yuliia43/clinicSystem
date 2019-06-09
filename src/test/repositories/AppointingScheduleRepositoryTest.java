@@ -32,12 +32,11 @@ public class AppointingScheduleRepositoryTest {
 
 
     @Test
-    public void checkIfConnectionIsClosedAfterSearchScheduleForToday() {
+    public void checkIfSearchScheduleForTodayWorksCorrectly() {
         try {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             when(preparedStatement.executeQuery()).thenReturn(resultSet);
-            repository.searchScheduleForToday(anyInt(), "operation", connection);
-            verify(connection).close();
+            repository.searchScheduleForToday(anyInt(), anyString(), eq(connection));
         }catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
         } catch (NullPointerException e) {
@@ -46,11 +45,10 @@ public class AppointingScheduleRepositoryTest {
     }
 
     @Test
-    public void checkIfConnectionIsClosedAfterDoAppointment() {
+    public void checkIfDoAppointmentWorksCorrectly() {
         try {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             repository.doAppointment(anyInt(), connection);
-            verify(connection).close();
         }catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
         } catch (NullPointerException e) {
@@ -59,11 +57,10 @@ public class AppointingScheduleRepositoryTest {
     }
 
     @Test
-    public void checkIfConnectionIsClosedAfterCancelAppointed() {
+    public void checkIfCancelAppointedWorksCorrectly() {
         try {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             repository.cancelAppointed(anyInt(), connection);
-            verify(connection).close();
         }catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
         } catch (NullPointerException e) {

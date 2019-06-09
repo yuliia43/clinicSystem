@@ -22,6 +22,13 @@ public class PatientCard {
         this.birthday_date = birthday_date;
     }
 
+    public PatientCard(String surname, String name, char sex, Date birthday_date) {
+        this.surname = surname;
+        this.name = name;
+        this.sex = sex;
+        this.birthday_date = birthday_date;
+    }
+
     public PatientCard() {
         birthday_date = Date.from(Instant.now());
     }

@@ -24,6 +24,8 @@ public class AppointedRepositoryTest {
     private PreparedStatement preparedStatement;
     @Mock
     private ResultSet resultSet;
+    @Mock
+    private Statement statement;
 
     @Before
     public void init(){
@@ -32,15 +34,28 @@ public class AppointedRepositoryTest {
 
 
     @Test
-    public void checkIfConnectionIsClosedAfterGetAllByDiagnosisId() {
+    public void checkIfGetAllByDiagnosisIdWorksCorrectly() {
         try {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             when(preparedStatement.executeQuery()).thenReturn(resultSet);
             repository.getAllByDiagnosisId(anyInt(), connection);
-            verify(connection).close();
         }catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
         } catch (NullPointerException e) {
+            fail(CommonlyUsedStrings.TESTING_NPE);
+        }
+    }
+
+    @Test
+    public void getLast() {
+        try {
+            when(connection.createStatement()).thenReturn(statement);
+            when(statement.executeQuery(anyString())).thenReturn(resultSet);
+            repository.query(anyString(), eq(connection));
+        } catch (SQLException e) {
+            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+        }
+        catch (NullPointerException e){
             fail(CommonlyUsedStrings.TESTING_NPE);
         }
     }

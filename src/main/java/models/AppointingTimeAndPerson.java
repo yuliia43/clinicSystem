@@ -17,6 +17,11 @@ public class AppointingTimeAndPerson {
         this.wasAppointed = wasAppointed;
     }
 
+    public AppointingTimeAndPerson(Timestamp time, int performerId) {
+        this.time = time;
+        this.performerId = performerId;
+    }
+
     public AppointingTimeAndPerson() {
     }
 

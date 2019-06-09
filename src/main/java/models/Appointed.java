@@ -16,6 +16,14 @@ public class Appointed {
         this.details = details;
     }
 
+    public Appointed(int diagnosisId, String type, String details) {
+        this.diagnosisId = diagnosisId;
+        this.type = type;
+        this.details = details;
+    }
+
+
+
     public Appointed() {
     }
 

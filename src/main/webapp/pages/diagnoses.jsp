@@ -20,10 +20,11 @@
         <img style="position: absolute; padding-top: 15px; padding-left: 5px" height="30px"
              src="https://png2.kisspng.com/sh/6e5588ec068618cd4c06c88aaed56456/L0KzQYm3V8AyN5ZniJH0aYP2gLBuTfFzepD8RdV4bYD4hLb5Tflkd594ReVEbXLyfH7qjPlxNZJ3jJ9wbz3lcbTyTcVjO2o1SNUCOUa3dbSCTsM6PWM7T6gCMUW2QIW9UsQxP2c2Tak3cH7q/kisspng-arrow-computer-icons-symbol-clip-art-go-back-5b3900c7964ec9.3952676715304624076157.png">
     </a>
-    <a href="#">
+    <form method="post">
+    <button name="patientId" value="${patient.getId()}">
         <img style="position: relative; float: right; padding-top: 15px" height="30px"
              src="https://png2.kisspng.com/sh/17b12ca887ef84713255a3a3b494499e/L0KzQYm3VMA1N6hofZH0aYP2gLBuTgN1aZdrRdHvLXjogr7sk710dpJwfZ92ZXTsc7r1hb10gZ5nh942Y4LoccXwlvl1gV46edU9Ykm4SYbtWPZnQF87UaQEOEi4QYK8UsI5PGIATKc8OUG3PsH1h5==/kisspng-staff-of-hermes-snake-medicine-symbol-creativity-5ac4b9595f8ff8.6929885115228419453914.png">
-    </a>
+    </button>
     <h3 align="center">
         <c:out value="${patient.getName()} ${patient.getSurname()}"/>
         <c:if test="${patient.getSex()=='m'.charAt(0)}">
@@ -66,6 +67,23 @@
                     <form method="post">
                         <div class="box" id="add_app"
                              style="display: block; width: auto; position: absolute; z-index: 999; font-size: 20px">
+                            Type: <select name="type">
+                            <option value="operation">
+                                <img height="30px"
+                                     src="https://png2.kisspng.com/sh/51638d4719fcd5822c9f904ba666279a/L0KzQYm3VMIzN5ptfZH0aYP2gLBuTgNkaZ11fd42c4X1d7b5mb1kd551jeZucj3sc7F1k710faNsfdH3LXLvcbXsTgZma6V0ip8AYXTmQrXoVvU0bWY3UJCCN0O2RoS3VME2OmU4T6s5NEa8Q4S8TwBvbz==/kisspng-scalpel-surgery-computer-icons-surgeon-blade-vector-5adc2da6e3e528.7733630415243790469335.png">
+                                Operation
+                            </option>
+                            <option value="procedure">
+                                <img height="30px"
+                                     src="https://png2.kisspng.com/sh/2322c4fc9ca88f39833cafb4515423b0/L0KzQYm3U8I1N6V5iZH0aYP2gLBuTflvcpZojNt4bj3mf773lgRmel5ue9H3cz3zeLL5jfFkbaZ5gdVqbD3ngsbuTfh6eJDpReVud3nxd371hfVldJYyTdNrNkPpc4O5WfM1O2czUKQDOUe8QIe4VcIyQGo4S6M9MUe0QXB3jvc=/kisspng-injection-computer-icons-pharmaceutical-drug-hypod-sewing-needle-5ab63fc229c436.8289790615218933141711.png">
+                                Procedure
+                            </option>
+                            <option value="medicine"
+                                    style="background-image: url(../images/medicine.png)">
+                                Medicine
+                            </option>
+                        </select>
+                            <br>
                             Details: <input name="details" type="text"/>
                             <br>
                             Days: <input name="num_days" type="number" min="1"/>
@@ -79,8 +97,8 @@
                             <br>
                             <select name="performerId" style="float: left; width: 80px">
                                 <c:forEach items="${doctors}" var="doctor">
-                                <option value="${doctor.getId()}">${doctor.getSurname()} ${doctor.getName()}</option>
-                            </c:forEach>
+                                    <option value="${doctor.getId()}">${doctor.getSurname()} ${doctor.getName()}</option>
+                                </c:forEach>
                             </select>
                             <br>
                             <input name="method" value="add_appointed" type="hidden"/>

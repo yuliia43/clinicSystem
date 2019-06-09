@@ -22,6 +22,12 @@ public class Diagnosis {
         this.isFinal = isFinal;
     }
 
+    public Diagnosis(int cardId, String diagnosis, int doctorId) {
+        this.cardId = cardId;
+        this.diagnosis = diagnosis;
+        this.doctorId = doctorId;
+    }
+
     public Diagnosis() {
     }
 

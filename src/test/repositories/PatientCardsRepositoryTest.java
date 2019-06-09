@@ -35,12 +35,11 @@ public class PatientCardsRepositoryTest {
 
 
     @Test
-    public void checkIfConnectionIsClosedAfterGetAllByDoctorId() {
+    public void checkIfGetAllByDoctorIdWorksCorrectly() {
         try {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             when(preparedStatement.executeQuery()).thenReturn(resultSet);
             repository.getAllByDoctorId(anyInt(), connection);
-            verify(connection).close();
         }catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
         } catch (NullPointerException e) {

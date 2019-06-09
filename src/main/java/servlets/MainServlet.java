@@ -1,4 +1,7 @@
 package servlets;
 
-public class MainServlet {
+import javax.servlet.http.HttpServlet;
+
+public class MainServlet extends HttpServlet {
+
 }

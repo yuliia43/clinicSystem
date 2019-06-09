@@ -24,7 +24,6 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
     @Override
     public void add(Diagnosis item, Connection connection) throws SQLException {
         addItem(item, connection);
-        connection.close();
     }
 
     private void addItem(Diagnosis item, Connection connection) throws SQLException {
@@ -44,7 +43,6 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
         for (Diagnosis diagnosis : items) {
             addItem(diagnosis, connection);
         }
-        connection.close();
     }
 
     @Override
@@ -60,13 +58,11 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
         statement.setInt(5, item.getId());
         statement.executeUpdate();
         logger.info("Updated diagnosis with id " + item.getId());
-        connection.close();
     }
 
     @Override
     public void remove(Diagnosis item, Connection connection) throws SQLException {
         removeItem(item, connection);
-        connection.close();
     }
 
     private void removeItem(Diagnosis item, Connection connection) throws SQLException {
@@ -83,7 +79,6 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
         for (Diagnosis diagnosis : items) {
             removeItem(diagnosis, connection);
         }
-        connection.close();
     }
 
     @Override
@@ -92,7 +87,6 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
         ResultSet resultSet = statement.executeQuery(query);
 
         List<Diagnosis> diagnoses = getDiagnosis(resultSet);
-        connection.close();
         return diagnoses;
     }
 
@@ -125,7 +119,6 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<Diagnosis> diagnoses = getDiagnosis(resultSet);
-        connection.close();
         if(diagnoses.size() == 0)
             return null;
         return diagnoses.get(0);
@@ -141,7 +134,17 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
         preparedStatement.setInt(2, patientId);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<Diagnosis> diagnoses = getDiagnosis(resultSet);
-        connection.close();
         return diagnoses;
+    }
+
+    public Diagnosis getLastDiagnosisForPatient(int patientId, Connection connection) throws SQLException {
+        String sqlSelect = "SELECT * FROM diagnosis " +
+                "WHERE diagnosis_id in (SELECT MAX(diagnosis_id) " +
+                "FROM diagnosis WHERE patient_card_id = ?);";
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlSelect);
+        preparedStatement.setInt(1, patientId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<Diagnosis> diagnoses = getDiagnosis(resultSet);
+        return diagnoses.get(0);
     }
 }

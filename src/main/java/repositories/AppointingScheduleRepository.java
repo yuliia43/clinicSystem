@@ -25,19 +25,17 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
     @Override
     public void add(AppointingTimeAndPerson item, Connection connection) throws SQLException {
         addItem(item, connection);
-        connection.close();
 
     }
 
     private void addItem(AppointingTimeAndPerson item, Connection connection) throws SQLException {
         String sqlAddSchedule = "INSERT INTO " +
                 "appointing_schedule (appointed_id,pursuance_time,performer_id,is_performed)" +
-                "VALUES(?, ? , ?, ?);";
+                "VALUES(?, ? , ?, FALSE);";
         PreparedStatement statement = connection.prepareStatement(sqlAddSchedule);
         statement.setInt(1, item.getAppointedId());
         statement.setTimestamp(2, item.getTime());
         statement.setInt(3, item.getPerformerId());
-        statement.setBoolean(4, item.isWasAppointed());
         statement.executeUpdate();
         logger.info("Added appointed schedule for appointed with id " + item.getAppointedId());
     }
@@ -47,7 +45,6 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
         for (AppointingTimeAndPerson schedule : items) {
             addItem(schedule, connection);
         }
-        connection.close();
     }
 
 
@@ -63,13 +60,11 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
         statement.setInt(4, item.getId());
         statement.executeUpdate();
         logger.info("Updated appointed schedule with id " + item.getId());
-        connection.close();
     }
 
     @Override
     public void remove(AppointingTimeAndPerson item, Connection connection) throws SQLException {
         removeItem(item, connection);
-        connection.close();
     }
 
     private void removeItem(AppointingTimeAndPerson item, Connection connection) throws SQLException {
@@ -86,7 +81,6 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
         for (AppointingTimeAndPerson schedule : items) {
             removeItem(schedule, connection);
         }
-        connection.close();
     }
 
 
@@ -112,7 +106,6 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
         ResultSet resultSet = statement.executeQuery(query);
 
         List<AppointingTimeAndPerson> patientCards = getSchedule(resultSet);
-        connection.close();
         return patientCards;
     }
 
@@ -129,7 +122,6 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<AppointingTimeAndPerson> patientCards = getSchedule(resultSet);
-        connection.close();
         if(patientCards.size() == 0)
             return null;
         return patientCards.get(0);
@@ -156,7 +148,6 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
             String patient = resultSet.getString(4);
             schedules.add(new AppointedSchedule(scheduleId, performerId, pursuanceTime, details, patient));
         }
-        connection.close();
         return schedules;
     }
 
@@ -168,7 +159,6 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
         statement.setInt(1, id);
         statement.executeUpdate();
         logger.info("Performed appointment for schedule with id " + id);
-        connection.close();
     }
 
     public int cancelAppointed(int appointedId, Connection connection) throws SQLException {
@@ -179,7 +169,6 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
         statement.setInt(1, appointedId);
         int num = statement.executeUpdate();
         logger.info("Cancelled appointment with id " + appointedId);
-        connection.close();
         return num;
     }
 }

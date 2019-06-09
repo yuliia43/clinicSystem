@@ -32,12 +32,11 @@ public class ClinicStaffRepositoryTest {
 
 
     @Test
-    public void checkIfConnectionIsClosedAfterGetAllDoctors() {
+    public void checkIfGetAllDoctorsWorksCorrectly() {
         try {
             when(connection.createStatement()).thenReturn(statement);
             when(statement.executeQuery(any(String.class))).thenReturn(resultSet);
             repository.getAllDoctors(connection);
-            verify(connection).close();
         } catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
         } catch (NullPointerException e) {
@@ -46,12 +45,11 @@ public class ClinicStaffRepositoryTest {
     }
 
     @Test
-    public void checkIfConnectionIsClosedAfterCheckAuthorization() {
+    public void checkIfCheckAuthorizationWorksCorrectly() {
         try {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             when(preparedStatement.executeQuery()).thenReturn(resultSet);
             repository.checkAuthorization(any(String.class), "password", connection);
-            verify(connection).close();
         } catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
         } catch (NullPointerException e) {
@@ -60,12 +58,11 @@ public class ClinicStaffRepositoryTest {
     }
 
     @Test
-    public void checkIfConnectionIsClosedAfterCheckIfEmailExists() {
+    public void checkIfCheckIfEmailExistsWorksCorrectly() {
         try {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             when(preparedStatement.executeQuery()).thenReturn(resultSet);
             repository.checkIfEmailExists("email", connection);
-            verify(connection).close();
         } catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
         } catch (NullPointerException e) {

@@ -52,11 +52,10 @@ public class RepositoryTest {
     }
 
     @Test
-    public void checkIfConnectionIsClosedAfterAdd() {
+    public void checkIfAddWorksCorrectly() {
         try {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             repository.add(type, connection);
-            verify(connection).close();
         } catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
         }
@@ -66,11 +65,10 @@ public class RepositoryTest {
     }
 
     @Test
-    public void checkIfConnectionIsClosedAfterAddMultiple() {
+    public void checkIfAddMultipleWorksCorrectly() {
         try {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             repository.add(new ArrayList<>(), connection);
-            verify(connection).close();
         } catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
         }
@@ -80,11 +78,10 @@ public class RepositoryTest {
     }
 
     @Test
-    public void checkIfConnectionIsClosedAfterUpdate() {
+    public void checkIfUpdateWorksCorrectly() {
         try {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             repository.update(type, connection);
-            verify(connection).close();
         } catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
         }
@@ -94,11 +91,10 @@ public class RepositoryTest {
     }
 
     @Test
-    public void checkIfConnectionIsClosedAfterRemove()  {
+    public void checkIfRemoveWorksCorrectly()  {
         try {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             repository.remove(type, connection);
-            verify(connection).close();
         }  catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
         }
@@ -108,11 +104,10 @@ public class RepositoryTest {
     }
 
     @Test
-    public void checkIfConnectionIsClosedAfterRemoveMultiple() {
+    public void checkIfRemoveMultipleWorksCorrectly() {
         try {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             repository.remove(new ArrayList<>(), connection);
-            verify(connection).close();
         } catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
         }
@@ -122,12 +117,11 @@ public class RepositoryTest {
     }
 
     @Test
-    public void checkIfConnectionIsClosedAfterQuery() {
+    public void checkIfQueryWorksCorrectly() {
         try {
             when(connection.createStatement()).thenReturn(statement);
             when(statement.executeQuery(anyString())).thenReturn(resultSet);
             repository.query("SELECT * from appointing_schedule;", connection);
-            verify(connection).close();
         } catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
         }
@@ -137,12 +131,11 @@ public class RepositoryTest {
     }
 
     @Test
-    public void checkIfConnectionIsClosedAfterGetAll(){
+    public void checkIfGetAllWorksCorrectly(){
         try {
             when(connection.createStatement()).thenReturn(statement);
             when(statement.executeQuery(anyString())).thenReturn(resultSet);
             repository.getAll(connection);
-            verify(connection).close();
         } catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
         }
@@ -152,12 +145,11 @@ public class RepositoryTest {
     }
 
     @Test
-    public void checkIfConnectionIsClosedAfterGetOneById() {
+    public void checkIfGetOneByIdWorksCorrectly() {
         try {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             when(preparedStatement.executeQuery()).thenReturn(resultSet);
             repository.getOneById(1, connection);
-            verify(connection).close();
         } catch (SQLException e) {
             fail("SQL Exception was thrown");
         }

@@ -22,7 +22,6 @@ public class AppointedRepository implements Repository<Appointed> {
     @Override
     public void add(Appointed item, Connection connection) throws SQLException {
         addItem(item, connection);
-        connection.close();
     }
 
     @Override
@@ -30,7 +29,6 @@ public class AppointedRepository implements Repository<Appointed> {
         for (Appointed appointed : items) {
             addItem(appointed, connection);
         }
-        connection.close();
     }
 
     private void addItem(Appointed item, Connection connection) throws SQLException {
@@ -57,13 +55,11 @@ public class AppointedRepository implements Repository<Appointed> {
         statement.setInt(4, item.getId());
         statement.executeUpdate();
         logger.info("Updated appointed with id " + item.getId());
-        connection.close();
     }
 
     @Override
     public void remove(Appointed item, Connection connection) throws SQLException {
         removeItem(item, connection);
-        connection.close();
     }
 
     @Override
@@ -71,7 +67,6 @@ public class AppointedRepository implements Repository<Appointed> {
         for (Appointed appointed : items) {
             removeItem(appointed, connection);
         }
-        connection.close();
     }
 
     private void removeItem(Appointed item, Connection connection) throws SQLException {
@@ -90,7 +85,6 @@ public class AppointedRepository implements Repository<Appointed> {
         ResultSet resultSet = statement.executeQuery(query);
 
         List<Appointed> appointedList = getAppointedList(resultSet);
-        connection.close();
         return appointedList;
     }
 
@@ -107,7 +101,6 @@ public class AppointedRepository implements Repository<Appointed> {
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<Appointed> appointedList = getAppointedList(resultSet);
-        connection.close();
         if(appointedList.size() == 0)
             return null;
         return appointedList.get(0);
@@ -132,7 +125,12 @@ public class AppointedRepository implements Repository<Appointed> {
         preparedStatement.setInt(1, diagnosisId);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<Appointed> appointedList = getAppointedList(resultSet);
-        connection.close();
         return appointedList;
+    }
+
+    public Appointed getLast(Connection connection) throws SQLException {
+        String sqlSelect = "SELECT * FROM appointed " +
+                "WHERE appointed_id=(SELECT MAX(appointed_id) FROM appointed);";
+        return query(sqlSelect, connection).get(0);
     }
 }

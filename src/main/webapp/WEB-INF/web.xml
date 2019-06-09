@@ -94,6 +94,14 @@
         <servlet-name>Procedures</servlet-name>
         <url-pattern>/procedures</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>AdminPage</servlet-name>
+        <servlet-class>servlets.AdminPage</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminPage</servlet-name>
+        <url-pattern>/admin</url-pattern>
+    </servlet-mapping>
 
 
     <error-page>

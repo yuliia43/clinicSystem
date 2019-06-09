@@ -24,7 +24,6 @@ public class PatientCardsRepository implements Repository<PatientCard> {
     @Override
     public void add(PatientCard item, Connection connection) throws SQLException {
         addItem(item, connection);
-        connection.close();
     }
 
     @Override
@@ -32,7 +31,6 @@ public class PatientCardsRepository implements Repository<PatientCard> {
         for (PatientCard card : items) {
             addItem(card, connection);
         }
-        connection.close();
     }
 
     private void addItem(PatientCard item, Connection connection) throws SQLException {
@@ -61,13 +59,11 @@ public class PatientCardsRepository implements Repository<PatientCard> {
         statement.setInt(5, item.getId());
         statement.executeUpdate();
         logger.info("Updated patient card with id " + item.getId());
-        connection.close();
     }
 
     @Override
     public void remove(PatientCard item, Connection connection) throws SQLException {
         removeItem(item, connection);
-        connection.close();
     }
 
     @Override
@@ -75,7 +71,6 @@ public class PatientCardsRepository implements Repository<PatientCard> {
         for (PatientCard card : items) {
             removeItem(card, connection);
         }
-        connection.close();
     }
 
     private void removeItem(PatientCard item, Connection connection) throws SQLException {
@@ -92,7 +87,6 @@ public class PatientCardsRepository implements Repository<PatientCard> {
         ResultSet resultSet = statement.executeQuery(query);
 
         List<PatientCard> patientCards = getPatientCards(resultSet);
-        connection.close();
         return patientCards;
     }
 
@@ -125,7 +119,6 @@ public class PatientCardsRepository implements Repository<PatientCard> {
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<PatientCard> patientCards = getPatientCards(resultSet);
-        connection.close();
         return patientCards;
     }
 
@@ -136,7 +129,6 @@ public class PatientCardsRepository implements Repository<PatientCard> {
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<PatientCard> patientCards = getPatientCards(resultSet);
-        connection.close();
         if(patientCards.size() == 0)
             return null;
         return patientCards.get(0);

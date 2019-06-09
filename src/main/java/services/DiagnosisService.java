@@ -10,26 +10,29 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-public class DiagnosisService {
+public class DiagnosisService extends Service {
     private static final DiagnosisRepository diagnosisRepository =
             DiagnosisRepository.getDiagnosisRepository();
     private static final AppointedRepository appointedRepository =
             AppointedRepository.getAppointedRepository();
 
-    public static List<Diagnosis> getDiagnosisForPatient(int patientId) throws SQLException {
-        Connection connection = ConnectionPoolHolder.getConnection();
-        List<Diagnosis> diagnoses = diagnosisRepository
-                .getAllLastDiagnosesForPatient(patientId, connection);
-        for (Diagnosis diagnosis : diagnoses) {
-            List<Appointed> appointeds = appointedRepository
-                    .getAllByDiagnosisId(diagnosis.getId(), connection);
-            diagnosis.setRecommendations(appointeds);
+    public List<Diagnosis> getDiagnosisForPatient(int patientId) throws SQLException {
+        try (Connection connection = receiveConnection()) {
+            List<Diagnosis> diagnoses = diagnosisRepository
+                    .getAllLastDiagnosesForPatient(patientId, connection);
+            for (Diagnosis diagnosis : diagnoses) {
+                List<Appointed> appointeds = appointedRepository
+                        .getAllByDiagnosisId(diagnosis.getId(), connection);
+                diagnosis.setRecommendations(appointeds);
+            }
+            return diagnoses;
         }
-        return diagnoses;
     }
 
+
     public void add(Diagnosis diagnosis) throws SQLException {
-        Connection connection = ConnectionPoolHolder.getConnection();
-        diagnosisRepository.add(diagnosis, connection);
+        try (Connection connection = receiveConnection()) {
+            diagnosisRepository.add(diagnosis, connection);
+        }
     }
 }

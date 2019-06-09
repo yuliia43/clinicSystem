@@ -25,7 +25,6 @@ public class ClinicStaffRepository implements Repository<ClinicStaffWithPassword
     @Override
     public void add(ClinicStaffWithPasswords item, Connection connection) throws SQLException {
         addItem(item, connection);
-        connection.close();
     }
 
     private void addItem(ClinicStaffWithPasswords item, Connection connection) throws SQLException {
@@ -47,7 +46,6 @@ public class ClinicStaffRepository implements Repository<ClinicStaffWithPassword
         for (ClinicStaffWithPasswords staff : items) {
             addItem(staff, connection);
         }
-        connection.close();
     }
 
     @Override
@@ -64,14 +62,12 @@ public class ClinicStaffRepository implements Repository<ClinicStaffWithPassword
         statement.setInt(6, item.getId());
         statement.executeUpdate();
         logger.info("Updated user with id " + item.getId());
-        connection.close();
 
     }
 
     @Override
     public void remove(ClinicStaffWithPasswords item, Connection connection) throws SQLException {
         removeItem(item, connection);
-        connection.close();
     }
 
     private void removeItem(ClinicStaffWithPasswords item, Connection connection) throws SQLException {
@@ -88,7 +84,6 @@ public class ClinicStaffRepository implements Repository<ClinicStaffWithPassword
         for (ClinicStaffWithPasswords staff : items) {
             removeItem(staff, connection);
         }
-        connection.close();
     }
 
     @Override
@@ -99,7 +94,6 @@ public class ClinicStaffRepository implements Repository<ClinicStaffWithPassword
 
 
         List<ClinicStaffWithPasswords> clinicStaffWithPasswords = getClinicStaffWithPasswords(resultSet);
-        connection.close();
         return clinicStaffWithPasswords;
     }
 
@@ -143,7 +137,6 @@ public class ClinicStaffRepository implements Repository<ClinicStaffWithPassword
             String title  = set.getString(4);
             staff = new ClinicStaff(id, surname, name, title, email);
         }
-        connection.close();
         return staff;
     }
 
@@ -152,7 +145,6 @@ public class ClinicStaffRepository implements Repository<ClinicStaffWithPassword
             PreparedStatement statement = connection.prepareStatement(sqlSearch);
             statement.setString(1, email);
             boolean executed = statement.executeQuery().next() ? true : false;
-            connection.close();
             return executed;
     }
 
@@ -163,7 +155,6 @@ public class ClinicStaffRepository implements Repository<ClinicStaffWithPassword
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<ClinicStaffWithPasswords> staff = getClinicStaffWithPasswords(resultSet);
-        connection.close();
         if(staff.size() == 0)
             return null;
         return staff.get(0);
