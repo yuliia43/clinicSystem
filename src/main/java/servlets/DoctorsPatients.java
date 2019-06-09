@@ -4,7 +4,7 @@ package servlets;
 import models.ClinicStaff;
 import models.PatientCard;
 import org.apache.log4j.Logger;
-import repositories.PatientCardsRepository;
+import services.PatientCardsService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,14 +17,14 @@ import java.util.List;
 public class DoctorsPatients extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(DoctorsPatients.class);
-    private PatientCardsRepository patientCardsRepository = PatientCardsRepository.getPatientCardsRepository();
+    private PatientCardsService patientCardsService = new PatientCardsService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ClinicStaff staff = (ClinicStaff) req.getSession().getAttribute("user");
             if(staff.getTitle().equals("doctor")){
                 try {
-                    List<PatientCard> cards = patientCardsRepository.getAllByDoctorId(staff.getId());
+                    List<PatientCard> cards = patientCardsService.getAllByDoctorId(staff.getId());
                     req.setAttribute("patients", cards);
                     req.getRequestDispatcher("pages/DoctorsPatients.jsp").forward(req, resp);
                 } catch (SQLException e) {

@@ -22,38 +22,41 @@ public class PatientCardsRepository implements Repository<PatientCard> {
     }
 
     @Override
-    public void add(PatientCard item) throws SQLException {
-        String sqlAddPatient = "INSERT INTO " +
-                "patients_cards (patient_surname, patient_name, birthday_date, sex)" +
-                "VALUES(?, ? , ?, ?);";
-        Connection connection = ConnectionPoolHolder.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sqlAddPatient);
-        statement.setString(1, item.getSurname());
-        statement.setString(2, item.getName());
-        statement.setDate(3, Date.valueOf(item.getBirthday_date().toString()));
-        statement.setString(4, ""+item.getSex());
-        statement.executeUpdate();
-        logger.info("Added new patient card");
+    public void add(PatientCard item, Connection connection) throws SQLException {
+        addItem(item, connection);
         connection.close();
     }
 
     @Override
-    public void add(Iterable<PatientCard> items) throws SQLException {
+    public void add(Iterable<PatientCard> items, Connection connection) throws SQLException {
         for (PatientCard card : items) {
-            add(card);
+            addItem(card, connection);
         }
+        connection.close();
+    }
+
+    private void addItem(PatientCard item, Connection connection) throws SQLException {
+        String sqlAddPatient = "INSERT INTO " +
+                "patients_cards (patient_surname, patient_name, birthday_date, sex) " +
+                "VALUES(?, ? , ?, ?);";
+        PreparedStatement statement = connection.prepareStatement(sqlAddPatient);
+        statement.setString(1, item.getSurname());
+        statement.setString(2, item.getName());
+        statement.setDate(3, new Date(item.getBirthday_date().getTime()));
+        statement.setString(4, ""+item.getSex());
+        statement.executeUpdate();
+        logger.info("Added new patient card");
     }
 
     @Override
-    public void update(PatientCard item) throws SQLException {
+    public void update(PatientCard item, Connection connection) throws SQLException {
         String sqlUpdatePatient = "UPDATE patients_cards " +
-                "SET patient_surname = ?, patient_name = ?, birthday_date = ?, sex = ?" +
+                "SET patient_surname = ?, patient_name = ?, birthday_date = ?, sex = ? " +
                 "where patient_card_id = ?;";
-        Connection connection = ConnectionPoolHolder.getConnection();
         PreparedStatement statement = connection.prepareStatement(sqlUpdatePatient);
         statement.setString(1, item.getSurname());
         statement.setString(2, item.getName());
-        statement.setDate(3, Date.valueOf(item.getBirthday_date().toString()));
+        statement.setDate(3, new Date(item.getBirthday_date().getTime()));
         statement.setString(4, ""+item.getSex());
         statement.setInt(5, item.getId());
         statement.executeUpdate();
@@ -62,27 +65,29 @@ public class PatientCardsRepository implements Repository<PatientCard> {
     }
 
     @Override
-    public void remove(PatientCard item) throws SQLException {
-        String sqlRemovePatient = "DELETE from patients_cards where patient_card_id = ?";
-
-        Connection connection = ConnectionPoolHolder.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(sqlRemovePatient);
-        preparedStatement.setInt(1, item.getId());
-        preparedStatement.executeUpdate();
-        logger.info("Removed patient card with id " + item.getId());
+    public void remove(PatientCard item, Connection connection) throws SQLException {
+        removeItem(item, connection);
         connection.close();
     }
 
     @Override
-    public void remove(Iterable<PatientCard> items) throws SQLException {
+    public void remove(Iterable<PatientCard> items, Connection connection) throws SQLException {
         for (PatientCard card : items) {
-            remove(card);
+            removeItem(card, connection);
         }
+        connection.close();
+    }
+
+    private void removeItem(PatientCard item, Connection connection) throws SQLException {
+        String sqlRemovePatient = "DELETE from patients_cards where patient_card_id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlRemovePatient);
+        preparedStatement.setInt(1, item.getId());
+        preparedStatement.executeUpdate();
+        logger.info("Removed patient card with id " + item.getId());
     }
 
     @Override
-    public List<PatientCard> query(String query) throws SQLException {
-        Connection connection = ConnectionPoolHolder.getConnection();
+    public List<PatientCard> query(String query, Connection connection) throws SQLException {
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
 
@@ -106,17 +111,16 @@ public class PatientCardsRepository implements Repository<PatientCard> {
     }
 
     @Override
-    public List<PatientCard> getAll() throws SQLException {
+    public List<PatientCard> getAll(Connection connection) throws SQLException {
         String sqlSelect = "SELECT * from patients_cards;";
-        return query(sqlSelect);
+        return query(sqlSelect, connection);
     }
 
 
-    public List<PatientCard> getAllByDoctorId(int id) throws SQLException {
+    public List<PatientCard> getAllByDoctorId(int id, Connection connection) throws SQLException {
         String sqlSearchPatients = "SELECT * FROM patients_cards WHERE patient_card_id in\n" +
                 " (SELECT  patient_card_id  FROM diagnosis WHERE doctor_id = ? and is_final_diagnosis = 0\n" +
                 " and diagnosis_id in (Select MAX(diagnosis_id) FROM  diagnosis GROUP BY(patient_card_id)));\n";
-        Connection connection = ConnectionPoolHolder.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(sqlSearchPatients);
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
@@ -126,9 +130,8 @@ public class PatientCardsRepository implements Repository<PatientCard> {
     }
 
     @Override
-    public PatientCard getOneById(int id) throws SQLException {
+    public PatientCard getOneById(int id, Connection connection) throws SQLException {
         String sqlSelect = "SELECT * from patients_cards WHERE patient_card_id = ?;";
-        Connection connection = ConnectionPoolHolder.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(sqlSelect);
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();

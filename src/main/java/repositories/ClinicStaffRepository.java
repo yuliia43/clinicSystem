@@ -23,11 +23,15 @@ public class ClinicStaffRepository implements Repository<ClinicStaffWithPassword
     }
 
     @Override
-    public void add(ClinicStaffWithPasswords item) throws SQLException {
+    public void add(ClinicStaffWithPasswords item, Connection connection) throws SQLException {
+        addItem(item, connection);
+        connection.close();
+    }
+
+    private void addItem(ClinicStaffWithPasswords item, Connection connection) throws SQLException {
         String sqlAddStaff = "INSERT INTO " +
                 "clinic_staff (staff_surname, staff_name, title, email,  `password`)" +
                 "VALUES(?, ? , ?, ?, ?);";
-        Connection connection = ConnectionPoolHolder.getConnection();
         PreparedStatement statement = connection.prepareStatement(sqlAddStaff);
         statement.setString(1, item.getSurname());
         statement.setString(2, item.getName());
@@ -36,22 +40,21 @@ public class ClinicStaffRepository implements Repository<ClinicStaffWithPassword
         statement.setString(5, item.getPassword());
         statement.executeUpdate();
         logger.info("Registration success!");
+    }
+
+    @Override
+    public void add(Iterable<ClinicStaffWithPasswords> items, Connection connection) throws SQLException {
+        for (ClinicStaffWithPasswords staff : items) {
+            addItem(staff, connection);
+        }
         connection.close();
     }
 
     @Override
-    public void add(Iterable<ClinicStaffWithPasswords> items) throws SQLException {
-        for (ClinicStaffWithPasswords staff : items) {
-            add(staff);
-        }
-    }
-
-    @Override
-    public void update(ClinicStaffWithPasswords item) throws SQLException {
+    public void update(ClinicStaffWithPasswords item, Connection connection) throws SQLException {
         String sqlUpdateStaff = "UPDATE clinic_staff " +
                 "SET staff_surname = ?, staff_name = ?, title = ?, email = ?, " +
                 "`password` = ? where staff_id = ?;";
-        Connection connection = ConnectionPoolHolder.getConnection();
         PreparedStatement statement = connection.prepareStatement(sqlUpdateStaff);
         statement.setString(1, item.getSurname());
         statement.setString(2, item.getName());
@@ -66,27 +69,30 @@ public class ClinicStaffRepository implements Repository<ClinicStaffWithPassword
     }
 
     @Override
-    public void remove(ClinicStaffWithPasswords item) throws SQLException {
+    public void remove(ClinicStaffWithPasswords item, Connection connection) throws SQLException {
+        removeItem(item, connection);
+        connection.close();
+    }
+
+    private void removeItem(ClinicStaffWithPasswords item, Connection connection) throws SQLException {
         String sqlUpdatePatient = "DELETE from clinic_staff where staff_id = ?";
 
-        Connection connection = ConnectionPoolHolder.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(sqlUpdatePatient);
         preparedStatement.setInt(1, item.getId());
         preparedStatement.executeUpdate();
         logger.info("Removed user with id " + item.getId());
+    }
+
+    @Override
+    public void remove(Iterable<ClinicStaffWithPasswords> items, Connection connection) throws SQLException {
+        for (ClinicStaffWithPasswords staff : items) {
+            removeItem(staff, connection);
+        }
         connection.close();
     }
 
     @Override
-    public void remove(Iterable<ClinicStaffWithPasswords> items) throws SQLException {
-        for (ClinicStaffWithPasswords staff : items) {
-            remove(staff);
-        }
-    }
-
-    @Override
-    public List<ClinicStaffWithPasswords> query(String query) throws SQLException {
-        Connection connection = ConnectionPoolHolder.getConnection();
+    public List<ClinicStaffWithPasswords> query(String query, Connection connection) throws SQLException {
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
 
@@ -113,18 +119,17 @@ public class ClinicStaffRepository implements Repository<ClinicStaffWithPassword
     }
 
     @Override
-    public List<ClinicStaffWithPasswords> getAll() throws SQLException {
+    public List<ClinicStaffWithPasswords> getAll(Connection connection) throws SQLException {
         String sqlSelect = "SELECT * FROM clinic_staff;";
-        return query(sqlSelect);
+        return query(sqlSelect, connection);
     }
 
-    public List<ClinicStaffWithPasswords> getAllDoctors() throws SQLException {
+    public List<ClinicStaffWithPasswords> getAllDoctors(Connection connection) throws SQLException {
         String sqlSelect = "SELECT * FROM clinic_staff WHERE title='doctor';";
-        return query(sqlSelect);
+        return query(sqlSelect, connection);
     }
 
-    public ClinicStaff checkAuthorization(String email, String password) throws SQLException {
-        Connection connection = ConnectionPoolHolder.getConnection();
+    public ClinicStaff checkAuthorization(String email, String password, Connection connection) throws SQLException {
         String sqlSearch = "SELECT * FROM clinic_staff WHERE email = ? and `password` = ?;";
         PreparedStatement statement = connection.prepareStatement(sqlSearch);
         statement.setString(1, email);
@@ -142,19 +147,18 @@ public class ClinicStaffRepository implements Repository<ClinicStaffWithPassword
         return staff;
     }
 
-    public boolean checkIfEmailExists(String email) throws SQLException {
-        try(Connection connection = ConnectionPoolHolder.getConnection()){
+    public boolean checkIfEmailExists(String email, Connection connection) throws SQLException {
             String sqlSearch = "SELECT * FROM clinic_staff WHERE email = ?;";
             PreparedStatement statement = connection.prepareStatement(sqlSearch);
             statement.setString(1, email);
-            return statement.executeQuery().next() ? true : false;
-        }
+            boolean executed = statement.executeQuery().next() ? true : false;
+            connection.close();
+            return executed;
     }
 
     @Override
-    public ClinicStaffWithPasswords getOneById(int id) throws SQLException {
+    public ClinicStaffWithPasswords getOneById(int id, Connection connection) throws SQLException {
         String sqlSelect = "SELECT * from patients_cards WHERE patient_card_id = ?;";
-        Connection connection = ConnectionPoolHolder.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(sqlSelect);
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();

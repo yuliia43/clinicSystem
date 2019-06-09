@@ -17,6 +17,9 @@ public class AppointingTimeAndPerson {
         this.wasAppointed = wasAppointed;
     }
 
+    public AppointingTimeAndPerson() {
+    }
+
     public int getId() {
         return id;
     }

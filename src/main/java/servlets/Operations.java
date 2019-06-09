@@ -4,7 +4,7 @@ import dtos.AppointedSchedule;
 import enums.AppointedTypes;
 import models.ClinicStaff;
 import org.apache.log4j.Logger;
-import repositories.AppointingScheduleRepository;
+import services.AppointingScheduleService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,8 +16,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Operations extends HttpServlet {
-    private static final AppointingScheduleRepository appointingScheduleRepository =
-            AppointingScheduleRepository.getAppointingScheduleRepository();
+    private static final AppointingScheduleService appointingScheduleService =
+            new AppointingScheduleService();
     private static final Logger logger = Logger.getLogger(Operations.class);
 
     @Override
@@ -29,7 +29,7 @@ public class Operations extends HttpServlet {
         } else {
             int performerId = clinicStaff.getId();
             try {
-                List<AppointedSchedule> appointedSchedules = appointingScheduleRepository
+                List<AppointedSchedule> appointedSchedules = appointingScheduleService
                         .searchScheduleForToday(performerId, AppointedTypes.OPERATION);
                 req.setAttribute("schedules", appointedSchedules);
                 req.getRequestDispatcher("pages/operations.jsp")
@@ -53,10 +53,10 @@ public class Operations extends HttpServlet {
             ids = new int[0];
         try {
             for (int i = 0; i < ids.length; i++) {
-                appointingScheduleRepository.doAppointment(ids[i]);
+                appointingScheduleService.doAppointment(ids[i]);
             }
             int performerId = ((ClinicStaff) req.getSession().getAttribute("user")).getId();
-            List<AppointedSchedule> appointedSchedules = appointingScheduleRepository
+            List<AppointedSchedule> appointedSchedules = appointingScheduleService
                     .searchScheduleForToday(performerId, AppointedTypes.OPERATION);
             req.setAttribute("schedules", appointedSchedules);
             req.getRequestDispatcher("pages/operations.jsp")

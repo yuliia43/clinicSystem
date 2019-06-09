@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class ConnectionPoolHolder {
-    private static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
     private static final String DB_URL = "jdbc:mysql://localhost:3306/clinic" +
             "?serverTimezone=UTC";
     private static final String USER = "root";

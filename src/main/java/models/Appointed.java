@@ -16,6 +16,9 @@ public class Appointed {
         this.details = details;
     }
 
+    public Appointed() {
+    }
+
     public int getId() {
         return id;
     }

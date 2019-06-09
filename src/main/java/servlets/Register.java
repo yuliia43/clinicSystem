@@ -1,9 +1,9 @@
 package servlets;
 
 import dtos.ClinicStaffWithPasswords;
-import models.ClinicStaff;
 import org.apache.log4j.Logger;
 import repositories.ClinicStaffRepository;
+import services.ClinicStaffService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class Register extends HttpServlet {
-    private static final ClinicStaffRepository clinicStaffRepository =
-            ClinicStaffRepository.getClinicStaffRepository();
+    private static final ClinicStaffService clinicStaffService =
+            new ClinicStaffService();
     private static final Logger logger = Logger.getLogger(Register.class);
 
     @Override
@@ -43,7 +43,7 @@ public class Register extends HttpServlet {
                 clinicStaff.setTitle(title);
                 clinicStaff.setEmail(email);
                 clinicStaff.setPassword(password);
-                clinicStaffRepository.add(clinicStaff);
+                clinicStaffService.add(clinicStaff);
                 logger.info("Clinic staff " + name + " " + surname + " added");
                 req.getRequestDispatcher("pages/successfulRegistration.jsp").forward(req,resp);
             }

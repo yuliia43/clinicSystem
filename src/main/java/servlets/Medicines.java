@@ -4,7 +4,7 @@ import dtos.AppointedSchedule;
 import enums.AppointedTypes;
 import models.ClinicStaff;
 import org.apache.log4j.Logger;
-import repositories.AppointingScheduleRepository;
+import services.AppointingScheduleService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,15 +15,15 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class Medicines extends HttpServlet {
-    private static final AppointingScheduleRepository appointingScheduleRepository =
-            AppointingScheduleRepository.getAppointingScheduleRepository();
+    private static final AppointingScheduleService appointingScheduleService =
+            new AppointingScheduleService();
     private static final Logger logger = Logger.getLogger(Medicines.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int performerId = ((ClinicStaff)req.getSession().getAttribute("user")).getId();
         try {
-            List<AppointedSchedule> appointedSchedules = appointingScheduleRepository
+            List<AppointedSchedule> appointedSchedules = appointingScheduleService
                     .searchScheduleForToday(performerId, AppointedTypes.MEDICINE);
             req.setAttribute("schedules", appointedSchedules);
             req.getRequestDispatcher("pages/medicines.jsp")

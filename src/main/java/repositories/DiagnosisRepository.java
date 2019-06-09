@@ -22,33 +22,36 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
     }
 
     @Override
-    public void add(Diagnosis item) throws SQLException {
+    public void add(Diagnosis item, Connection connection) throws SQLException {
+        addItem(item, connection);
+        connection.close();
+    }
+
+    private void addItem(Diagnosis item, Connection connection) throws SQLException {
         String sqlAddDiagnosis = "INSERT INTO " +
                 "diagnosis(patient_card_id, doctor_id, diagnosis, is_final_diagnosis, set_date)" +
                 "VALUES(?, ? , ?, false, CURDATE());";
-        Connection connection = ConnectionPoolHolder.getConnection();
         PreparedStatement statement = connection.prepareStatement(sqlAddDiagnosis);
         statement.setInt(1, item.getCardId());
         statement.setInt(2, item.getDoctorId());
         statement.setString(3, item.getDiagnosis());
         statement.executeUpdate();
         logger.info("Added diagnosis for card " + item.getCardId());
+    }
+
+    @Override
+    public void add(Iterable<Diagnosis> items, Connection connection) throws SQLException {
+        for (Diagnosis diagnosis : items) {
+            addItem(diagnosis, connection);
+        }
         connection.close();
     }
 
     @Override
-    public void add(Iterable<Diagnosis> items) throws SQLException {
-        for (Diagnosis diagnosis : items) {
-            add(diagnosis);
-        }
-    }
-
-    @Override
-    public void update(Diagnosis item) throws SQLException {
+    public void update(Diagnosis item, Connection connection) throws SQLException {
         String sqlUpdateDiagnosis = "UPDATE diagnosis " +
                 "SET patient_card_id = ?, doctor_id = ?, diagnosis = ?, is_final_diagnosis = ?" +
                 "where diagnosis_id = ?;";
-        Connection connection = ConnectionPoolHolder.getConnection();
         PreparedStatement statement = connection.prepareStatement(sqlUpdateDiagnosis);
         statement.setInt(1, item.getCardId());
         statement.setInt(2, item.getDoctorId());
@@ -61,27 +64,30 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
     }
 
     @Override
-    public void remove(Diagnosis item) throws SQLException {
+    public void remove(Diagnosis item, Connection connection) throws SQLException {
+        removeItem(item, connection);
+        connection.close();
+    }
+
+    private void removeItem(Diagnosis item, Connection connection) throws SQLException {
         String sqlRemoveDiagnosis = "DELETE from diagnosis where diagnosis_id = ?";
 
-        Connection connection = ConnectionPoolHolder.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(sqlRemoveDiagnosis);
         preparedStatement.setInt(1, item.getId());
         preparedStatement.executeUpdate();
         logger.info("Removed diagnosis with id " + item.getId());
+    }
+
+    @Override
+    public void remove(Iterable<Diagnosis> items, Connection connection) throws SQLException {
+        for (Diagnosis diagnosis : items) {
+            removeItem(diagnosis, connection);
+        }
         connection.close();
     }
 
     @Override
-    public void remove(Iterable<Diagnosis> items) throws SQLException {
-        for (Diagnosis diagnosis : items) {
-            remove(diagnosis);
-        }
-    }
-
-    @Override
-    public List<Diagnosis> query(String query) throws SQLException {
-        Connection connection = ConnectionPoolHolder.getConnection();
+    public List<Diagnosis> query(String query, Connection connection) throws SQLException {
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
 
@@ -107,15 +113,14 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
     }
 
     @Override
-    public List<Diagnosis> getAll() throws SQLException {
+    public List<Diagnosis> getAll(Connection connection) throws SQLException {
         String sqlSelect = "SELECT * from diagnosis;";
-        return query(sqlSelect);
+        return query(sqlSelect, connection);
     }
 
     @Override
-    public Diagnosis getOneById(int id) throws SQLException {
+    public Diagnosis getOneById(int id, Connection connection) throws SQLException {
         String sqlSelect = "SELECT * from diagnosis WHERE diagnosis_id = ?;";
-        Connection connection = ConnectionPoolHolder.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(sqlSelect);
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
@@ -126,12 +131,11 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
         return diagnoses.get(0);
     }
 
-    public List<Diagnosis> getAllLastDiagnosesForPatient(int patientId) throws SQLException {
+    public List<Diagnosis> getAllLastDiagnosesForPatient(int patientId, Connection connection) throws SQLException {
         String sqlSelect = "SELECT * FROM diagnosis WHERE patient_card_id = ? " +
                 "and (diagnosis_id > (SELECT MAX(diagnosis_id) FROM diagnosis " +
                 "WHERE patient_card_id = ? and is_final_diagnosis = 1) or diagnosis_id>0)" +
                 "Order by diagnosis_id desc;";
-        Connection connection = ConnectionPoolHolder.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(sqlSelect);
         preparedStatement.setInt(1, patientId);
         preparedStatement.setInt(2, patientId);

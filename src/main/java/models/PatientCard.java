@@ -1,5 +1,7 @@
 package models;
 
+
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +23,7 @@ public class PatientCard {
     }
 
     public PatientCard() {
+        birthday_date = Date.from(Instant.now());
     }
 
     public int getId() {

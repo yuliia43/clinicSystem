@@ -4,12 +4,10 @@ import models.ClinicStaff;
 import models.Diagnosis;
 import models.PatientCard;
 import org.apache.log4j.Logger;
-import repositories.AppointingScheduleRepository;
-import repositories.ClinicStaffRepository;
-import repositories.DiagnosisRepository;
-import repositories.PatientCardsRepository;
+import services.AppointingScheduleService;
 import services.ClinicStaffService;
 import services.DiagnosisService;
+import services.PatientCardsService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,12 +18,12 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class PatientsDiagnoses extends HttpServlet {
-    private static final PatientCardsRepository patientsCardsRepository =
-            PatientCardsRepository.getPatientCardsRepository();
-    private static final AppointingScheduleRepository appointingScheduleRepository =
-            AppointingScheduleRepository.getAppointingScheduleRepository();
-    private static final DiagnosisRepository diagnosisRepository =
-            DiagnosisRepository.getDiagnosisRepository();
+    private static final PatientCardsService patientsCardsService =
+            new PatientCardsService();
+    private static final AppointingScheduleService appointingScheduleService =
+            new AppointingScheduleService();
+    private static final DiagnosisService diagnosisService =
+            new DiagnosisService();
     private static final ClinicStaffService clinicStaffService =
             new ClinicStaffService();
     private static final Logger logger = Logger.getLogger(PatientsDiagnoses.class);
@@ -34,7 +32,7 @@ public class PatientsDiagnoses extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             int id = Integer.parseInt(req.getParameter("patientId"), 10);
-            PatientCard patientCard = patientsCardsRepository.getOneById(id);
+            PatientCard patientCard = patientsCardsService.getOneById(id);
             req.setAttribute("patient", patientCard);
             List<Diagnosis> diagnoses = DiagnosisService.getDiagnosisForPatient(id);
             req.setAttribute("diagnoses", diagnoses);
@@ -55,7 +53,7 @@ public class PatientsDiagnoses extends HttpServlet {
         switch (method) {
             case ("delete_recommendation"): {
                 int appointedId = Integer.parseInt(req.getParameter("appointedId"), 10);
-                appointingScheduleRepository.cancelAppointed(appointedId);
+                appointingScheduleService.cancelAppointed(appointedId);
             }
             case ("add_diagnosis"): {
                 String diagnosisStr = req.getParameter("diagnosis");
@@ -65,7 +63,7 @@ public class PatientsDiagnoses extends HttpServlet {
                 diagnosis.setDoctorId(doctorId);
                 diagnosis.setCardId(patientId);
                 diagnosis.setDiagnosis(diagnosisStr);
-                diagnosisRepository.add(diagnosis);
+                diagnosisService.add(diagnosis);
             }
             case ("add_appointed"):{
                 String details = req.getParameter("details");
