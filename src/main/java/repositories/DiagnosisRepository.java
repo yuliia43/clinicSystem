@@ -48,8 +48,8 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
     @Override
     public void update(Diagnosis item, Connection connection) throws SQLException {
         String sqlUpdateDiagnosis = "UPDATE diagnosis " +
-                "SET patient_card_id = ?, doctor_id = ?, diagnosis = ?, is_final_diagnosis = ?" +
-                "where diagnosis_id = ?;";
+                "SET patient_card_id = ?, doctor_id = ?, diagnosis = ?, is_final_diagnosis = ? " +
+                "WHERE diagnosis_id = ?;";
         PreparedStatement statement = connection.prepareStatement(sqlUpdateDiagnosis);
         statement.setInt(1, item.getCardId());
         statement.setInt(2, item.getDoctorId());
@@ -137,7 +137,7 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
         return diagnoses;
     }
 
-    public Diagnosis getLastDiagnosisForPatient(int patientId, Connection connection) throws SQLException {
+    /*public Diagnosis getLastDiagnosisForPatient(int patientId, Connection connection) throws SQLException {
         String sqlSelect = "SELECT * FROM diagnosis " +
                 "WHERE diagnosis_id in (SELECT MAX(diagnosis_id) " +
                 "FROM diagnosis WHERE patient_card_id = ?);";
@@ -146,5 +146,5 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
         ResultSet resultSet = preparedStatement.executeQuery();
         List<Diagnosis> diagnoses = getDiagnosis(resultSet);
         return diagnoses.get(0);
-    }
+    }*/
 }

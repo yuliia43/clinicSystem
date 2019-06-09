@@ -1,13 +1,10 @@
 package servlets;
 
-import models.ClinicStaff;
-import models.Diagnosis;
-import models.PatientCard;
+import models.*;
 import org.apache.log4j.Logger;
-import services.AppointingScheduleService;
-import services.ClinicStaffService;
-import services.DiagnosisService;
-import services.PatientCardsService;
+import services.*;
+import transactionServices.AddAppointmentService;
+import transactions.DischargePatient;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.*;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PatientsDiagnoses extends HttpServlet {
@@ -34,7 +35,7 @@ public class PatientsDiagnoses extends HttpServlet {
             int id = Integer.parseInt(req.getParameter("patientId"), 10);
             PatientCard patientCard = patientsCardsService.getOneById(id);
             req.setAttribute("patient", patientCard);
-            List<Diagnosis> diagnoses = DiagnosisService.getDiagnosisForPatient(id);
+            List<Diagnosis> diagnoses = diagnosisService.getDiagnosisForPatient(id);
             req.setAttribute("diagnoses", diagnoses);
             req.setAttribute("staff", clinicStaffService.getAll());
             req.setAttribute("doctors", clinicStaffService.getAllDoctors());
@@ -70,15 +71,21 @@ public class PatientsDiagnoses extends HttpServlet {
                 int num_days = Integer.parseInt(req.getParameter("num_days"), 10);
                 String[] times = req.getParameterValues("time");
                 int performerId = Integer.parseInt(req.getParameter("performerId"), 10);
-                for(int i = 1; i <= num_days; i++){
-                    for(int j = 0; j < times.length; j++){
-
-                    }
-                }
-                String diagnosisId = req.getParameter("diagnosisId");
+                int diagnosisId = Integer.parseInt(req.getParameter("diagnosisId"), 10);
+                String type = req.getParameter("type");
+                Appointed appointed =
+                        setAppointment(details, num_days, times, performerId, diagnosisId, type);
+                AddAppointmentService addAppointmentService = new AddAppointmentService();
+                boolean success = addAppointmentService.addAppointment(appointed);
+                if(success)
+                    logger.info("Added appointed");
             }
             case ("discharge"):{
-
+                int patientId = Integer.parseInt(req.getParameter("patientId"), 10);
+                DischargePatientService dischargePatientTransaction = new DischargePatientService();
+                boolean success = dischargePatientTransaction.execute(patientId);
+                if(success)
+                    logger.info("Discharged patient with id " + patientId);
             }
         }
         doGet(req, resp);
@@ -87,5 +94,20 @@ public class PatientsDiagnoses extends HttpServlet {
             req.getRequestDispatcher("errorPages/SQlError.jsp")
                     .forward(req, resp);
         }
+    }
+
+    private Appointed setAppointment(String details, int num_days, String[] times, int performerId, int diagnosisId, String type) {
+        Appointed appointed = new Appointed(diagnosisId, type, details);
+        List<AppointingTimeAndPerson> list = new ArrayList<>();
+        for(int i = 1; i <= num_days; i++){
+            LocalDate date = LocalDate.now().plusDays(i);
+            for(int j = 0; j < times.length; j++){
+                LocalDateTime time = LocalTime.parse(times[j]).atDate(date);
+                Timestamp dateTime = Timestamp.from(time.atZone(ZoneId.systemDefault()).toInstant());
+                list.add(new AppointingTimeAndPerson(dateTime, performerId));
+            }
+        }
+        appointed.setSchedule(list);
+        return appointed;
     }
 }

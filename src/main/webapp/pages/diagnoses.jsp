@@ -21,8 +21,9 @@
              src="https://png2.kisspng.com/sh/6e5588ec068618cd4c06c88aaed56456/L0KzQYm3V8AyN5ZniJH0aYP2gLBuTfFzepD8RdV4bYD4hLb5Tflkd594ReVEbXLyfH7qjPlxNZJ3jJ9wbz3lcbTyTcVjO2o1SNUCOUa3dbSCTsM6PWM7T6gCMUW2QIW9UsQxP2c2Tak3cH7q/kisspng-arrow-computer-icons-symbol-clip-art-go-back-5b3900c7964ec9.3952676715304624076157.png">
     </a>
     <form method="post">
-    <button name="patientId" value="${patient.getId()}">
-        <img style="position: relative; float: right; padding-top: 15px" height="30px"
+        <input type="hidden" name="method" value="discharge">
+    <button style="position: relative; float: right; padding-top: 15px" name="patientId" value="${patient.getId()}">
+        <img height="30px"
              src="https://png2.kisspng.com/sh/17b12ca887ef84713255a3a3b494499e/L0KzQYm3VMA1N6hofZH0aYP2gLBuTgN1aZdrRdHvLXjogr7sk710dpJwfZ92ZXTsc7r1hb10gZ5nh942Y4LoccXwlvl1gV46edU9Ykm4SYbtWPZnQF87UaQEOEi4QYK8UsI5PGIATKc8OUG3PsH1h5==/kisspng-staff-of-hermes-snake-medicine-symbol-creativity-5ac4b9595f8ff8.6929885115228419453914.png">
     </button>
     <h3 align="center">

@@ -35,4 +35,16 @@ public class DiagnosisService extends Service {
             diagnosisRepository.add(diagnosis, connection);
         }
     }
+
+    public List<Diagnosis> getAllLastDiagnosesForPatient(int patientId) throws SQLException {
+        try (Connection connection = receiveConnection()) {
+            return diagnosisRepository.getAllLastDiagnosesForPatient(patientId, connection);
+        }
+    }
+
+    public void update(Diagnosis diagnosis) throws SQLException {
+        try (Connection connection = receiveConnection()) {
+            diagnosisRepository.update(diagnosis, connection);
+        }
+    }
 }
