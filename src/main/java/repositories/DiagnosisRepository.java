@@ -1,6 +1,5 @@
 package repositories;
 
-import jdbc.ConnectionPoolHolder;
 import models.Diagnosis;
 import org.apache.log4j.Logger;
 
@@ -8,48 +7,79 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Yullia Shcherbakova
+ * @project final
+ */
 public class DiagnosisRepository implements Repository<Diagnosis> {
 
     private static final Logger logger = Logger.getLogger(DiagnosisRepository.class);
     private static final DiagnosisRepository diagnosisRepository =
             new DiagnosisRepository();
-    private DiagnosisRepository(){
+
+    /**
+     *
+     */
+    private DiagnosisRepository() {
 
     }
 
+    /**
+     * @return
+     */
     public static DiagnosisRepository getDiagnosisRepository() {
         return diagnosisRepository;
     }
 
+    /**
+     * @param item
+     * @param connection
+     * @throws SQLException
+     */
     @Override
-    public void add(Diagnosis item) throws SQLException {
+    public void add(Diagnosis item, Connection connection) throws SQLException {
+        addItem(item, connection);
+    }
+
+    /**
+     * @param item
+     * @param connection
+     * @throws SQLException
+     */
+    private void addItem(Diagnosis item, Connection connection) throws SQLException {
         String sqlAddDiagnosis = "INSERT INTO " +
                 "diagnosis(patient_card_id, doctor_id, diagnosis, is_final_diagnosis, set_date)" +
-                "VALUES(?, ? , ?, ?, CURDATE());";
-        Connection connection = ConnectionPoolHolder.getConnection();
+                "VALUES(?, ? , ?, false, CURDATE());";
         PreparedStatement statement = connection.prepareStatement(sqlAddDiagnosis);
         statement.setInt(1, item.getCardId());
         statement.setInt(2, item.getDoctorId());
         statement.setString(3, item.getDiagnosis());
-        statement.setBoolean(4, item.isFinal());
         statement.executeUpdate();
         logger.info("Added diagnosis for card " + item.getCardId());
-        connection.close();
     }
 
+    /**
+     * @param items
+     * @param connection
+     * @throws SQLException
+     */
     @Override
-    public void add(Iterable<Diagnosis> items) throws SQLException {
+    public void add(Iterable<Diagnosis> items, Connection connection) throws SQLException {
         for (Diagnosis diagnosis : items) {
-            add(diagnosis);
+            addItem(diagnosis, connection);
         }
     }
 
+    /**
+     * @param item
+     * @param connection
+     * @throws SQLException
+     */
     @Override
-    public void update(Diagnosis item) throws SQLException {
+    public void update(Diagnosis item, Connection connection) throws SQLException {
         String sqlUpdateDiagnosis = "UPDATE diagnosis " +
-                "SET patient_card_id = ?, doctor_id = ?, diagnosis = ?, is_final_diagnosis = ?" +
-                "where diagnosis_id = ?;";
-        Connection connection = ConnectionPoolHolder.getConnection();
+                "SET patient_card_id = ?, doctor_id = ?, diagnosis = ?, is_final_diagnosis = ? " +
+                "WHERE diagnosis_id = ?;";
         PreparedStatement statement = connection.prepareStatement(sqlUpdateDiagnosis);
         statement.setInt(1, item.getCardId());
         statement.setInt(2, item.getDoctorId());
@@ -58,39 +88,64 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
         statement.setInt(5, item.getId());
         statement.executeUpdate();
         logger.info("Updated diagnosis with id " + item.getId());
-        connection.close();
     }
 
+    /**
+     * @param item
+     * @param connection
+     * @throws SQLException
+     */
     @Override
-    public void remove(Diagnosis item) throws SQLException {
+    public void remove(Diagnosis item, Connection connection) throws SQLException {
+        removeItem(item, connection);
+    }
+
+    /**
+     * @param item
+     * @param connection
+     * @throws SQLException
+     */
+    private void removeItem(Diagnosis item, Connection connection) throws SQLException {
         String sqlRemoveDiagnosis = "DELETE from diagnosis where diagnosis_id = ?";
 
-        Connection connection = ConnectionPoolHolder.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(sqlRemoveDiagnosis);
         preparedStatement.setInt(1, item.getId());
         preparedStatement.executeUpdate();
         logger.info("Removed diagnosis with id " + item.getId());
-        connection.close();
     }
 
+    /**
+     * @param items
+     * @param connection
+     * @throws SQLException
+     */
     @Override
-    public void remove(Iterable<Diagnosis> items) throws SQLException {
+    public void remove(Iterable<Diagnosis> items, Connection connection) throws SQLException {
         for (Diagnosis diagnosis : items) {
-            remove(diagnosis);
+            removeItem(diagnosis, connection);
         }
     }
 
+    /**
+     * @param query
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
     @Override
-    public List<Diagnosis> query(String query) throws SQLException {
-        Connection connection = ConnectionPoolHolder.getConnection();
+    public List<Diagnosis> query(String query, Connection connection) throws SQLException {
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
 
         List<Diagnosis> diagnoses = getDiagnosis(resultSet);
-        connection.close();
         return diagnoses;
     }
 
+    /**
+     * @param resultSet
+     * @return
+     * @throws SQLException
+     */
     private List<Diagnosis> getDiagnosis(ResultSet resultSet) throws SQLException {
         List<Diagnosis> diagnoses = new ArrayList<>();
 
@@ -107,38 +162,51 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
         return diagnoses;
     }
 
+    /**
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
     @Override
-    public List<Diagnosis> getAll() throws SQLException {
+    public List<Diagnosis> getAll(Connection connection) throws SQLException {
         String sqlSelect = "SELECT * from diagnosis;";
-        return query(sqlSelect);
+        return query(sqlSelect, connection);
     }
 
+    /**
+     * @param id
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
     @Override
-    public Diagnosis getOneById(int id) throws SQLException {
+    public Diagnosis getOneById(int id, Connection connection) throws SQLException {
         String sqlSelect = "SELECT * from diagnosis WHERE diagnosis_id = ?;";
-        Connection connection = ConnectionPoolHolder.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(sqlSelect);
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<Diagnosis> diagnoses = getDiagnosis(resultSet);
-        connection.close();
-        if(diagnoses.size() == 0)
+        if (diagnoses.size() == 0)
             return null;
         return diagnoses.get(0);
     }
 
-    public List<Diagnosis> getAllLastDiagnosesForPatient(int patientId) throws SQLException {
+    /**
+     * @param patientId
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
+    public List<Diagnosis> getAllLastDiagnosesForPatient(int patientId, Connection connection) throws SQLException {
         String sqlSelect = "SELECT * FROM diagnosis WHERE patient_card_id = ? " +
-                "and diagnosis_id > (SELECT MAX(diagnosis_id)  FROM diagnosis " +
-                "WHERE patient_card_id = ? and is_final_diagnosis = 1) " +
+                "and (diagnosis_id > (SELECT MAX(diagnosis_id) FROM diagnosis " +
+                "WHERE patient_card_id = ? and is_final_diagnosis = 1) or diagnosis_id>0)" +
                 "Order by diagnosis_id desc;";
-        Connection connection = ConnectionPoolHolder.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(sqlSelect);
         preparedStatement.setInt(1, patientId);
         preparedStatement.setInt(2, patientId);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<Diagnosis> diagnoses = getDiagnosis(resultSet);
-        connection.close();
         return diagnoses;
     }
 }

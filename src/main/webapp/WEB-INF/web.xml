@@ -4,65 +4,75 @@
 		 http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
-  <display-name>Archetype Created Web Application</display-name>
+    <display-name>Archetype Created Web Application</display-name>
 
-  <servlet>
-    <servlet-name>MainPage</servlet-name>
-    <servlet-class>servlets.MainPage</servlet-class>
-  </servlet>
+    <welcome-file-list>
+        <welcome-file>main</welcome-file>
+    </welcome-file-list>
 
-  <servlet-mapping>
-    <servlet-name>MainPage</servlet-name>
-    <url-pattern>/main</url-pattern>
-  </servlet-mapping>
 
-  <servlet>
-    <servlet-name>Authorisation</servlet-name>
-    <servlet-class>servlets.Authorisation</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Authorisation</servlet-name>
-    <url-pattern>/authorisation</url-pattern>
-  </servlet-mapping>
+    <servlet>
+        <servlet-name>DispatcherServlet</servlet-name>
+        <servlet-class>servlets.DispatcherServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DispatcherServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
 
-  <servlet>
-    <servlet-name>UserPage</servlet-name>
-    <servlet-class>servlets.UserPage</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>UserPage</servlet-name>
-    <url-pattern>/userPage</url-pattern>
-  </servlet-mapping>
 
-  <servlet>
-    <servlet-name>Patients</servlet-name>
-    <servlet-class>servlets.DoctorsPatients</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Patients</servlet-name>
-    <url-pattern>/patients</url-pattern>
-  </servlet-mapping>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/errorPages/404.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>405</error-code>
+        <location>/errorPages/405.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.NullPointerException</exception-type>
+        <location>/errorPages/notAuthorisedError.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.NumberFormatException</exception-type>
+        <location>/errorPages/requestError.jsp</location>
+    </error-page>
 
-<error-page>
-  <error-code>404</error-code>
-  <location>/errorPages/404.jsp</location>
-</error-page>
+    <filter>
+        <filter-name>Localization</filter-name>
+        <filter-class>filters.LocalizationFilter</filter-class>
+        <init-param>
+            <param-name>bundle</param-name>
+            <param-value>menu</param-value>
+        </init-param>
+        <init-param>
+            <param-name>locale</param-name>
+            <param-value>ru</param-value>
+        </init-param>
+    </filter>
 
-  <filter>
-    <filter-name>Localization</filter-name>
-    <filter-class>filters.LocalizationFilter</filter-class>
-    <init-param>
-    <param-name>bundle</param-name>
-    <param-value>menu</param-value>
-  </init-param>
-    <init-param>
-      <param-name>locale</param-name>
-      <param-value>ru</param-value>
-    </init-param>
-  </filter>
+    <filter-mapping>
+        <filter-name>Localization</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
-  <filter-mapping>
-    <filter-name>Localization</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
+    <filter>
+        <filter-name>PaginationFilter</filter-name>
+        <filter-class>filters.PaginationFilter</filter-class>
+        <init-param>
+            <param-name>itemsCountStartingIdx</param-name>
+            <param-value>0</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>PaginationFilter</filter-name>
+        <url-pattern>/appointments</url-pattern>
+    </filter-mapping>
+
+    <jsp-config>
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <page-encoding>UTF-8</page-encoding>
+        </jsp-property-group>
+    </jsp-config>
 </web-app>

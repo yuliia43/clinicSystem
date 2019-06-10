@@ -6,6 +6,9 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+/**
+ * @author Yullia Shcherbakova
+ */
 public class LocalizationFilter implements Filter {
     private static final String LOCALE = "locale";
     private static final String BUNDLE = "bundle";
@@ -15,12 +18,23 @@ public class LocalizationFilter implements Filter {
 
     private static final Logger logger = Logger.getLogger(LocalizationFilter.class);
 
+    /**
+     * @param filterConfig
+     * @throws ServletException
+     */
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         setLocale = filterConfig.getInitParameter(LOCALE);
         setBundle = filterConfig.getInitParameter(BUNDLE);
     }
 
+    /**
+     * @param servletRequest
+     * @param servletResponse
+     * @param filterChain
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
@@ -57,8 +71,11 @@ public class LocalizationFilter implements Filter {
         }
     }
 
+
+    /**
+     *
+     */
     @Override
     public void destroy() {
-
     }
 }

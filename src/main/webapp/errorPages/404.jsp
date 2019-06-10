@@ -4,10 +4,14 @@
 <fmt:setLocale value="${locale}"/>
 <fmt:setBundle basename="${bundle}"/>
 
-<jsp:include page = '../pages/mainPage.jsp'/>
+<jsp:include page='../pages/mainPage.jsp'/>
 
 <html>
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+</head>
 <body>
-<h1><fmt:message key = "error.pageNotFound"/></h1>
+<h1><fmt:message key="error.pageNotFound"/></h1>
 </body>
 </html>
