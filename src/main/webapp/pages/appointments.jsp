@@ -31,6 +31,11 @@
     </table>
     <button onclick="this.form.submit()">Save changes</button>
     </form>
+    <form method="get">
+        <input type="hidden" name="type" value="${type}">
+    <button ${startIdx == '0' ? 'disabled' : ''} name="startIdx" value="${startIdx-10}">prev</button>
+        <button ${endOfList != null ? 'disabled' : ''} name="startIdx" value="${startIdx+10}">next</button>
+    </form>
 </div>
 </body>
 </html>

@@ -10,6 +10,7 @@
         <welcome-file>main</welcome-file>
     </welcome-file-list>
 
+
     <servlet>
         <servlet-name>DispatcherServlet</servlet-name>
         <servlet-class>servlets.DispatcherServlet</servlet-class>
@@ -53,6 +54,19 @@
     <filter-mapping>
         <filter-name>Localization</filter-name>
         <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>PaginationFilter</filter-name>
+        <filter-class>filters.PaginationFilter</filter-class>
+        <init-param>
+            <param-name>itemsCountStartingIdx</param-name>
+            <param-value>0</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>PaginationFilter</filter-name>
+        <url-pattern>/appointments</url-pattern>
     </filter-mapping>
 
     <jsp-config>

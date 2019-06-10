@@ -17,7 +17,7 @@ public class ControllerFactory {
             case ("admin"): {
                 return new AdminPageGetController();
             }
-            case ("main"): {
+            case (""): {
                 return new MainPageGetController();
             }
             case ("authorisation"): {

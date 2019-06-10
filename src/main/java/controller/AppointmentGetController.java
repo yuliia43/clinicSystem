@@ -38,6 +38,13 @@ public class AppointmentGetController implements Controller {
             if (appointedSchedules.size() == 0) {
                 return "errorPages/emptyList.jsp";
             } else {
+                int startingIndex = (int) req.getAttribute("startIdx");
+                int endIdx = (int) req.getAttribute("endIdx");
+                if(appointedSchedules.size()-startingIndex<=10){
+                    req.setAttribute("endOfList", true);
+                    endIdx = appointedSchedules.size();
+                }
+                appointedSchedules = appointedSchedules.subList(startingIndex, endIdx);
                 req.setAttribute("schedules", appointedSchedules);
                 req.setAttribute("type", type);
                 return "pages/appointments.jsp";
