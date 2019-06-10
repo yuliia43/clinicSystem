@@ -8,7 +8,7 @@
 <html>
 <body>
 <div class="box">
-    <form action="registerCheck" method="post">
+    <form action="registration" method="post">
         <h3>Registration</h3>
         First Name<input type="text" name="firstName">
         <br>

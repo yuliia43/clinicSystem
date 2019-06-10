@@ -1,5 +1,6 @@
-package services;
+package transactionServices;
 
+import services.Service;
 import transactions.DischargePatient;
 
 import java.sql.Connection;

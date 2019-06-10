@@ -11,6 +11,7 @@ import java.util.List;
 public class AppointedRepository implements Repository<Appointed> {
     private static final Logger logger = Logger.getLogger(AppointedRepository.class);
     private static final AppointedRepository appointedRepository = new AppointedRepository();
+
     private AppointedRepository(){
 
     }
@@ -131,6 +132,7 @@ public class AppointedRepository implements Repository<Appointed> {
     public Appointed getLast(Connection connection) throws SQLException {
         String sqlSelect = "SELECT * FROM appointed " +
                 "WHERE appointed_id=(SELECT MAX(appointed_id) FROM appointed);";
-        return query(sqlSelect, connection).get(0);
+        List<Appointed> query = query(sqlSelect, connection);
+        return query.get(0);
     }
 }

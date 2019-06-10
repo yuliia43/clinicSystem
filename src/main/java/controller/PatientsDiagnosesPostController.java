@@ -1,56 +1,45 @@
-package servlets;
+package controller;
 
-import models.*;
+import models.Appointed;
+import models.AppointingTimeAndPerson;
+import models.ClinicStaff;
+import models.Diagnosis;
 import org.apache.log4j.Logger;
-import services.*;
+import services.AppointingScheduleService;
+import services.ClinicStaffService;
+import services.DiagnosisService;
+import services.PatientCardsService;
+import servlets.DispatcherServlet;
 import transactionServices.AddAppointmentService;
-import transactions.DischargePatient;
+import transactionServices.DischargePatientService;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-public class PatientsDiagnoses extends HttpServlet {
+public class PatientsDiagnosesPostController implements Controller {
     private static final PatientCardsService patientsCardsService =
             new PatientCardsService();
     private static final AppointingScheduleService appointingScheduleService =
             new AppointingScheduleService();
     private static final DiagnosisService diagnosisService =
             new DiagnosisService();
-    private static final ClinicStaffService clinicStaffService =
-            new ClinicStaffService();
-    private static final Logger logger = Logger.getLogger(PatientsDiagnoses.class);
+    private static final Logger logger = Logger.getLogger(DispatcherServlet.class);
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try {
-            int id = Integer.parseInt(req.getParameter("patientId"), 10);
-            PatientCard patientCard = patientsCardsService.getOneById(id);
-            req.setAttribute("patient", patientCard);
-            List<Diagnosis> diagnoses = diagnosisService.getDiagnosisForPatient(id);
-            req.setAttribute("diagnoses", diagnoses);
-            req.setAttribute("staff", clinicStaffService.getAll());
-            req.setAttribute("doctors", clinicStaffService.getAllDoctors());
-            req.getRequestDispatcher("pages/diagnoses.jsp").forward(req, resp);
-        } catch (SQLException e) {
-            logger.error("Sql error occured!");
-            req.getRequestDispatcher("errorPages/SQlError.jsp")
-                    .forward(req, resp);
-        }
+    public String execute(HttpServletRequest req) throws SQLException {
+        doReceivedMethod(req);
+        return new PatientsDiagnosesGetController().execute(req);
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void doReceivedMethod(HttpServletRequest req) throws SQLException {
         String method = req.getParameter("method");
-        try {
         switch (method) {
             case ("delete_recommendation"): {
                 int appointedId = Integer.parseInt(req.getParameter("appointedId"), 10);
@@ -87,12 +76,6 @@ public class PatientsDiagnoses extends HttpServlet {
                 if(success)
                     logger.info("Discharged patient with id " + patientId);
             }
-        }
-        doGet(req, resp);
-        } catch (SQLException e) {
-            logger.error("Sql error occured!");
-            req.getRequestDispatcher("errorPages/SQlError.jsp")
-                    .forward(req, resp);
         }
     }
 

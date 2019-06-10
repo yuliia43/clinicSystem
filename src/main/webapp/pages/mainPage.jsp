@@ -118,9 +118,9 @@
             <li><a href="/patients" class="text"><fmt:message key="menu.myPatients"/></a></li>
             <li><a href="#" class="text"><fmt:message key="menu.myEvents"/></a>
                 <ul>
-                    <li><a href="/procedures" class="text"><fmt:message key="menu.myEvents.procedures"/></a></li>
-                    <li><a href="/operations" class="text"><fmt:message key="menu.myEvents.operations"/></a></li>
-                    <li><a href="/medicines" class="text"><fmt:message key="menu.myEvents.medicines"/></a></li>
+                    <li><a href="/appointments?type=procedure" class="text"><fmt:message key="menu.myEvents.procedures"/></a></li>
+                    <li><a href="/appointments?type=operation" class="text"><fmt:message key="menu.myEvents.operations"/></a></li>
+                    <li><a href="/appointments?type=medicine" class="text"><fmt:message key="menu.myEvents.medicines"/></a></li>
                 </ul>
             </li>
             <li><a href="#" class="text"><fmt:message key="menu.entrance"/></a>

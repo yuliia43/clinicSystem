@@ -12,7 +12,11 @@
     <table>
         <tr>
             <th></th>
-            <th>Medicine</th>
+            <th>
+                <c:if test="${type eq 'medicine'}">Medicine</c:if>
+                <c:if test="${type eq 'operation'}">Operation</c:if>
+                <c:if test="${type eq 'procedure'}">Procedure</c:if>
+            </th>
             <th>Patient</th>
             <th>Time</th>
         </tr>

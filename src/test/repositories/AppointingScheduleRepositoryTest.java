@@ -36,7 +36,7 @@ public class AppointingScheduleRepositoryTest {
         try {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             when(preparedStatement.executeQuery()).thenReturn(resultSet);
-            repository.searchScheduleForToday(anyInt(), anyString(), eq(connection));
+            repository.searchScheduleForToday(0, "", connection);
         }catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
         } catch (NullPointerException e) {

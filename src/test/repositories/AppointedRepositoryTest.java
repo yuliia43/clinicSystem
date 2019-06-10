@@ -10,6 +10,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -26,6 +27,8 @@ public class AppointedRepositoryTest {
     private ResultSet resultSet;
     @Mock
     private Statement statement;
+    @Mock
+    public List<Appointed> appointeds;
 
     @Before
     public void init(){
@@ -36,9 +39,9 @@ public class AppointedRepositoryTest {
     @Test
     public void checkIfGetAllByDiagnosisIdWorksCorrectly() {
         try {
-            when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
+            when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
             when(preparedStatement.executeQuery()).thenReturn(resultSet);
-            repository.getAllByDiagnosisId(anyInt(), connection);
+            repository.getAllByDiagnosisId(1, connection);
         }catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
         } catch (NullPointerException e) {
@@ -47,11 +50,14 @@ public class AppointedRepositoryTest {
     }
 
     @Test
-    public void getLast() {
+    public void checkIfGetLastWorksCorrectly() {
         try {
             when(connection.createStatement()).thenReturn(statement);
             when(statement.executeQuery(anyString())).thenReturn(resultSet);
-            repository.query(anyString(), eq(connection));
+            when(resultSet.next()).thenReturn(true).thenReturn(false);
+            when(resultSet.getInt(anyInt())).thenReturn(0);
+            when(resultSet.getString(anyInt())).thenReturn("");
+            repository.getLast(connection);
         } catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
         }
