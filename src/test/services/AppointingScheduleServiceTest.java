@@ -1,37 +1,30 @@
 package services;
 
 import commonlyUsedStrings.CommonlyUsedStrings;
-import jdbc.ConnectionPoolHolder;
-import models.Appointed;
-import models.Diagnosis;
+import enums.AppointedTypes;
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
-import repositories.AppointedRepository;
-import repositories.DiagnosisRepository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-
-public class DiagnosisServiceTest {
-
-
+/**
+ * @author Yullia Shcherbakova
+ * @project final
+ */
+public class AppointingScheduleServiceTest {
     @Spy
-    public DiagnosisService diagnosisService;
+    public AppointingScheduleService appointingScheduleService;
     @Mock
     private Connection connection;
     @Mock
@@ -39,20 +32,19 @@ public class DiagnosisServiceTest {
     @Mock
     private ResultSet resultSet;
 
-
     @Before
     public void setRules() throws SQLException {
         MockitoAnnotations.initMocks(this);
-        when(diagnosisService.receiveConnection())
+        when(appointingScheduleService.receiveConnection())
                 .thenReturn(connection);
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
     }
 
     @Test
-    public void checkIfConnectionIsClosedAfterGetDiagnosisForPatient() {
+    public void checkIfConnectionIsClosedAfterSearchScheduleForToday() {
         try {
-            diagnosisService.getDiagnosisForPatient(1);
+            appointingScheduleService.searchScheduleForToday(1, AppointedTypes.OPERATION);
             verify(connection).close();
         } catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
@@ -60,9 +52,19 @@ public class DiagnosisServiceTest {
     }
 
     @Test
-    public void checkIfConnectionIsClosedAfterAdd() {
+    public void checkIfConnectionIsClosedAfterCancelAppointed() {
         try {
-            diagnosisService.add(new Diagnosis());
+            appointingScheduleService.cancelAppointed(1);
+            verify(connection).close();
+        } catch (SQLException e) {
+            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+        }
+    }
+
+    @Test
+    public void checkIfConnectionIsClosedAfterDoAppointment() {
+        try {
+            appointingScheduleService.doAppointment(1);
             verify(connection).close();
         } catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
