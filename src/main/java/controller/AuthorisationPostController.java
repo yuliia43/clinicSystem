@@ -8,11 +8,20 @@ import servlets.DispatcherServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 
+/**
+ * @author Yullia Shcherbakova
+ * @project final
+ */
 public class AuthorisationPostController implements Controller {
     private static final Logger logger = Logger.getLogger(DispatcherServlet.class);
     private static final ClinicStaffService clinicStaffService =
             new ClinicStaffService();
 
+    /**
+     * @param req
+     * @return
+     * @throws SQLException
+     */
     @Override
     public String execute(HttpServletRequest req) throws SQLException {
         String email = (String) req.getParameter("email");
@@ -27,8 +36,7 @@ public class AuthorisationPostController implements Controller {
                 req.setAttribute("fail", true);
                 return "pages/authorisation.jsp";
             }
-        }
-        else {
+        } else {
             req.setAttribute("fail", true);
             return "pages/authorisation.jsp";
         }

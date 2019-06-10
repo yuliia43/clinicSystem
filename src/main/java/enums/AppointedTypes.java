@@ -1,6 +1,10 @@
 package enums;
 
-public enum  AppointedTypes {
+/**
+ * @author Yullia Shcherbakova
+ * @project final
+ */
+public enum AppointedTypes {
     OPERATION, PROCEDURE, MEDICINE;
 }
 

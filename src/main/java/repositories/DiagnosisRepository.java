@@ -1,6 +1,5 @@
 package repositories;
 
-import jdbc.ConnectionPoolHolder;
 import models.Diagnosis;
 import org.apache.log4j.Logger;
 
@@ -8,24 +7,45 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Yullia Shcherbakova
+ * @project final
+ */
 public class DiagnosisRepository implements Repository<Diagnosis> {
 
     private static final Logger logger = Logger.getLogger(DiagnosisRepository.class);
     private static final DiagnosisRepository diagnosisRepository =
             new DiagnosisRepository();
-    private DiagnosisRepository(){
+
+    /**
+     *
+     */
+    private DiagnosisRepository() {
 
     }
 
+    /**
+     * @return
+     */
     public static DiagnosisRepository getDiagnosisRepository() {
         return diagnosisRepository;
     }
 
+    /**
+     * @param item
+     * @param connection
+     * @throws SQLException
+     */
     @Override
     public void add(Diagnosis item, Connection connection) throws SQLException {
         addItem(item, connection);
     }
 
+    /**
+     * @param item
+     * @param connection
+     * @throws SQLException
+     */
     private void addItem(Diagnosis item, Connection connection) throws SQLException {
         String sqlAddDiagnosis = "INSERT INTO " +
                 "diagnosis(patient_card_id, doctor_id, diagnosis, is_final_diagnosis, set_date)" +
@@ -38,6 +58,11 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
         logger.info("Added diagnosis for card " + item.getCardId());
     }
 
+    /**
+     * @param items
+     * @param connection
+     * @throws SQLException
+     */
     @Override
     public void add(Iterable<Diagnosis> items, Connection connection) throws SQLException {
         for (Diagnosis diagnosis : items) {
@@ -45,6 +70,11 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
         }
     }
 
+    /**
+     * @param item
+     * @param connection
+     * @throws SQLException
+     */
     @Override
     public void update(Diagnosis item, Connection connection) throws SQLException {
         String sqlUpdateDiagnosis = "UPDATE diagnosis " +
@@ -60,11 +90,21 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
         logger.info("Updated diagnosis with id " + item.getId());
     }
 
+    /**
+     * @param item
+     * @param connection
+     * @throws SQLException
+     */
     @Override
     public void remove(Diagnosis item, Connection connection) throws SQLException {
         removeItem(item, connection);
     }
 
+    /**
+     * @param item
+     * @param connection
+     * @throws SQLException
+     */
     private void removeItem(Diagnosis item, Connection connection) throws SQLException {
         String sqlRemoveDiagnosis = "DELETE from diagnosis where diagnosis_id = ?";
 
@@ -74,6 +114,11 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
         logger.info("Removed diagnosis with id " + item.getId());
     }
 
+    /**
+     * @param items
+     * @param connection
+     * @throws SQLException
+     */
     @Override
     public void remove(Iterable<Diagnosis> items, Connection connection) throws SQLException {
         for (Diagnosis diagnosis : items) {
@@ -81,6 +126,12 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
         }
     }
 
+    /**
+     * @param query
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
     @Override
     public List<Diagnosis> query(String query, Connection connection) throws SQLException {
         Statement statement = connection.createStatement();
@@ -90,6 +141,11 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
         return diagnoses;
     }
 
+    /**
+     * @param resultSet
+     * @return
+     * @throws SQLException
+     */
     private List<Diagnosis> getDiagnosis(ResultSet resultSet) throws SQLException {
         List<Diagnosis> diagnoses = new ArrayList<>();
 
@@ -106,12 +162,23 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
         return diagnoses;
     }
 
+    /**
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
     @Override
     public List<Diagnosis> getAll(Connection connection) throws SQLException {
         String sqlSelect = "SELECT * from diagnosis;";
         return query(sqlSelect, connection);
     }
 
+    /**
+     * @param id
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
     @Override
     public Diagnosis getOneById(int id, Connection connection) throws SQLException {
         String sqlSelect = "SELECT * from diagnosis WHERE diagnosis_id = ?;";
@@ -119,11 +186,17 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<Diagnosis> diagnoses = getDiagnosis(resultSet);
-        if(diagnoses.size() == 0)
+        if (diagnoses.size() == 0)
             return null;
         return diagnoses.get(0);
     }
 
+    /**
+     * @param patientId
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
     public List<Diagnosis> getAllLastDiagnosesForPatient(int patientId, Connection connection) throws SQLException {
         String sqlSelect = "SELECT * FROM diagnosis WHERE patient_card_id = ? " +
                 "and (diagnosis_id > (SELECT MAX(diagnosis_id) FROM diagnosis " +
@@ -136,15 +209,4 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
         List<Diagnosis> diagnoses = getDiagnosis(resultSet);
         return diagnoses;
     }
-
-    /*public Diagnosis getLastDiagnosisForPatient(int patientId, Connection connection) throws SQLException {
-        String sqlSelect = "SELECT * FROM diagnosis " +
-                "WHERE diagnosis_id in (SELECT MAX(diagnosis_id) " +
-                "FROM diagnosis WHERE patient_card_id = ?);";
-        PreparedStatement preparedStatement = connection.prepareStatement(sqlSelect);
-        preparedStatement.setInt(1, patientId);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        List<Diagnosis> diagnoses = getDiagnosis(resultSet);
-        return diagnoses.get(0);
-    }*/
 }

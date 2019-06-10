@@ -2,16 +2,24 @@ package factories;
 
 import enums.AppointedTypes;
 
+/**
+ * @author Yullia Shcherbakova
+ * @project final
+ */
 public class AppointmentsFactory {
-    public static AppointedTypes getAppointmentType(String type){
-        switch (type){
-            case("operation"):{
+    /**
+     * @param type
+     * @return
+     */
+    public static AppointedTypes getAppointmentType(String type) {
+        switch (type) {
+            case ("operation"): {
                 return AppointedTypes.OPERATION;
             }
-            case("medicine"):{
+            case ("medicine"): {
                 return AppointedTypes.MEDICINE;
             }
-            case("procedure"):{
+            case ("procedure"): {
                 return AppointedTypes.PROCEDURE;
             }
             default:

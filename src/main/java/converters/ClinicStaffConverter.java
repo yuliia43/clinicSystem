@@ -1,13 +1,20 @@
 package converters;
 
 import dtos.ClinicStaffWithPasswords;
-import enums.AppointedTypes;
 import models.ClinicStaff;
 
+/**
+ * @author Yullia Shcherbakova
+ * @project final
+ */
 public class ClinicStaffConverter {
-    public static ClinicStaff convertIntoModel(ClinicStaffWithPasswords cswp){
-        return new ClinicStaff(cswp.getId(), cswp.getSurname(),cswp.getName(),
-                cswp.getTitle(), cswp.getEmail());
+    /**
+     * @param clinicStaffWithPasswords
+     * @return
+     */
+    public static ClinicStaff convertIntoModel(ClinicStaffWithPasswords clinicStaffWithPasswords) {
+        return new ClinicStaff(clinicStaffWithPasswords.getId(), clinicStaffWithPasswords.getSurname(), clinicStaffWithPasswords.getName(),
+                clinicStaffWithPasswords.getTitle(), clinicStaffWithPasswords.getEmail());
     }
 }
 

@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * @author Yullia Shcherbakova
+ * @project final
+ */
 public interface Repository<T> {
     void add(T item, Connection connection) throws SQLException;
 

@@ -1,6 +1,5 @@
 package servlets;
 
-import controller.AdminPageGetController;
 import controller.Controller;
 import factories.ControllerFactory;
 import org.apache.log4j.Logger;
@@ -12,9 +11,20 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * @author Yullia Shcherbakova
+ * @project final
+ */
 public class DispatcherServlet extends HttpServlet {
     private Logger logger = Logger.getLogger(DispatcherServlet.class);
 
+    /**
+     * @param req
+     * @param resp
+     * @param controller
+     * @throws ServletException
+     * @throws IOException
+     */
     private void executeRequest(HttpServletRequest req, HttpServletResponse resp, Controller controller) throws ServletException, IOException {
         String page;
         try {
@@ -27,11 +37,21 @@ public class DispatcherServlet extends HttpServlet {
                 .forward(req, resp);
     }
 
+    /**
+     * @param req
+     * @return
+     */
     private String getUri(HttpServletRequest req) {
         return req.getRequestURI()
-                    .substring(req.getContextPath().length()+1);
+                .substring(req.getContextPath().length() + 1);
     }
 
+    /**
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String uri = getUri(req);
@@ -40,6 +60,12 @@ public class DispatcherServlet extends HttpServlet {
         executeRequest(req, resp, controller);
     }
 
+    /**
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String uri = getUri(req);

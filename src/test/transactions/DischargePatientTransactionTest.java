@@ -1,23 +1,19 @@
 package transactions;
 
 import commonlyUsedStrings.CommonlyUsedStrings;
-import models.Appointed;
-import models.AppointingTimeAndPerson;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
-public class AddAppointmentTest {
-    public static final AddAppointment transactionApplier =
-            AddAppointment.getInstance();
+public class DischargePatientTransactionTest {
+    private static final DischargePatientTransaction transactionApplier = DischargePatientTransaction.getInstance();
 
     @Mock
     private Connection connection;
@@ -29,7 +25,7 @@ public class AddAppointmentTest {
     private Statement statement;
 
     @Before
-    public void init(){
+    public void init() {
         MockitoAnnotations.initMocks(this);
     }
 
@@ -44,13 +40,10 @@ public class AddAppointmentTest {
             when(resultSet.getInt(2)).thenReturn(1);
             when(resultSet.getString(3)).thenReturn("type");
             when(resultSet.getString(4)).thenReturn("details");
-            Appointed appointed = new Appointed();
-            appointed.setSchedule(new ArrayList<AppointingTimeAndPerson>());
-            transactionApplier.execute(appointed, connection);
+            transactionApplier.execute(1, connection);
         } catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
-        }
-        catch (NullPointerException e){
+        } catch (NullPointerException e) {
             fail(CommonlyUsedStrings.TESTING_NPE);
         }
     }

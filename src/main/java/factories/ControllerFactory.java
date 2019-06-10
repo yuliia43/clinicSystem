@@ -2,62 +2,74 @@ package factories;
 
 import controller.*;
 
+/**
+ * @author Yullia Shcherbakova
+ * @project final
+ */
 public class ControllerFactory {
 
-    public static Controller chooseGetMethodController(String uri){
-        switch (uri){
-            case ("admin"):{
+    /**
+     * @param uri
+     * @return
+     */
+    public static Controller chooseGetMethodController(String uri) {
+        switch (uri) {
+            case ("admin"): {
                 return new AdminPageGetController();
             }
-            case ("main"):{
+            case ("main"): {
                 return new MainPageGetController();
             }
-            case ("authorisation"):{
+            case ("authorisation"): {
                 return new AuthorisationGetController();
             }
-            case ("userPage"):{
+            case ("userPage"): {
                 return new UserPageGetController();
             }
-            case ("patients"):{
+            case ("patients"): {
                 return new PatientsGetController();
             }
-            case ("diagnoses"):{
+            case ("diagnoses"): {
                 return new PatientsDiagnosesGetController();
             }
-            case ("registration"):{
+            case ("registration"): {
                 return new RegistrationPageGetController();
             }
-            case ("appointments"):{
+            case ("appointments"): {
                 return new AppointmentGetController();
             }
-            default:{
+            default: {
                 return new PageNotFoundGetController();
             }
         }
     }
 
 
-    public static Controller choosePostMethodController(String uri){
-        switch (uri){
-            case ("admin"):{
+    /**
+     * @param uri
+     * @return
+     */
+    public static Controller choosePostMethodController(String uri) {
+        switch (uri) {
+            case ("admin"): {
                 return new AdminPagePostController();
             }
-            case ("authorisation"):{
+            case ("authorisation"): {
                 return new AuthorisationPostController();
             }
-            case ("patients"):{
+            case ("patients"): {
                 return new PatientsPostController();
             }
-            case ("diagnoses"):{
+            case ("diagnoses"): {
                 return new PatientsDiagnosesPostController();
             }
-            case ("registration"):{
+            case ("registration"): {
                 return new RegistrationPagePostController();
             }
-            case ("appointments"):{
+            case ("appointments"): {
                 return new AppointmentPostController();
             }
-            default:{
+            default: {
                 return new PageNotFoundGetController();
             }
         }

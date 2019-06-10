@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * @author Yullia Shcherbakova
+ * @project final
+ */
 public class PatientsDiagnosesGetController implements Controller {
     private static final PatientCardsService patientsCardsService =
             new PatientCardsService();
@@ -19,6 +23,11 @@ public class PatientsDiagnosesGetController implements Controller {
             new ClinicStaffService();
 
 
+    /**
+     * @param req
+     * @return
+     * @throws SQLException
+     */
     @Override
     public String execute(HttpServletRequest req) throws SQLException {
 

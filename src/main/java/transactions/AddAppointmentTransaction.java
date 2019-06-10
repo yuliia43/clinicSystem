@@ -1,6 +1,5 @@
 package transactions;
 
-import dtos.AppointedSchedule;
 import models.Appointed;
 import org.apache.log4j.Logger;
 import repositories.AppointedRepository;
@@ -9,22 +8,38 @@ import repositories.AppointingScheduleRepository;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class AddAppointment {
+/**
+ * @author Yullia Shcherbakova
+ * @project final
+ */
+public class AddAppointmentTransaction {
 
-    private static final AddAppointment singleton = new AddAppointment();
+    private static final AddAppointmentTransaction singleton = new AddAppointmentTransaction();
     private static final AppointedRepository appointedRepository =
             AppointedRepository.getAppointedRepository();
     private static final AppointingScheduleRepository appointingScheduleRepository =
             AppointingScheduleRepository.getAppointingScheduleRepository();
-    private static final Logger logger = Logger.getLogger(AddAppointment.class);
+    private static final Logger logger = Logger.getLogger(AddAppointmentTransaction.class);
 
-    private AddAppointment() {
+    /**
+     *
+     */
+    private AddAppointmentTransaction() {
     }
 
-    public static AddAppointment getInstance(){
+    /**
+     * @return
+     */
+    public static AddAppointmentTransaction getInstance() {
         return singleton;
     }
 
+    /**
+     * @param appointment
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
     public boolean execute(Appointed appointment, Connection connection) throws SQLException {
         try {
             logger.info("Transaction of adding appointment started");
@@ -33,7 +48,7 @@ public class AddAppointment {
             appointedRepository.add(appointment, connection);
             int appointedId = appointedRepository.getLast(connection).getId();
             appointment.getSchedule().stream()
-                    .forEach(schedule->schedule.setAppointedId(appointedId));
+                    .forEach(schedule -> schedule.setAppointedId(appointedId));
             appointingScheduleRepository.add(appointment.getSchedule(), connection);
             connection.commit();
             connection.setAutoCommit(true);

@@ -8,12 +8,21 @@ import servlets.DispatcherServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 
+/**
+ * @author Yullia Shcherbakova
+ * @project final
+ */
 public class RegistrationPagePostController implements Controller {
     private static final ClinicStaffService clinicStaffService =
             new ClinicStaffService();
     private static final Logger logger = Logger.getLogger(DispatcherServlet.class);
 
 
+    /**
+     * @param req
+     * @return
+     * @throws SQLException
+     */
     @Override
     public String execute(HttpServletRequest req) throws SQLException {
         String name = req.getParameter("firstName");

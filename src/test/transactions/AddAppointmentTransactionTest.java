@@ -15,8 +15,9 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
-public class DischargePatientTest {
-    private static final DischargePatient transactionApplier = DischargePatient.getInstance();
+public class AddAppointmentTransactionTest {
+    public static final AddAppointmentTransaction transactionApplier =
+            AddAppointmentTransaction.getInstance();
 
     @Mock
     private Connection connection;
@@ -28,7 +29,7 @@ public class DischargePatientTest {
     private Statement statement;
 
     @Before
-    public void init() {
+    public void init(){
         MockitoAnnotations.initMocks(this);
     }
 
@@ -43,10 +44,13 @@ public class DischargePatientTest {
             when(resultSet.getInt(2)).thenReturn(1);
             when(resultSet.getString(3)).thenReturn("type");
             when(resultSet.getString(4)).thenReturn("details");
-            transactionApplier.execute(1, connection);
+            Appointed appointed = new Appointed();
+            appointed.setSchedule(new ArrayList<AppointingTimeAndPerson>());
+            transactionApplier.execute(appointed, connection);
         } catch (SQLException e) {
             fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
-        } catch (NullPointerException e) {
+        }
+        catch (NullPointerException e){
             fail(CommonlyUsedStrings.TESTING_NPE);
         }
     }

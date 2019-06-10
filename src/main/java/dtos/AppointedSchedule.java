@@ -3,6 +3,10 @@ package dtos;
 
 import java.sql.Time;
 
+/**
+ * @author Yullia Shcherbakova
+ * @project final
+ */
 public class AppointedSchedule {
     private int scheduleId;
     private int performerId;
@@ -10,6 +14,13 @@ public class AppointedSchedule {
     private String details;
     private String patient;
 
+    /**
+     * @param scheduleId
+     * @param performerId
+     * @param pursuanceTime
+     * @param details
+     * @param patient
+     */
     public AppointedSchedule(int scheduleId, int performerId, Time pursuanceTime, String details, String patient) {
         this.scheduleId = scheduleId;
         this.performerId = performerId;
@@ -18,45 +29,78 @@ public class AppointedSchedule {
         this.patient = patient;
     }
 
+    /**
+     *
+     */
     public AppointedSchedule() {
     }
 
+    /**
+     * @return
+     */
     public int getScheduleId() {
         return scheduleId;
     }
 
+    /**
+     * @param scheduleId
+     */
     public void setScheduleId(int scheduleId) {
         this.scheduleId = scheduleId;
     }
 
+    /**
+     * @return
+     */
     public int getPerformerId() {
         return performerId;
     }
 
+    /**
+     * @param performerId
+     */
     public void setPerformerId(int performerId) {
         this.performerId = performerId;
     }
 
+    /**
+     * @return
+     */
     public Time getPursuanceTime() {
         return pursuanceTime;
     }
 
+    /**
+     * @param pursuanceTime
+     */
     public void setPursuanceTime(Time pursuanceTime) {
         this.pursuanceTime = pursuanceTime;
     }
 
+    /**
+     * @return
+     */
     public String getDetails() {
         return details;
     }
 
+    /**
+     * @param details
+     */
     public void setDetails(String details) {
         this.details = details;
     }
 
+    /**
+     * @return
+     */
     public String getPatient() {
         return patient;
     }
 
+    /**
+     * @param patient
+     */
     public void setPatient(String patient) {
         this.patient = patient;
     }

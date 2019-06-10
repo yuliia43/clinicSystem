@@ -1,6 +1,5 @@
 package transactions;
 
-import jdbc.ConnectionPoolHolder;
 import models.Appointed;
 import models.Diagnosis;
 import org.apache.log4j.Logger;
@@ -13,23 +12,39 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DischargePatient{
-    private static final DischargePatient singleton = new DischargePatient();
-    private static final Logger logger = Logger.getLogger(DischargePatient.class);
+/**
+ * @author Yullia Shcherbakova
+ * @project final
+ */
+public class DischargePatientTransaction {
+    private static final DischargePatientTransaction singleton = new DischargePatientTransaction();
+    private static final Logger logger = Logger.getLogger(DischargePatientTransaction.class);
     private static final DiagnosisService diagnosisService = new DiagnosisService();
     private static final AppointingScheduleService appointingScheduleService =
             new AppointingScheduleService();
     private static final AppointedService appointedService =
             new AppointedService();
 
-    private DischargePatient(){
+    /**
+     *
+     */
+    private DischargePatientTransaction() {
 
     }
 
-    public static DischargePatient getInstance() {
+    /**
+     * @return
+     */
+    public static DischargePatientTransaction getInstance() {
         return singleton;
     }
 
+    /**
+     * @param patientId
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
     public boolean execute(int patientId, Connection connection) throws SQLException {
         try {
             connection.setAutoCommit(false);

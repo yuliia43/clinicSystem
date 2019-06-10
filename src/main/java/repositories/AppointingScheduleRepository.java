@@ -1,8 +1,6 @@
 package repositories;
 
 import dtos.AppointedSchedule;
-import enums.AppointedTypes;
-import jdbc.ConnectionPoolHolder;
 import models.AppointingTimeAndPerson;
 import org.apache.log4j.Logger;
 
@@ -10,24 +8,45 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Yullia Shcherbakova
+ * @project final
+ */
 public class AppointingScheduleRepository implements Repository<AppointingTimeAndPerson> {
     private static final Logger logger = Logger.getLogger(AppointingScheduleRepository.class);
     private static final AppointingScheduleRepository appointingScheduleRepository =
             new AppointingScheduleRepository();
-    private AppointingScheduleRepository(){
+
+    /**
+     *
+     */
+    private AppointingScheduleRepository() {
 
     }
 
+    /**
+     * @return
+     */
     public static AppointingScheduleRepository getAppointingScheduleRepository() {
         return appointingScheduleRepository;
     }
 
+    /**
+     * @param item
+     * @param connection
+     * @throws SQLException
+     */
     @Override
     public void add(AppointingTimeAndPerson item, Connection connection) throws SQLException {
         addItem(item, connection);
 
     }
 
+    /**
+     * @param item
+     * @param connection
+     * @throws SQLException
+     */
     private void addItem(AppointingTimeAndPerson item, Connection connection) throws SQLException {
         String sqlAddSchedule = "INSERT INTO " +
                 "appointing_schedule (appointed_id,pursuance_time,performer_id,is_performed)" +
@@ -40,6 +59,11 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
         logger.info("Added appointed schedule for appointed with id " + item.getAppointedId());
     }
 
+    /**
+     * @param items
+     * @param connection
+     * @throws SQLException
+     */
     @Override
     public void add(Iterable<AppointingTimeAndPerson> items, Connection connection) throws SQLException {
         for (AppointingTimeAndPerson schedule : items) {
@@ -48,6 +72,11 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
     }
 
 
+    /**
+     * @param item
+     * @param connection
+     * @throws SQLException
+     */
     @Override
     public void update(AppointingTimeAndPerson item, Connection connection) throws SQLException {
         String sqlUpdateSchedule = "UPDATE appointing_schedule " +
@@ -62,11 +91,21 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
         logger.info("Updated appointed schedule with id " + item.getId());
     }
 
+    /**
+     * @param item
+     * @param connection
+     * @throws SQLException
+     */
     @Override
     public void remove(AppointingTimeAndPerson item, Connection connection) throws SQLException {
         removeItem(item, connection);
     }
 
+    /**
+     * @param item
+     * @param connection
+     * @throws SQLException
+     */
     private void removeItem(AppointingTimeAndPerson item, Connection connection) throws SQLException {
         String sqlRemoveSchedule = "DELETE from appointing_schedule where schedule_id = ?";
 
@@ -76,6 +115,11 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
         logger.info("Removed appointed schedule with id " + item.getId());
     }
 
+    /**
+     * @param items
+     * @param connection
+     * @throws SQLException
+     */
     @Override
     public void remove(Iterable<AppointingTimeAndPerson> items, Connection connection) throws SQLException {
         for (AppointingTimeAndPerson schedule : items) {
@@ -84,6 +128,11 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
     }
 
 
+    /**
+     * @param resultSet
+     * @return
+     * @throws SQLException
+     */
     private List<AppointingTimeAndPerson> getSchedule(ResultSet resultSet) throws SQLException {
         List<AppointingTimeAndPerson> schedule = new ArrayList<>();
 
@@ -94,12 +143,18 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
             int performerId = resultSet.getInt(4);
             boolean isPerformed = resultSet.getBoolean(5);
             schedule
-                    .add(new AppointingTimeAndPerson(id, appointedId, time,performerId, isPerformed));
+                    .add(new AppointingTimeAndPerson(id, appointedId, time, performerId, isPerformed));
         }
         return schedule;
     }
 
 
+    /**
+     * @param query
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
     @Override
     public List<AppointingTimeAndPerson> query(String query, Connection connection) throws SQLException {
         Statement statement = connection.createStatement();
@@ -109,12 +164,23 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
         return patientCards;
     }
 
+    /**
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
     @Override
     public List<AppointingTimeAndPerson> getAll(Connection connection) throws SQLException {
         String sqlSelect = "SELECT * from appointing_schedule;";
         return query(sqlSelect, connection);
     }
 
+    /**
+     * @param id
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
     @Override
     public AppointingTimeAndPerson getOneById(int id, Connection connection) throws SQLException {
         String sqlSelect = "SELECT * from appointing_schedule WHERE schedule_id = ?;";
@@ -122,12 +188,19 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<AppointingTimeAndPerson> patientCards = getSchedule(resultSet);
-        if(patientCards.size() == 0)
+        if (patientCards.size() == 0)
             return null;
         return patientCards.get(0);
     }
 
 
+    /**
+     * @param performerId
+     * @param type
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
     public List<AppointedSchedule> searchScheduleForToday(int performerId, String type, Connection connection) throws SQLException {
         String sqlSelect = "SELECT schedule_id, time(pursuance_time), details, concat(patient_surname, ' ', patient_name)\n" +
                 "FROM appointing_schedule, appointed, patients_cards\n" +
@@ -141,7 +214,7 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
         preparedStatement.setString(2, type);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<AppointedSchedule> schedules = new ArrayList<>();
-        while(resultSet.next()){
+        while (resultSet.next()) {
             int scheduleId = resultSet.getInt(1);
             Time pursuanceTime = Time.valueOf(resultSet.getString(2));
             String details = resultSet.getString(3);
@@ -151,6 +224,11 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
         return schedules;
     }
 
+    /**
+     * @param id
+     * @param connection
+     * @throws SQLException
+     */
     public void doAppointment(int id, Connection connection) throws SQLException {
         String sqlUpdateSchedule = "UPDATE appointing_schedule " +
                 "SET is_performed = 1 " +
@@ -161,6 +239,12 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
         logger.info("Performed appointment for schedule with id " + id);
     }
 
+    /**
+     * @param appointedId
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
     public int cancelAppointed(int appointedId, Connection connection) throws SQLException {
         String sqlUpdateSchedule = "DELETE FROM appointing_schedule " +
                 "WHERE appointed_id = ? AND is_performed <> 1 " +

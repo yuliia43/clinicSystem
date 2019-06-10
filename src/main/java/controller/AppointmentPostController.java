@@ -12,12 +12,21 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @author Yullia Shcherbakova
+ * @project final
+ */
 public class AppointmentPostController implements Controller {
     private static final Logger logger = Logger.getLogger(DispatcherServlet.class);
     private static final AppointingScheduleService appointingScheduleService =
             new AppointingScheduleService();
 
 
+    /**
+     * @param req
+     * @return
+     * @throws SQLException
+     */
     @Override
     public String execute(HttpServletRequest req) throws SQLException {
         String[] appointments = req.getParameterValues("appointed");

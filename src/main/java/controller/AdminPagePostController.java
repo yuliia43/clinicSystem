@@ -11,10 +11,19 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
+/**
+ * @author Yullia Shcherbakova
+ * @project final
+ */
 public class AdminPagePostController implements Controller {
 
     private static final Logger logger = Logger.getLogger(DispatcherServlet.class);
 
+    /**
+     * @param req
+     * @return
+     * @throws SQLException
+     */
     @Override
     public String execute(HttpServletRequest req) throws SQLException {
         String firstName = req.getParameter("firstName");

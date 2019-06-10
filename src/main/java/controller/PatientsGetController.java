@@ -8,9 +8,18 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * @author Yullia Shcherbakova
+ * @project final
+ */
 public class PatientsGetController implements Controller {
     private PatientCardsService patientCardsService = new PatientCardsService();
 
+    /**
+     * @param req
+     * @return
+     * @throws SQLException
+     */
     @Override
     public String execute(HttpServletRequest req) throws SQLException {
         ClinicStaff staff = (ClinicStaff) req.getSession().getAttribute("user");

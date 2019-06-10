@@ -1,8 +1,7 @@
 package services;
 
-import dtos.ClinicStaffWithPasswords;
 import converters.ClinicStaffConverter;
-import jdbc.ConnectionPoolHolder;
+import dtos.ClinicStaffWithPasswords;
 import models.ClinicStaff;
 import repositories.ClinicStaffRepository;
 
@@ -12,9 +11,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * @author Yullia Shcherbakova
+ * @project final
+ */
 public class ClinicStaffService extends Service {
     private static final ClinicStaffRepository clinicStaffRepository = ClinicStaffRepository.getClinicStaffRepository();
 
+    /**
+     * @param id
+     * @return
+     * @throws SQLException
+     */
     public ClinicStaff getOneById(int id) throws SQLException {
         ClinicStaffWithPasswords staffWithPasswords;
         try (Connection connection = receiveConnection()) {
@@ -23,6 +31,10 @@ public class ClinicStaffService extends Service {
         }
     }
 
+    /**
+     * @return
+     * @throws SQLException
+     */
     public List<ClinicStaff> getAll() throws SQLException {
         List<ClinicStaffWithPasswords> all;
         try (Connection connection = receiveConnection()) {
@@ -35,6 +47,10 @@ public class ClinicStaffService extends Service {
         }
     }
 
+    /**
+     * @return
+     * @throws SQLException
+     */
     public List<ClinicStaff> getAllDoctors() throws SQLException {
         try (Connection connection = receiveConnection()) {
             return clinicStaffRepository.getAllDoctors(connection).stream()
@@ -43,12 +59,22 @@ public class ClinicStaffService extends Service {
         }
     }
 
+    /**
+     * @param email
+     * @param password
+     * @return
+     * @throws SQLException
+     */
     public ClinicStaff checkAuthorization(String email, String password) throws SQLException {
         try (Connection connection = receiveConnection()) {
             return clinicStaffRepository.checkAuthorization(email, password, connection);
         }
     }
 
+    /**
+     * @param clinicStaffWithPasswords
+     * @throws SQLException
+     */
     public void add(ClinicStaffWithPasswords clinicStaffWithPasswords) throws SQLException {
         try (Connection connection = receiveConnection()) {
             clinicStaffRepository.add(clinicStaffWithPasswords, connection);
