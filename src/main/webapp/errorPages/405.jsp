@@ -7,8 +7,12 @@
 <jsp:include page='../pages/mainPage.jsp'/>
 
 <html>
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+</head>
 <body>
-<h1>Page can not be reached!</h1>
-<a href="/main">Go to main page</a>
+<h1><fmt:message key="error.notReached"/>!</h1>
+<a href="/main"><fmt:message key="button.return.toMain"/></a>
 </body>
 </html>

@@ -7,7 +7,11 @@
 
 <jsp:include page='../pages/mainPage.jsp'/>
 <html>
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+</head>
 <body>
-<h1>Request error!</h1>
+<h1><fmt:message key="error.invalid.request"/>!</h1>
 </body>
 </html>

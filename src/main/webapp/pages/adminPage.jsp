@@ -8,24 +8,24 @@
 <body>
 <div class="box">
     <form method="post">
-        <h3>Add patient</h3>
-        First Name<input type="text" name="firstName">
+        <h3><fmt:message key="registration.label.patient"/></h3>
+        <fmt:message key="user.name"/><input type="text" name="firstName">
         <br>
-        Last Name<input type="text" name="lastName">
+        <fmt:message key="user.surname"/><input type="text" name="lastName">
         <br>
-        Sex
+        <fmt:message key="user.sex"/>
         <select name="sex">
             <option value="m">male</option>
             <option value="f">female</option>
         </select>
         <br>
-        Birthday Date<input type="date" name="birthday">
+        <fmt:message key="user.birthday"/><input type="date" name="birthday">
         <br>
         <c:if test="${fail != null}">
-            <p>You should fill in all fields!</p><br>
+            <p><fmt:message key="error.fieldsNotFilled"/>!</p><br>
         </c:if>
 
-        <button onclick="this.form.submit()">Register</button>
+        <button onclick="this.form.submit()"><fmt:message key="registration.submit"/></button>
     </form>
 </div>
 </body>

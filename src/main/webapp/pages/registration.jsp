@@ -6,31 +6,35 @@
 <fmt:setLocale value="${locale}"/>
 <fmt:setBundle basename="${bundle}"/>
 <html>
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+</head>
 <body>
 <div class="box">
     <form action="registration" method="post">
-        <h3>Registration</h3>
-        First Name<input type="text" name="firstName">
+        <h3><fmt:message key="label.registration"/></h3>
+        <fmt:message key="user.name"/><input type="text" name="firstName">
         <br>
-        Last Name<input type="text" name="lastName">
+        <fmt:message key="user.surname"/><input type="text" name="lastName">
         <br>
-        E-mail<input type="email" name="email">
+        <fmt:message key="user.email"/><input type="email" name="email">
         <br>
-        Title<input type="radio" name="title" value="doctor">Doctor</input>
+        <fmt:message key="user.title"/><input type="radio" name="title" value="doctor">Doctor</input>
         <input type="radio" name="title" value="nurse">Nurse</input>
         <br>
-        Password<input type="password" name="password">
+        <fmt:message key="label.password"/><input type="password" name="password">
         <br>
-        Confirm password<input type="password" name="confirmedPassword">
+        <fmt:message key="label.password.confirm"/><input type="password" name="confirmedPassword">
         <br>
         <c:if test="${fail != null}">
-            <p>You should fill in all fields!</p><br>
+            <p><fmt:message key="error.fieldsNotFilled"/>!</p><br>
         </c:if>
         <c:if test="${notEqual == true}">
-            <p>Passwords are not equal!</p><br>
+            <p><fmt:message key="error.passwordsNotEqual"/>!</p><br>
         </c:if>
 
-        <button onclick="this.form.submit()">Register</button>
+        <button onclick="this.form.submit()"><fmt:message key="registration.submit"/></button>
     </form>
 </div>
 </body>

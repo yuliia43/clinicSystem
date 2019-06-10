@@ -26,7 +26,7 @@ public class PatientsGetController implements Controller {
         if (staff.getTitle().equals("doctor")) {
             List<PatientCard> allPatients = patientCardsService.getAll();
             if(allPatients.size() == 0)
-                return "errorPages/noPatients.jsp";
+                return "pages/noPatients.jsp";
             req.setAttribute("allPatients", allPatients);
             List<PatientCard> cards = patientCardsService.getAllByDoctorId(staff.getId());
             req.setAttribute("doctorsPatients", cards);

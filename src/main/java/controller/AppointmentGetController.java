@@ -36,7 +36,7 @@ public class AppointmentGetController implements Controller {
             List<AppointedSchedule> appointedSchedules = appointingScheduleService
                     .searchScheduleForToday(performerId, appointedType);
             if (appointedSchedules.size() == 0) {
-                return "errorPages/emptyList.jsp";
+                return "pages/emptyAppointmentsList.jsp";
             } else {
                 int startingIndex = (int) req.getAttribute("startIdx");
                 int endIdx = (int) req.getAttribute("endIdx");

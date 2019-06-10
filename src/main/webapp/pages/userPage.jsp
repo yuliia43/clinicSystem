@@ -8,6 +8,7 @@
 
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>UserPage</title>
 </head>
 <body>
