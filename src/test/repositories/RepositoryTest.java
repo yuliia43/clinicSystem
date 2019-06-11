@@ -1,6 +1,6 @@
 package repositories;
 
-import commonlyUsedStrings.CommonlyUsedStrings;
+import commonlyUsedStrings.ExceptionMessage;
 import dtos.ClinicStaffWithPasswords;
 import models.*;
 import org.junit.Before;
@@ -12,7 +12,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 import static org.junit.Assert.*;
@@ -57,10 +56,10 @@ public class RepositoryTest {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             repository.add(type, connection);
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
         catch (NullPointerException e){
-            fail(CommonlyUsedStrings.TESTING_NPE);
+            fail(ExceptionMessage.TESTING_NPE);
         }
     }
 
@@ -70,10 +69,10 @@ public class RepositoryTest {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             repository.add(new ArrayList<>(), connection);
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
         catch (NullPointerException e){
-            fail(CommonlyUsedStrings.TESTING_NPE);
+            fail(ExceptionMessage.TESTING_NPE);
         }
     }
 
@@ -83,10 +82,10 @@ public class RepositoryTest {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             repository.update(type, connection);
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
         catch (NullPointerException e){
-            fail(CommonlyUsedStrings.TESTING_NPE);
+            fail(ExceptionMessage.TESTING_NPE);
         }
     }
 
@@ -96,10 +95,10 @@ public class RepositoryTest {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             repository.remove(type, connection);
         }  catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
         catch (NullPointerException e){
-            fail(CommonlyUsedStrings.TESTING_NPE);
+            fail(ExceptionMessage.TESTING_NPE);
         }
     }
 
@@ -109,10 +108,10 @@ public class RepositoryTest {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             repository.remove(new ArrayList<>(), connection);
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
         catch (NullPointerException e){
-            fail(CommonlyUsedStrings.TESTING_NPE);
+            fail(ExceptionMessage.TESTING_NPE);
         }
     }
 
@@ -123,10 +122,10 @@ public class RepositoryTest {
             when(statement.executeQuery(anyString())).thenReturn(resultSet);
             repository.query("SELECT * from appointing_schedule;", connection);
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
         catch (NullPointerException e){
-            fail(CommonlyUsedStrings.TESTING_NPE);
+            fail(ExceptionMessage.TESTING_NPE);
         }
     }
 
@@ -137,10 +136,10 @@ public class RepositoryTest {
             when(statement.executeQuery(anyString())).thenReturn(resultSet);
             repository.getAll(connection);
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
         catch (NullPointerException e){
-            fail(CommonlyUsedStrings.TESTING_NPE);
+            fail(ExceptionMessage.TESTING_NPE);
         }
     }
 

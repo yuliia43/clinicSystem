@@ -1,5 +1,7 @@
 package controller;
 
+import commonlyUsedStrings.PageName;
+
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 
@@ -16,6 +18,6 @@ public class AuthorisationGetController implements Controller {
      */
     @Override
     public String execute(HttpServletRequest req) throws SQLException {
-        return "pages/authorisation.jsp";
+        return PageName.AUTHORISATION;
     }
 }

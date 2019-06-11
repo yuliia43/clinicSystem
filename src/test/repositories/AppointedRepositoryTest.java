@@ -1,15 +1,13 @@
 package repositories;
 
-import commonlyUsedStrings.CommonlyUsedStrings;
+import commonlyUsedStrings.ExceptionMessage;
 import models.Appointed;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -43,9 +41,9 @@ public class AppointedRepositoryTest {
             when(preparedStatement.executeQuery()).thenReturn(resultSet);
             repository.getAllByDiagnosisId(1, connection);
         }catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         } catch (NullPointerException e) {
-            fail(CommonlyUsedStrings.TESTING_NPE);
+            fail(ExceptionMessage.TESTING_NPE);
         }
     }
 
@@ -59,10 +57,10 @@ public class AppointedRepositoryTest {
             when(resultSet.getString(anyInt())).thenReturn("");
             repository.getLast(connection);
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
         catch (NullPointerException e){
-            fail(CommonlyUsedStrings.TESTING_NPE);
+            fail(ExceptionMessage.TESTING_NPE);
         }
     }
 }

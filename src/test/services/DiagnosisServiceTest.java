@@ -1,26 +1,17 @@
 package services;
 
-import commonlyUsedStrings.CommonlyUsedStrings;
-import jdbc.ConnectionPoolHolder;
-import models.Appointed;
+import commonlyUsedStrings.ExceptionMessage;
 import models.Diagnosis;
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
-import repositories.AppointedRepository;
-import repositories.DiagnosisRepository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
@@ -55,7 +46,7 @@ public class DiagnosisServiceTest {
             diagnosisService.getDiagnosisForPatient(1);
             verify(connection).close();
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
     }
 
@@ -65,7 +56,7 @@ public class DiagnosisServiceTest {
             diagnosisService.add(new Diagnosis());
             verify(connection).close();
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
     }
 }

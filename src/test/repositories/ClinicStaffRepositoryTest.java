@@ -1,6 +1,6 @@
 package repositories;
 
-import commonlyUsedStrings.CommonlyUsedStrings;
+import commonlyUsedStrings.ExceptionMessage;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -38,9 +38,9 @@ public class ClinicStaffRepositoryTest {
             when(statement.executeQuery(any(String.class))).thenReturn(resultSet);
             repository.getAllDoctors(connection);
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         } catch (NullPointerException e) {
-            fail(CommonlyUsedStrings.TESTING_NPE);
+            fail(ExceptionMessage.TESTING_NPE);
         }
     }
 
@@ -51,9 +51,9 @@ public class ClinicStaffRepositoryTest {
             when(preparedStatement.executeQuery()).thenReturn(resultSet);
             repository.checkAuthorization(any(String.class), "password", connection);
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         } catch (NullPointerException e) {
-            fail(CommonlyUsedStrings.TESTING_NPE);
+            fail(ExceptionMessage.TESTING_NPE);
         }
     }
 
@@ -64,9 +64,9 @@ public class ClinicStaffRepositoryTest {
             when(preparedStatement.executeQuery()).thenReturn(resultSet);
             repository.checkIfEmailExists("email", connection);
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         } catch (NullPointerException e) {
-            fail(CommonlyUsedStrings.TESTING_NPE);
+            fail(ExceptionMessage.TESTING_NPE);
         }
     }
 

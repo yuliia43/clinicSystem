@@ -1,6 +1,6 @@
 package services;
 
-import commonlyUsedStrings.CommonlyUsedStrings;
+import commonlyUsedStrings.ExceptionMessage;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -48,7 +48,7 @@ public class AppointedServiceTest {
             appointedService.getAllByDiagnosisId(1);
             verify(connection).close();
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
     }
 }

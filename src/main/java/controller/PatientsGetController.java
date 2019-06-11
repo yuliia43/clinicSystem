@@ -1,5 +1,6 @@
 package controller;
 
+import commonlyUsedStrings.PageName;
 import models.ClinicStaff;
 import models.PatientCard;
 import services.PatientCardsService;
@@ -30,9 +31,9 @@ public class PatientsGetController implements Controller {
             req.setAttribute("allPatients", allPatients);
             List<PatientCard> cards = patientCardsService.getAllByDoctorId(staff.getId());
             req.setAttribute("doctorsPatients", cards);
-            return "pages/DoctorsPatients.jsp";
+            return PageName.DOCTORS_PATIENTS;
         } else {
-            return "errorPages/accessError.jsp";
+            return PageName.ACCESS_ERROR;
         }
     }
 }

@@ -1,5 +1,6 @@
 package controller;
 
+import commonlyUsedStrings.PageName;
 import models.ClinicStaff;
 import org.apache.log4j.Logger;
 import services.ClinicStaffService;
@@ -31,14 +32,14 @@ public class AuthorisationPostController implements Controller {
             if (staff != null) {
                 logger.info("User with id " + staff.getId() + " authorised");
                 req.getSession().setAttribute("user", staff);
-                return "pages/userPage.jsp";
+                return PageName.USER_PAGE;
             } else {
                 req.setAttribute("fail", true);
-                return "pages/authorisation.jsp";
+                return PageName.AUTHORISATION;
             }
         } else {
             req.setAttribute("fail", true);
-            return "pages/authorisation.jsp";
+            return PageName.AUTHORISATION;
         }
     }
 }

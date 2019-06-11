@@ -1,5 +1,6 @@
 package controller;
 
+import commonlyUsedStrings.PageName;
 import dtos.AppointedSchedule;
 import enums.AppointedTypes;
 import factories.AppointmentsFactory;
@@ -30,7 +31,7 @@ public class AppointmentGetController implements Controller {
         String type = req.getParameter("type");
         AppointedTypes appointedType = AppointmentsFactory.getAppointmentType(type);
         if (!clinicStaff.getTitle().equals("doctor") && appointedType == AppointedTypes.OPERATION) {
-            return "errorPages/accessError.jsp";
+            return PageName.ACCESS_ERROR;
         } else {
             int performerId = clinicStaff.getId();
             List<AppointedSchedule> appointedSchedules = appointingScheduleService
@@ -47,7 +48,7 @@ public class AppointmentGetController implements Controller {
                 appointedSchedules = appointedSchedules.subList(startingIndex, endIdx);
                 req.setAttribute("schedules", appointedSchedules);
                 req.setAttribute("type", type);
-                return "pages/appointments.jsp";
+                return PageName.APPOINTMENTS;
 
             }
         }

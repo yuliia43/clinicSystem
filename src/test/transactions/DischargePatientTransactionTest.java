@@ -1,6 +1,6 @@
 package transactions;
 
-import commonlyUsedStrings.CommonlyUsedStrings;
+import commonlyUsedStrings.ExceptionMessage;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -42,9 +42,9 @@ public class DischargePatientTransactionTest {
             when(resultSet.getString(4)).thenReturn("details");
             transactionApplier.execute(1, connection);
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         } catch (NullPointerException e) {
-            fail(CommonlyUsedStrings.TESTING_NPE);
+            fail(ExceptionMessage.TESTING_NPE);
         }
     }
 }

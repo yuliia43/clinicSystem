@@ -1,6 +1,6 @@
 package transactions;
 
-import commonlyUsedStrings.CommonlyUsedStrings;
+import commonlyUsedStrings.ExceptionMessage;
 import models.Appointed;
 import models.AppointingTimeAndPerson;
 import org.junit.Before;
@@ -48,10 +48,10 @@ public class AddAppointmentTransactionTest {
             appointed.setSchedule(new ArrayList<AppointingTimeAndPerson>());
             transactionApplier.execute(appointed, connection);
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
         catch (NullPointerException e){
-            fail(CommonlyUsedStrings.TESTING_NPE);
+            fail(ExceptionMessage.TESTING_NPE);
         }
     }
 }

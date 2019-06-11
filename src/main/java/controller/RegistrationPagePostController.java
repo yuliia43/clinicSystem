@@ -1,5 +1,6 @@
 package controller;
 
+import commonlyUsedStrings.PageName;
 import dtos.ClinicStaffWithPasswords;
 import org.apache.log4j.Logger;
 import services.ClinicStaffService;
@@ -32,11 +33,11 @@ public class RegistrationPagePostController implements Controller {
         String password = req.getParameter("password");
         if (!password.equals(req.getParameter("confirmedPassword"))) {
             req.setAttribute("notEqual", true);
-            return "pages/registration.jsp";
+            return PageName.REGISTRATION;
         } else if (name.isEmpty() || surname.isEmpty() || email.isEmpty()
                 || title == null || password.isEmpty()) {
             req.setAttribute("fail", true);
-            return "pages/registration.jsp";
+            return PageName.REGISTRATION;
         } else {
             ClinicStaffWithPasswords clinicStaff = new ClinicStaffWithPasswords();
             clinicStaff.setName(name);
@@ -46,7 +47,7 @@ public class RegistrationPagePostController implements Controller {
             clinicStaff.setPassword(password);
             clinicStaffService.add(clinicStaff);
             logger.info("Clinic staff " + name + " " + surname + " added");
-            return "pages/successfulRegistration.jsp";
+            return PageName.SUCCESSFUL_REGISTRATION;
         }
     }
 }

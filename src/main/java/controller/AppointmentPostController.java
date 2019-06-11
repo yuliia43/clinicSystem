@@ -1,5 +1,6 @@
 package controller;
 
+import commonlyUsedStrings.PageName;
 import dtos.AppointedSchedule;
 import enums.AppointedTypes;
 import models.ClinicStaff;
@@ -45,6 +46,6 @@ public class AppointmentPostController implements Controller {
         List<AppointedSchedule> appointedSchedules = appointingScheduleService
                 .searchScheduleForToday(performerId, AppointedTypes.OPERATION);
         req.setAttribute("schedules", appointedSchedules);
-        return "pages/operations.jsp";
+        return PageName.APPOINTMENTS;
     }
 }

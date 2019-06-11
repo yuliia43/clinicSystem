@@ -1,5 +1,6 @@
 package controller;
 
+import commonlyUsedStrings.PageName;
 import models.PatientCard;
 import org.apache.log4j.Logger;
 import services.PatientCardsService;
@@ -38,6 +39,6 @@ public class AdminPagePostController implements Controller {
         PatientCardsService service = new PatientCardsService();
         service.add(patientCard);
         logger.info("Added patient " + firstName + " " + lastName);
-        return "pages/adminPage.jsp";
+        return PageName.ADMIN_PAGE;
     }
 }

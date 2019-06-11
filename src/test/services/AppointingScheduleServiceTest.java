@@ -1,6 +1,6 @@
 package services;
 
-import commonlyUsedStrings.CommonlyUsedStrings;
+import commonlyUsedStrings.ExceptionMessage;
 import enums.AppointedTypes;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +47,7 @@ public class AppointingScheduleServiceTest {
             appointingScheduleService.searchScheduleForToday(1, AppointedTypes.OPERATION);
             verify(connection).close();
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
     }
 
@@ -57,7 +57,7 @@ public class AppointingScheduleServiceTest {
             appointingScheduleService.cancelAppointed(1);
             verify(connection).close();
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
     }
 
@@ -67,7 +67,7 @@ public class AppointingScheduleServiceTest {
             appointingScheduleService.doAppointment(1);
             verify(connection).close();
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
     }
 }

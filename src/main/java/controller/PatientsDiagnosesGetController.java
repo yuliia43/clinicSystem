@@ -1,5 +1,6 @@
 package controller;
 
+import commonlyUsedStrings.PageName;
 import models.Diagnosis;
 import models.PatientCard;
 import services.ClinicStaffService;
@@ -38,6 +39,6 @@ public class PatientsDiagnosesGetController implements Controller {
         req.setAttribute("diagnoses", diagnoses);
         req.setAttribute("staff", clinicStaffService.getAll());
         req.setAttribute("doctors", clinicStaffService.getAllDoctors());
-        return "pages/diagnoses.jsp";
+        return PageName.DIAGNOSES;
     }
 }

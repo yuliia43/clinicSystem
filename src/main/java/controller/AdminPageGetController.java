@@ -1,5 +1,7 @@
 package controller;
 
+import commonlyUsedStrings.PageName;
+
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -16,6 +18,6 @@ public class AdminPageGetController implements Controller {
      */
     @Override
     public String execute(HttpServletRequest request) {
-        return "pages/adminPage.jsp";
+        return PageName.ADMIN_PAGE;
     }
 }

@@ -1,5 +1,8 @@
 package controller;
 
+import commonlyUsedStrings.PageName;
+import models.ClinicStaff;
+
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 
@@ -15,6 +18,10 @@ public class UserPageGetController implements Controller {
      */
     @Override
     public String execute(HttpServletRequest request) throws SQLException {
-        return "pages/userPage.jsp";
+        ClinicStaff user = (ClinicStaff) request.getSession().getAttribute("user");
+        if (user != null)
+            return PageName.USER_PAGE;
+        else
+            return PageName.AUTHORISATION_ERROR;
     }
 }

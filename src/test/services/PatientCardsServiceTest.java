@@ -1,6 +1,6 @@
 package services;
 
-import commonlyUsedStrings.CommonlyUsedStrings;
+import commonlyUsedStrings.ExceptionMessage;
 import models.PatientCard;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,7 +50,7 @@ public class PatientCardsServiceTest {
             patientCardsService.getAllByDoctorId(1);
             verify(connection).close();
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
     }
 
@@ -60,7 +60,7 @@ public class PatientCardsServiceTest {
             patientCardsService.getOneById(1);
             verify(connection).close();
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
     }
 
@@ -70,7 +70,7 @@ public class PatientCardsServiceTest {
             patientCardsService.add(new PatientCard());
             verify(connection).close();
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
     }
 
@@ -80,7 +80,7 @@ public class PatientCardsServiceTest {
             patientCardsService.getAll();
             verify(connection).close();
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
     }
 }

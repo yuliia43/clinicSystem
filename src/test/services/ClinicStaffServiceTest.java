@@ -1,13 +1,12 @@
 package services;
 
-import commonlyUsedStrings.CommonlyUsedStrings;
+import commonlyUsedStrings.ExceptionMessage;
 import dtos.ClinicStaffWithPasswords;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
-import repositories.ClinicStaffRepository;
 
 import java.sql.*;
 
@@ -54,7 +53,7 @@ public class ClinicStaffServiceTest {
             clinicStaffService.getOneById(1);
             verify(connection).close();
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
     }
 
@@ -64,7 +63,7 @@ public class ClinicStaffServiceTest {
             clinicStaffService.getAll();
             verify(connection).close();
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
     }
 
@@ -74,7 +73,7 @@ public class ClinicStaffServiceTest {
             clinicStaffService.getAllDoctors();
             verify(connection).close();
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
     }
 
@@ -84,7 +83,7 @@ public class ClinicStaffServiceTest {
             clinicStaffService.checkAuthorization("email", "password");
             verify(connection).close();
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
     }
 
@@ -94,7 +93,7 @@ public class ClinicStaffServiceTest {
             clinicStaffService.add(new ClinicStaffWithPasswords());
             verify(connection).close();
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
     }
 }
