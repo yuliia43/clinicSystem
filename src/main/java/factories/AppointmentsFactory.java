@@ -1,6 +1,6 @@
 package factories;
 
-import enums.AppointedTypes;
+import enums.AppointmentTypes;
 
 /**
  * @author Yullia Shcherbakova
@@ -11,16 +11,16 @@ public class AppointmentsFactory {
      * @param type
      * @return
      */
-    public static AppointedTypes getAppointmentType(String type) {
+    public static AppointmentTypes getAppointmentType(String type) {
         switch (type) {
             case ("operation"): {
-                return AppointedTypes.OPERATION;
+                return AppointmentTypes.OPERATION;
             }
             case ("medicine"): {
-                return AppointedTypes.MEDICINE;
+                return AppointmentTypes.MEDICINE;
             }
             case ("procedure"): {
-                return AppointedTypes.PROCEDURE;
+                return AppointmentTypes.PROCEDURE;
             }
             default:
                 return null;

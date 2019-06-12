@@ -1,12 +1,14 @@
 package controller;
 
 import commonlyUsedStrings.PageName;
+import converters.StringConverter;
 import models.PatientCard;
 import org.apache.log4j.Logger;
 import services.PatientCardsService;
 import servlets.DispatcherServlet;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -26,9 +28,9 @@ public class AdminPagePostController implements Controller {
      * @throws SQLException
      */
     @Override
-    public String execute(HttpServletRequest req) throws SQLException {
-        String firstName = req.getParameter("firstName");
-        String lastName = req.getParameter("lastName");
+    public String execute(HttpServletRequest req) throws SQLException, UnsupportedEncodingException {
+        String firstName = StringConverter.convertToUTF8(req.getParameter("firstName"));
+        String lastName = StringConverter.convertToUTF8(req.getParameter("lastName"));
         char sex = req.getParameter("sex").charAt(0);
         Date birthday = Date
                 .from(LocalDate

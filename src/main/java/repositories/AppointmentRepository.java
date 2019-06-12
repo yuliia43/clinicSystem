@@ -1,6 +1,6 @@
 package repositories;
 
-import models.Appointed;
+import models.Appointment;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
@@ -11,22 +11,22 @@ import java.util.List;
  * @author Yullia Shcherbakova
  * @project final
  */
-public class AppointedRepository implements Repository<Appointed> {
-    private static final Logger logger = Logger.getLogger(AppointedRepository.class);
-    private static final AppointedRepository appointedRepository = new AppointedRepository();
+public class AppointmentRepository implements Repository<Appointment> {
+    private static final Logger logger = Logger.getLogger(AppointmentRepository.class);
+    private static final AppointmentRepository APPOINTMENT_REPOSITORY = new AppointmentRepository();
 
     /**
      *
      */
-    private AppointedRepository() {
+    private AppointmentRepository() {
 
     }
 
     /**
      * @return
      */
-    public static AppointedRepository getAppointedRepository() {
-        return appointedRepository;
+    public static AppointmentRepository getAppointmentRepository() {
+        return APPOINTMENT_REPOSITORY;
     }
 
     /**
@@ -35,7 +35,7 @@ public class AppointedRepository implements Repository<Appointed> {
      * @throws SQLException
      */
     @Override
-    public void add(Appointed item, Connection connection) throws SQLException {
+    public void add(Appointment item, Connection connection) throws SQLException {
         addItem(item, connection);
     }
 
@@ -45,9 +45,9 @@ public class AppointedRepository implements Repository<Appointed> {
      * @throws SQLException
      */
     @Override
-    public void add(Iterable<Appointed> items, Connection connection) throws SQLException {
-        for (Appointed appointed : items) {
-            addItem(appointed, connection);
+    public void add(Iterable<Appointment> items, Connection connection) throws SQLException {
+        for (Appointment appointment : items) {
+            addItem(appointment, connection);
         }
     }
 
@@ -56,7 +56,7 @@ public class AppointedRepository implements Repository<Appointed> {
      * @param connection
      * @throws SQLException
      */
-    private void addItem(Appointed item, Connection connection) throws SQLException {
+    private void addItem(Appointment item, Connection connection) throws SQLException {
         String sqlAddAppointed = "INSERT INTO " +
                 "appointed(diagnosis_id,`type`,details)" +
                 "VALUES(?, ? , ?);";
@@ -74,7 +74,7 @@ public class AppointedRepository implements Repository<Appointed> {
      * @throws SQLException
      */
     @Override
-    public void update(Appointed item, Connection connection) throws SQLException {
+    public void update(Appointment item, Connection connection) throws SQLException {
         String sqlUpdateAppointed = "UPDATE appointed " +
                 "SET diagnosis_id = ?, `type` = ?, details = ?" +
                 "where appointed_id = ?;";
@@ -93,7 +93,7 @@ public class AppointedRepository implements Repository<Appointed> {
      * @throws SQLException
      */
     @Override
-    public void remove(Appointed item, Connection connection) throws SQLException {
+    public void remove(Appointment item, Connection connection) throws SQLException {
         removeItem(item, connection);
     }
 
@@ -103,9 +103,9 @@ public class AppointedRepository implements Repository<Appointed> {
      * @throws SQLException
      */
     @Override
-    public void remove(Iterable<Appointed> items, Connection connection) throws SQLException {
-        for (Appointed appointed : items) {
-            removeItem(appointed, connection);
+    public void remove(Iterable<Appointment> items, Connection connection) throws SQLException {
+        for (Appointment appointment : items) {
+            removeItem(appointment, connection);
         }
     }
 
@@ -114,7 +114,7 @@ public class AppointedRepository implements Repository<Appointed> {
      * @param connection
      * @throws SQLException
      */
-    private void removeItem(Appointed item, Connection connection) throws SQLException {
+    private void removeItem(Appointment item, Connection connection) throws SQLException {
         String sqlRemoveAppointed = "DELETE from appointed " +
                 "where appointed_id = ?";
 
@@ -131,12 +131,12 @@ public class AppointedRepository implements Repository<Appointed> {
      * @throws SQLException
      */
     @Override
-    public List<Appointed> query(String query, Connection connection) throws SQLException {
+    public List<Appointment> query(String query, Connection connection) throws SQLException {
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
 
-        List<Appointed> appointedList = getAppointedList(resultSet);
-        return appointedList;
+        List<Appointment> appointmentList = getAppointedList(resultSet);
+        return appointmentList;
     }
 
     /**
@@ -145,7 +145,7 @@ public class AppointedRepository implements Repository<Appointed> {
      * @throws SQLException
      */
     @Override
-    public List<Appointed> getAll(Connection connection) throws SQLException {
+    public List<Appointment> getAll(Connection connection) throws SQLException {
         String sqlSelect = "SELECT * from appointed;";
         return query(sqlSelect, connection);
     }
@@ -157,15 +157,15 @@ public class AppointedRepository implements Repository<Appointed> {
      * @throws SQLException
      */
     @Override
-    public Appointed getOneById(int id, Connection connection) throws SQLException {
+    public Appointment getOneById(int id, Connection connection) throws SQLException {
         String sqlSelect = "SELECT * from appointed WHERE appointed_id = ?;";
         PreparedStatement preparedStatement = connection.prepareStatement(sqlSelect);
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
-        List<Appointed> appointedList = getAppointedList(resultSet);
-        if (appointedList.size() == 0)
+        List<Appointment> appointmentList = getAppointedList(resultSet);
+        if (appointmentList.size() == 0)
             return null;
-        return appointedList.get(0);
+        return appointmentList.get(0);
     }
 
     /**
@@ -173,15 +173,15 @@ public class AppointedRepository implements Repository<Appointed> {
      * @return
      * @throws SQLException
      */
-    private List<Appointed> getAppointedList(ResultSet resultSet) throws SQLException {
-        List<Appointed> patientCards = new ArrayList<>();
+    private List<Appointment> getAppointedList(ResultSet resultSet) throws SQLException {
+        List<Appointment> patientCards = new ArrayList<>();
 
         while (resultSet.next()) {
             int id = resultSet.getInt(1);
             int diagnosisId = resultSet.getInt(2);
             String type = resultSet.getString(3);
             String details = resultSet.getString(4);
-            patientCards.add(new Appointed(id, diagnosisId, type, details));
+            patientCards.add(new Appointment(id, diagnosisId, type, details));
         }
         return patientCards;
     }
@@ -192,13 +192,13 @@ public class AppointedRepository implements Repository<Appointed> {
      * @return
      * @throws SQLException
      */
-    public List<Appointed> getAllByDiagnosisId(int diagnosisId, Connection connection) throws SQLException {
+    public List<Appointment> getAllByDiagnosisId(int diagnosisId, Connection connection) throws SQLException {
         String sqlSelect = "SELECT * from appointed WHERE diagnosis_id = ?;";
         PreparedStatement preparedStatement = connection.prepareStatement(sqlSelect);
         preparedStatement.setInt(1, diagnosisId);
         ResultSet resultSet = preparedStatement.executeQuery();
-        List<Appointed> appointedList = getAppointedList(resultSet);
-        return appointedList;
+        List<Appointment> appointmentList = getAppointedList(resultSet);
+        return appointmentList;
     }
 
     /**
@@ -206,10 +206,10 @@ public class AppointedRepository implements Repository<Appointed> {
      * @return
      * @throws SQLException
      */
-    public Appointed getLast(Connection connection) throws SQLException {
+    public Appointment getLast(Connection connection) throws SQLException {
         String sqlSelect = "SELECT * FROM appointed " +
                 "WHERE appointed_id=(SELECT MAX(appointed_id) FROM appointed);";
-        List<Appointed> query = query(sqlSelect, connection);
+        List<Appointment> query = query(sqlSelect, connection);
         return query.get(0);
     }
 }

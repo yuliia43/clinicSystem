@@ -21,10 +21,10 @@ import static org.mockito.Mockito.when;
  * @author Yullia Shcherbakova
  * @project final
  */
-public class AppointedServiceTest {
+public class AppointmentServiceTest {
 
     @Spy
-    public AppointedService appointedService;
+    public AppointmentService appointmentService;
     @Mock
     private Connection connection;
     @Mock
@@ -36,7 +36,7 @@ public class AppointedServiceTest {
     @Before
     public void setRules() throws SQLException {
         MockitoAnnotations.initMocks(this);
-        when(appointedService.receiveConnection())
+        when(appointmentService.receiveConnection())
                 .thenReturn(connection);
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
@@ -45,7 +45,7 @@ public class AppointedServiceTest {
     @Test
     public void checkIfConnectionIsClosedAfterGetAllByDiagnosisId() {
         try {
-            appointedService.getAllByDiagnosisId(1);
+            appointmentService.getAllByDiagnosisId(1);
             verify(connection).close();
         } catch (SQLException e) {
             fail(ExceptionMessage.TESTING_SQL_EXCEPTION);

@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=utf-8" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <fmt:setLocale value="${locale}"/>
@@ -7,10 +7,13 @@
 <jsp:include page='../pages/mainPage.jsp'/>
 <html>
 <head>
-    <meta charset="UTF-8">
     <title>Error</title>
 </head>
 <body>
-<h1><fmt:message key="error.notAuthorised"/>!</h1>
+<div class="glassBox" style="padding: 100px 50px 70px">
+    <h1><fmt:message key="error.notAuthorised"/>!</h1>
+    <br>
+    <a href="/authorisation" style="float: right"><fmt:message key="authorisation.check"/></a>
+</div>
 </body>
 </html>

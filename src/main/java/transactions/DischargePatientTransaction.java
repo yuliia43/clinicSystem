@@ -1,9 +1,9 @@
 package transactions;
 
-import models.Appointed;
+import models.Appointment;
 import models.Diagnosis;
 import org.apache.log4j.Logger;
-import services.AppointedService;
+import services.AppointmentService;
 import services.AppointingScheduleService;
 import services.DiagnosisService;
 
@@ -22,8 +22,8 @@ public class DischargePatientTransaction {
     private static final DiagnosisService diagnosisService = new DiagnosisService();
     private static final AppointingScheduleService appointingScheduleService =
             new AppointingScheduleService();
-    private static final AppointedService appointedService =
-            new AppointedService();
+    private static final AppointmentService APPOINTMENT_SERVICE =
+            new AppointmentService();
 
     /**
      *
@@ -49,13 +49,13 @@ public class DischargePatientTransaction {
         try {
             connection.setAutoCommit(false);
             List<Diagnosis> diagnoses = diagnosisService.getAllLastDiagnosesForPatient(patientId);
-            List<Appointed> appointmentsToDelete = new ArrayList<>();
+            List<Appointment> appointmentsToDelete = new ArrayList<>();
             for (Diagnosis diagnosis :
                     diagnoses) {
-                appointmentsToDelete.addAll(appointedService.getAllByDiagnosisId(diagnosis.getId()));
+                appointmentsToDelete.addAll(APPOINTMENT_SERVICE.getAllByDiagnosisId(diagnosis.getId()));
             }
-            for (Appointed appointed : appointmentsToDelete) {
-                appointingScheduleService.cancelAppointed(appointed.getId());
+            for (Appointment appointment : appointmentsToDelete) {
+                appointingScheduleService.cancelAppointed(appointment.getId());
             }
             diagnoses.get(0).setFinal(true);
             diagnosisService.update(diagnoses.get(0));

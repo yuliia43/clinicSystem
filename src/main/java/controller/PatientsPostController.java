@@ -1,5 +1,6 @@
 package controller;
 
+import converters.StringConverter;
 import models.ClinicStaff;
 import models.Diagnosis;
 import org.apache.log4j.Logger;
@@ -7,6 +8,7 @@ import services.DiagnosisService;
 import servlets.DispatcherServlet;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 
 /**
@@ -23,9 +25,9 @@ public class PatientsPostController implements Controller {
      * @throws SQLException
      */
     @Override
-    public String execute(HttpServletRequest req) throws SQLException {
+    public String execute(HttpServletRequest req) throws SQLException, UnsupportedEncodingException {
         int patientId = Integer.parseInt(req.getParameter("patientId"), 10);
-        String diagnosis = req.getParameter("diagnosis");
+        String diagnosis = StringConverter.convertToUTF8(req.getParameter("diagnosis"));
         int doctorId = ((ClinicStaff) req.getSession().getAttribute("user")).getId();
         if (diagnosis.isEmpty())
             req.setAttribute("fail", true);

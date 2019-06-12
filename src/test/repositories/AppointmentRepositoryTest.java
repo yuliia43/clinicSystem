@@ -1,7 +1,7 @@
 package repositories;
 
 import commonlyUsedStrings.ExceptionMessage;
-import models.Appointed;
+import models.Appointment;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -14,9 +14,9 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 
-public class AppointedRepositoryTest {
+public class AppointmentRepositoryTest {
 
-    private AppointedRepository repository = AppointedRepository.getAppointedRepository();
+    private AppointmentRepository repository = AppointmentRepository.getAppointmentRepository();
     @Mock
     private Connection connection;
     @Mock
@@ -26,7 +26,7 @@ public class AppointedRepositoryTest {
     @Mock
     private Statement statement;
     @Mock
-    public List<Appointed> appointeds;
+    public List<Appointment> appointments;
 
     @Before
     public void init(){

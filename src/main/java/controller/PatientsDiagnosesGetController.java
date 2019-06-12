@@ -39,6 +39,13 @@ public class PatientsDiagnosesGetController implements Controller {
         req.setAttribute("diagnoses", diagnoses);
         req.setAttribute("staff", clinicStaffService.getAll());
         req.setAttribute("doctors", clinicStaffService.getAllDoctors());
+        String type = req.getParameter("type");
+        if(type == null)
+            type = "operation";
+
+        req.setAttribute("type", type);
+        String openedMenu = req.getParameter("openedMenu");
+        req.setAttribute("openedMenu", openedMenu);
         return PageName.DIAGNOSES;
     }
 }

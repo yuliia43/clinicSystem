@@ -1,7 +1,7 @@
 package services;
 
 import commonlyUsedStrings.ExceptionMessage;
-import enums.AppointedTypes;
+import enums.AppointmentTypes;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -44,7 +44,7 @@ public class AppointingScheduleServiceTest {
     @Test
     public void checkIfConnectionIsClosedAfterSearchScheduleForToday() {
         try {
-            appointingScheduleService.searchScheduleForToday(1, AppointedTypes.OPERATION);
+            appointingScheduleService.searchScheduleForToday(1, AppointmentTypes.OPERATION);
             verify(connection).close();
         } catch (SQLException e) {
             fail(ExceptionMessage.TESTING_SQL_EXCEPTION);

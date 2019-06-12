@@ -1,12 +1,14 @@
 package controller;
 
 import commonlyUsedStrings.PageName;
+import converters.StringConverter;
 import models.ClinicStaff;
 import org.apache.log4j.Logger;
 import services.ClinicStaffService;
 import servlets.DispatcherServlet;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 
 /**
@@ -24,9 +26,9 @@ public class AuthorisationPostController implements Controller {
      * @throws SQLException
      */
     @Override
-    public String execute(HttpServletRequest req) throws SQLException {
-        String email = (String) req.getParameter("email");
-        String password = (String) req.getParameter("password");
+    public String execute(HttpServletRequest req) throws SQLException, UnsupportedEncodingException {
+        String email = StringConverter.convertToUTF8(req.getParameter("email"));
+        String password = StringConverter.convertToUTF8(req.getParameter("password"));
         if (email != null && password != null) {
             ClinicStaff staff = clinicStaffService.checkAuthorization(email, password);
             if (staff != null) {

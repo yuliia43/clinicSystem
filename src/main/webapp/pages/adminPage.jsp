@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
@@ -6,7 +6,7 @@
 <fmt:setBundle basename="${bundle}"/>
 <html>
 <body>
-<div class="box">
+<div class="glassBox">
     <form method="post">
         <h3><fmt:message key="registration.label.patient"/></h3>
         <fmt:message key="user.name"/><input type="text" name="firstName">
@@ -25,7 +25,7 @@
             <p><fmt:message key="error.fieldsNotFilled"/>!</p><br>
         </c:if>
 
-        <button onclick="this.form.submit()"><fmt:message key="registration.submit"/></button>
+        <button class="accept" onclick="this.form.submit()"><fmt:message key="registration.submit"/></button>
     </form>
 </div>
 </body>

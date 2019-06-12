@@ -1,6 +1,7 @@
 package controller;
 
-import models.Appointed;
+import converters.StringConverter;
+import models.Appointment;
 import models.AppointingTimeAndPerson;
 import models.ClinicStaff;
 import models.Diagnosis;
@@ -13,6 +14,7 @@ import transactionServices.AddAppointmentTransactionService;
 import transactionServices.DischargePatientTransactionService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -41,7 +43,7 @@ public class PatientsDiagnosesPostController implements Controller {
      * @throws SQLException
      */
     @Override
-    public String execute(HttpServletRequest req) throws SQLException {
+    public String execute(HttpServletRequest req) throws SQLException, UnsupportedEncodingException {
         doReceivedMethod(req);
         return new PatientsDiagnosesGetController().execute(req);
     }
@@ -50,7 +52,7 @@ public class PatientsDiagnosesPostController implements Controller {
      * @param req
      * @throws SQLException
      */
-    private void doReceivedMethod(HttpServletRequest req) throws SQLException {
+    private void doReceivedMethod(HttpServletRequest req) throws SQLException, UnsupportedEncodingException {
         String method = req.getParameter("method");
         switch (method) {
             case ("delete_recommendation"): {
@@ -58,7 +60,7 @@ public class PatientsDiagnosesPostController implements Controller {
                 appointingScheduleService.cancelAppointed(appointedId);
             }
             case ("add_diagnosis"): {
-                String diagnosisStr = req.getParameter("diagnosis");
+                String diagnosisStr = StringConverter.convertToUTF8(req.getParameter("diagnosis"));
                 int doctorId = ((ClinicStaff) req.getSession().getAttribute("user")).getId();
                 int patientId = Integer.parseInt(req.getParameter("patientId"), 10);
                 Diagnosis diagnosis = new Diagnosis();
@@ -68,18 +70,18 @@ public class PatientsDiagnosesPostController implements Controller {
                 diagnosisService.add(diagnosis);
             }
             case ("add_appointed"): {
-                String details = req.getParameter("details");
+                String details = StringConverter.convertToUTF8(req.getParameter("details"));
                 int num_days = Integer.parseInt(req.getParameter("num_days"), 10);
                 String[] times = req.getParameterValues("time");
                 int performerId = Integer.parseInt(req.getParameter("performerId"), 10);
                 int diagnosisId = Integer.parseInt(req.getParameter("diagnosisId"), 10);
                 String type = req.getParameter("type");
-                Appointed appointed =
+                Appointment appointment =
                         setAppointment(details, num_days, times, performerId, diagnosisId, type);
                 AddAppointmentTransactionService addAppointmentTransactionService = new AddAppointmentTransactionService();
-                boolean success = addAppointmentTransactionService.addAppointment(appointed);
+                boolean success = addAppointmentTransactionService.addAppointment(appointment);
                 if (success)
-                    logger.info("Added appointed");
+                    logger.info("Added appointment");
             }
             case ("discharge"): {
                 int patientId = Integer.parseInt(req.getParameter("patientId"), 10);
@@ -100,8 +102,8 @@ public class PatientsDiagnosesPostController implements Controller {
      * @param type
      * @return
      */
-    private Appointed setAppointment(String details, int num_days, String[] times, int performerId, int diagnosisId, String type) {
-        Appointed appointed = new Appointed(diagnosisId, type, details);
+    private Appointment setAppointment(String details, int num_days, String[] times, int performerId, int diagnosisId, String type) {
+        Appointment appointment = new Appointment(diagnosisId, type, details);
         List<AppointingTimeAndPerson> list = new ArrayList<>();
         for (int i = 1; i <= num_days; i++) {
             LocalDate date = LocalDate.now().plusDays(i);
@@ -111,7 +113,7 @@ public class PatientsDiagnosesPostController implements Controller {
                 list.add(new AppointingTimeAndPerson(dateTime, performerId));
             }
         }
-        appointed.setSchedule(list);
-        return appointed;
+        appointment.setSchedule(list);
+        return appointment;
     }
 }

@@ -1,8 +1,8 @@
 package services;
 
-import models.Appointed;
+import models.Appointment;
 import models.Diagnosis;
-import repositories.AppointedRepository;
+import repositories.AppointmentRepository;
 import repositories.DiagnosisRepository;
 
 import java.sql.Connection;
@@ -16,8 +16,8 @@ import java.util.List;
 public class DiagnosisService extends Service {
     private static final DiagnosisRepository diagnosisRepository =
             DiagnosisRepository.getDiagnosisRepository();
-    private static final AppointedRepository appointedRepository =
-            AppointedRepository.getAppointedRepository();
+    private static final AppointmentRepository APPOINTMENT_REPOSITORY =
+            AppointmentRepository.getAppointmentRepository();
 
     /**
      * @param patientId
@@ -29,9 +29,9 @@ public class DiagnosisService extends Service {
             List<Diagnosis> diagnoses = diagnosisRepository
                     .getAllLastDiagnosesForPatient(patientId, connection);
             for (Diagnosis diagnosis : diagnoses) {
-                List<Appointed> appointeds = appointedRepository
+                List<Appointment> appointments = APPOINTMENT_REPOSITORY
                         .getAllByDiagnosisId(diagnosis.getId(), connection);
-                diagnosis.setRecommendations(appointeds);
+                diagnosis.setRecommendations(appointments);
             }
             return diagnoses;
         }

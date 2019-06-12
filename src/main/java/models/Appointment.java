@@ -6,7 +6,7 @@ import java.util.List;
  * @author Yullia Shcherbakova
  * @project final
  */
-public class Appointed {
+public class Appointment {
     private int id;
     private int diagnosisId;
     private String type;
@@ -19,7 +19,7 @@ public class Appointed {
      * @param type
      * @param details
      */
-    public Appointed(int id, int diagnosisId, String type, String details) {
+    public Appointment(int id, int diagnosisId, String type, String details) {
         this.id = id;
         this.diagnosisId = diagnosisId;
         this.type = type;
@@ -31,7 +31,7 @@ public class Appointed {
      * @param type
      * @param details
      */
-    public Appointed(int diagnosisId, String type, String details) {
+    public Appointment(int diagnosisId, String type, String details) {
         this.diagnosisId = diagnosisId;
         this.type = type;
         this.details = details;
@@ -41,7 +41,7 @@ public class Appointed {
     /**
      *
      */
-    public Appointed() {
+    public Appointment() {
     }
 
     /**

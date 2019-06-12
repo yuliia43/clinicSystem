@@ -1,6 +1,6 @@
 package transactionServices;
 
-import models.Appointed;
+import models.Appointment;
 import services.Service;
 import transactions.AddAppointmentTransaction;
 
@@ -13,13 +13,13 @@ import java.sql.SQLException;
  */
 public class AddAppointmentTransactionService extends Service {
     /**
-     * @param appointed
+     * @param appointment
      * @return
      * @throws SQLException
      */
-    public boolean addAppointment(Appointed appointed) throws SQLException {
+    public boolean addAppointment(Appointment appointment) throws SQLException {
         try (Connection connection = receiveConnection()) {
-            return AddAppointmentTransaction.getInstance().execute(appointed, connection);
+            return AddAppointmentTransaction.getInstance().execute(appointment, connection);
         }
     }
 }

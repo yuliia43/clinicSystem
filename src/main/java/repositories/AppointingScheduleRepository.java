@@ -1,6 +1,6 @@
 package repositories;
 
-import dtos.AppointedSchedule;
+import dtos.AppointmentSchedule;
 import models.AppointingTimeAndPerson;
 import org.apache.log4j.Logger;
 
@@ -201,25 +201,25 @@ public class AppointingScheduleRepository implements Repository<AppointingTimeAn
      * @return
      * @throws SQLException
      */
-    public List<AppointedSchedule> searchScheduleForToday(int performerId, String type, Connection connection) throws SQLException {
+    public List<AppointmentSchedule> searchScheduleForToday(int performerId, String type, Connection connection) throws SQLException {
         String sqlSelect = "SELECT schedule_id, time(pursuance_time), details, concat(patient_surname, ' ', patient_name)\n" +
                 "FROM appointing_schedule, appointed, patients_cards\n" +
                 "WHERE appointing_schedule.appointed_id = appointed.appointed_id\n" +
                 "AND date(pursuance_time) = CURDATE()\n" +
-                "AND is_performed=0 AND performer_id=? AND `type`=?\n" +
+                "AND is_performed<>1 AND performer_id=? AND `type`=?\n" +
                 "AND patient_card_id = (SELECT patient_card_id FROM diagnosis \n" +
                 "WHERE diagnosis.diagnosis_id = appointed.diagnosis_id);";
         PreparedStatement preparedStatement = connection.prepareStatement(sqlSelect);
         preparedStatement.setInt(1, performerId);
         preparedStatement.setString(2, type);
         ResultSet resultSet = preparedStatement.executeQuery();
-        List<AppointedSchedule> schedules = new ArrayList<>();
+        List<AppointmentSchedule> schedules = new ArrayList<>();
         while (resultSet.next()) {
             int scheduleId = resultSet.getInt(1);
             Time pursuanceTime = Time.valueOf(resultSet.getString(2));
             String details = resultSet.getString(3);
             String patient = resultSet.getString(4);
-            schedules.add(new AppointedSchedule(scheduleId, performerId, pursuanceTime, details, patient));
+            schedules.add(new AppointmentSchedule(scheduleId, performerId, pursuanceTime, details, patient));
         }
         return schedules;
     }

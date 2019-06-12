@@ -37,7 +37,7 @@ public class RepositoryTest {
     @Parameterized.Parameters(name = "{0}")
     public static Collection<Object[]> getTestData(){
         Collection<Object[]> collection = new ArrayList<>();
-        collection.add(new Object[]{AppointedRepository.getAppointedRepository(), new Appointed()});
+        collection.add(new Object[]{AppointmentRepository.getAppointmentRepository(), new Appointment()});
         collection.add(new Object[]{AppointingScheduleRepository.getAppointingScheduleRepository(), new AppointingTimeAndPerson()});
         collection.add(new Object[]{ClinicStaffRepository.getClinicStaffRepository(), new ClinicStaffWithPasswords()});
         collection.add(new Object[]{DiagnosisRepository.getDiagnosisRepository(), new Diagnosis()});
