@@ -16,9 +16,9 @@ public class DischargePatientTransactionService extends Service {
      * @return
      * @throws SQLException
      */
-    public boolean execute(int patientId) throws SQLException {
+    public boolean execute(int patientId, int doctorId) throws SQLException {
         try (Connection connection = receiveConnection()) {
-            return DischargePatientTransaction.getInstance().execute(patientId, connection);
+            return DischargePatientTransaction.getInstance().execute(patientId, doctorId, connection);
         }
     }
 }

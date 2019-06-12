@@ -30,10 +30,10 @@
         <input type="password" name="confirmedPassword" style="margin-right: 0px; float: unset">
         <br>
         <c:if test="${fail != null}">
-            <p><fmt:message key="error.fieldsNotFilled"/>!</p><br>
+            <p class="error"><fmt:message key="error.fieldsNotFilled"/>!</p><br>
         </c:if>
         <c:if test="${notEqual == true}">
-            <p><fmt:message key="error.passwordsNotEqual"/>!</p><br>
+            <p class="error"><fmt:message key="error.passwordsNotEqual"/>!</p><br>
         </c:if>
 
         <button class="accept" onclick="this.form.submit()"><fmt:message key="registration.submit"/></button>

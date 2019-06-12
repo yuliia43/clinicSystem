@@ -83,10 +83,14 @@
             </div>
             <form method="post">
                 <div class="box" id="add"
-                     style="display: none; width: auto; position: absolute; z-index: 999; font-size: 20px; height: 45px; padding-top: 10px">
+                     style="display:${openedDiaMenu ? 'inline' : 'none'}; width: auto; position: absolute; z-index: 999; font-size: 20px; height: 45px; padding-top: 10px">
                     <fmt:message key="label.diagnosis"/>: <input name="diagnosis" type="text"/>
                     <br>
                     <input name="method" value="add_diagnosis" type="hidden"/>
+                    <c:if test="${diaFail}">
+                        <p class="error"><fmt:message key="error.fieldsNotFilled"/>!</p>
+                    </c:if>
+                    <br>
                     <button class="accept" name="patientId" value="${patient.getId()}" onclick="this.form.submit()">
                         <fmt:message key="label.add"/>
                     </button>
@@ -177,6 +181,7 @@
                                 </tr>
                                 <tr>
                                     <th height="80px">
+                                        <input name="type" value="${type}" type="hidden">
                                         <input name="method" value="add_appointed" type="hidden"/>
                                         <button class="accept" name="diagnosisId" value="${diagnosis.getId()}"
                                                 onclick="this.form.submit()">

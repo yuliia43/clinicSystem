@@ -1,6 +1,7 @@
 package controller;
 
 import commonlyUsedStrings.PageName;
+import models.ClinicStaff;
 import models.Diagnosis;
 import models.PatientCard;
 import services.ClinicStaffService;
@@ -31,11 +32,11 @@ public class PatientsDiagnosesGetController implements Controller {
      */
     @Override
     public String execute(HttpServletRequest req) throws SQLException {
-
+        ClinicStaff clinicStaff = (ClinicStaff) req.getSession().getAttribute("user");
         int id = Integer.parseInt(req.getParameter("patientId"), 10);
         PatientCard patientCard = patientsCardsService.getOneById(id);
         req.setAttribute("patient", patientCard);
-        List<Diagnosis> diagnoses = diagnosisService.getDiagnosisForPatient(id);
+        List<Diagnosis> diagnoses = diagnosisService.getDiagnosisForPatient(id, clinicStaff.getId());
         req.setAttribute("diagnoses", diagnoses);
         req.setAttribute("staff", clinicStaffService.getAll());
         req.setAttribute("doctors", clinicStaffService.getAllDoctors());

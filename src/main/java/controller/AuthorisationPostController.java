@@ -29,7 +29,7 @@ public class AuthorisationPostController implements Controller {
     public String execute(HttpServletRequest req) throws SQLException, UnsupportedEncodingException {
         String email = StringConverter.convertToUTF8(req.getParameter("email"));
         String password = StringConverter.convertToUTF8(req.getParameter("password"));
-        if (email != null && password != null) {
+        if (!email.isEmpty() && !password.isEmpty()) {
             ClinicStaff staff = clinicStaffService.checkAuthorization(email, password);
             if (staff != null) {
                 logger.info("User with id " + staff.getId() + " authorised");
@@ -40,7 +40,7 @@ public class AuthorisationPostController implements Controller {
                 return PageName.AUTHORISATION;
             }
         } else {
-            req.setAttribute("fail", true);
+            req.setAttribute("isEmpty", true);
             return PageName.AUTHORISATION;
         }
     }

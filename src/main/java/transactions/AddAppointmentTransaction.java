@@ -15,7 +15,7 @@ import java.sql.SQLException;
 public class AddAppointmentTransaction {
 
     private static final AddAppointmentTransaction singleton = new AddAppointmentTransaction();
-    private static final AppointmentRepository APPOINTMENT_REPOSITORY =
+    private static final AppointmentRepository appointmentRepository =
             AppointmentRepository.getAppointmentRepository();
     private static final AppointingScheduleRepository appointingScheduleRepository =
             AppointingScheduleRepository.getAppointingScheduleRepository();
@@ -45,8 +45,8 @@ public class AddAppointmentTransaction {
             logger.info("Transaction of adding appointment started");
             connection.setAutoCommit(false);
             connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-            APPOINTMENT_REPOSITORY.add(appointment, connection);
-            int appointedId = APPOINTMENT_REPOSITORY.getLast(connection).getId();
+            appointmentRepository.add(appointment, connection);
+            int appointedId = appointmentRepository.getLast(connection).getId();
             appointment.getSchedule().stream()
                     .forEach(schedule -> schedule.setAppointedId(appointedId));
             appointingScheduleRepository.add(appointment.getSchedule(), connection);

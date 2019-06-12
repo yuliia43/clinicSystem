@@ -21,7 +21,7 @@
     </h3>
     <form method="post">
         <div class="box"
-             style="display: none; width: 300px; height: 80px; position: absolute; top: 200px; z-index: 999; font-size: 20px; "
+             style="display: ${openedMenu ? 'inline' : 'none'}; width: 300px; height: 80px; position: absolute; top: 200px; z-index: 999; font-size: 20px; "
              id="add">
             <fmt:message key="label.patient"/>:
             <select name="patientId" style="float: left; width: 147px">
@@ -32,7 +32,9 @@
             <br>
             <fmt:message key="label.diagnosis"/>: <input name="diagnosis" type="text"/>
             <br>
-            <c:if test="${fail}"><fmt:message key="error.fieldsNotFilled"/>!</c:if>
+            <c:if test="${fail}">
+                <p class="error"><fmt:message key="error.fieldsNotFilled"/>!</p>
+            </c:if>
             <input name="method" value="add_diagnosis" type="hidden"/>
             <button class="accept" onclick="this.form.submit()"><fmt:message key="registration.label.patient"/></button>
         </div>

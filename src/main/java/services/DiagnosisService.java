@@ -24,10 +24,10 @@ public class DiagnosisService extends Service {
      * @return
      * @throws SQLException
      */
-    public List<Diagnosis> getDiagnosisForPatient(int patientId) throws SQLException {
+    public List<Diagnosis> getDiagnosisForPatient(int patientId, int doctorId) throws SQLException {
         try (Connection connection = receiveConnection()) {
             List<Diagnosis> diagnoses = diagnosisRepository
-                    .getAllLastDiagnosesForPatient(patientId, connection);
+                    .getAllLastDiagnosesByPatientIdAndDoctorId(patientId, doctorId, connection);
             for (Diagnosis diagnosis : diagnoses) {
                 List<Appointment> appointments = APPOINTMENT_REPOSITORY
                         .getAllByDiagnosisId(diagnosis.getId(), connection);
@@ -53,9 +53,9 @@ public class DiagnosisService extends Service {
      * @return
      * @throws SQLException
      */
-    public List<Diagnosis> getAllLastDiagnosesForPatient(int patientId) throws SQLException {
+    public List<Diagnosis> getAllLastDiagnosesForPatient(int patientId, int doctorId) throws SQLException {
         try (Connection connection = receiveConnection()) {
-            return diagnosisRepository.getAllLastDiagnosesForPatient(patientId, connection);
+            return diagnosisRepository.getAllLastDiagnosesByPatientIdAndDoctorId(patientId, doctorId, connection);
         }
     }
 

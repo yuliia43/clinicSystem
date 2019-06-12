@@ -1,5 +1,6 @@
 package controller;
 
+import commonlyUsedStrings.PageName;
 import converters.StringConverter;
 import models.Appointment;
 import models.AppointingTimeAndPerson;
@@ -44,54 +45,76 @@ public class PatientsDiagnosesPostController implements Controller {
      */
     @Override
     public String execute(HttpServletRequest req) throws SQLException, UnsupportedEncodingException {
-        doReceivedMethod(req);
-        return new PatientsDiagnosesGetController().execute(req);
-    }
-
-    /**
-     * @param req
-     * @throws SQLException
-     */
-    private void doReceivedMethod(HttpServletRequest req) throws SQLException, UnsupportedEncodingException {
         String method = req.getParameter("method");
         switch (method) {
             case ("delete_recommendation"): {
-                int appointedId = Integer.parseInt(req.getParameter("appointedId"), 10);
-                appointingScheduleService.cancelAppointed(appointedId);
+                cancelAppointed(req);
+                break;
             }
             case ("add_diagnosis"): {
-                String diagnosisStr = StringConverter.convertToUTF8(req.getParameter("diagnosis"));
-                int doctorId = ((ClinicStaff) req.getSession().getAttribute("user")).getId();
-                int patientId = Integer.parseInt(req.getParameter("patientId"), 10);
-                Diagnosis diagnosis = new Diagnosis();
-                diagnosis.setDoctorId(doctorId);
-                diagnosis.setCardId(patientId);
-                diagnosis.setDiagnosis(diagnosisStr);
-                diagnosisService.add(diagnosis);
+                addDiagnosis(req);
+                break;
             }
             case ("add_appointed"): {
-                String details = StringConverter.convertToUTF8(req.getParameter("details"));
-                int num_days = Integer.parseInt(req.getParameter("num_days"), 10);
-                String[] times = req.getParameterValues("time");
-                int performerId = Integer.parseInt(req.getParameter("performerId"), 10);
-                int diagnosisId = Integer.parseInt(req.getParameter("diagnosisId"), 10);
-                String type = req.getParameter("type");
-                Appointment appointment =
-                        setAppointment(details, num_days, times, performerId, diagnosisId, type);
-                AddAppointmentTransactionService addAppointmentTransactionService = new AddAppointmentTransactionService();
-                boolean success = addAppointmentTransactionService.addAppointment(appointment);
-                if (success)
-                    logger.info("Added appointment");
+                addAppointment(req);
+                break;
             }
             case ("discharge"): {
-                int patientId = Integer.parseInt(req.getParameter("patientId"), 10);
-                DischargePatientTransactionService dischargePatientTransaction = new DischargePatientTransactionService();
-                boolean success = dischargePatientTransaction.execute(patientId);
-                if (success)
-                    logger.info("Discharged patient with id " + patientId);
+                dischargePatient(req);
+                return PageName.DISCHARGE_SUCCESS;
             }
         }
+        return new PatientsDiagnosesGetController().execute(req);
     }
+
+    private void dischargePatient(HttpServletRequest req) throws SQLException {
+        ClinicStaff staff = (ClinicStaff) req.getSession().getAttribute("user");
+        int patientId = Integer.parseInt(req.getParameter("patientId"), 10);
+        DischargePatientTransactionService dischargePatientTransaction = new DischargePatientTransactionService();
+        boolean success = dischargePatientTransaction.execute(patientId, staff.getId());
+        if (success){
+            logger.info("Discharged patient with id " + patientId);
+        }
+    }
+
+    private void cancelAppointed(HttpServletRequest req) throws SQLException {
+        int appointedId = Integer.parseInt(req.getParameter("appointedId"), 10);
+        appointingScheduleService.cancelAppointed(appointedId);
+    }
+
+    private void addDiagnosis(HttpServletRequest req) throws UnsupportedEncodingException, SQLException {
+        String diagnosisStr = StringConverter.convertToUTF8(req.getParameter("diagnosis"));
+        if(diagnosisStr.isEmpty()){
+            req.setAttribute("diaFail", true);
+            req.setAttribute("openedDiaMenu", true);
+        }
+        else {
+            int doctorId = ((ClinicStaff) req.getSession().getAttribute("user")).getId();
+            int patientId = Integer.parseInt(req.getParameter("patientId"), 10);
+            Diagnosis diagnosis = new Diagnosis();
+            diagnosis.setDoctorId(doctorId);
+            diagnosis.setCardId(patientId);
+            diagnosis.setDiagnosis(diagnosisStr);
+            diagnosisService.add(diagnosis);
+        }
+    }
+
+    private void addAppointment(HttpServletRequest req) throws UnsupportedEncodingException, SQLException {
+        String details = StringConverter.convertToUTF8(req.getParameter("details"));
+        int num_days = Integer.parseInt(req.getParameter("num_days"), 10);
+        String[] times = req.getParameterValues("time");
+        int performerId = Integer.parseInt(req.getParameter("performerId"), 10);
+        int diagnosisId = Integer.parseInt(req.getParameter("diagnosisId"), 10);
+        String type = req.getParameter("type");
+        Appointment appointment =
+                setAppointment(details, num_days, times, performerId, diagnosisId, type);
+        AddAppointmentTransactionService addAppointmentTransactionService = new AddAppointmentTransactionService();
+        boolean success = addAppointmentTransactionService.addAppointment(appointment);
+        if (success)
+            logger.info("Added appointment");
+        req.removeAttribute("openedMenu");
+    }
+
 
     /**
      * @param details

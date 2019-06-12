@@ -15,6 +15,9 @@
         <c:if test="${fail}">
             <div class="error"><fmt:message key="entrance.fail"/></div>
         </c:if>
+        <c:if test="${isEmpty != null}">
+            <p class="error"><fmt:message key="error.fieldsNotFilled"/>!</p><br>
+        </c:if>
         <button class="accept" onclick="this.form.submit()">
             <fmt:message key="authorisation.check"/>
         </button>

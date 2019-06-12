@@ -29,8 +29,10 @@ public class PatientsPostController implements Controller {
         int patientId = Integer.parseInt(req.getParameter("patientId"), 10);
         String diagnosis = StringConverter.convertToUTF8(req.getParameter("diagnosis"));
         int doctorId = ((ClinicStaff) req.getSession().getAttribute("user")).getId();
-        if (diagnosis.isEmpty())
+        if (diagnosis.isEmpty()){
+            req.setAttribute("openedMenu", true);
             req.setAttribute("fail", true);
+        }
         else {
             diagnosisService.add(new Diagnosis(patientId, diagnosis, doctorId));
             logger.info("Added diagnosis to patient with id " + patientId);

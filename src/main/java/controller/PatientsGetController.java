@@ -25,7 +25,7 @@ public class PatientsGetController implements Controller {
     public String execute(HttpServletRequest req) throws SQLException {
         ClinicStaff staff = (ClinicStaff) req.getSession().getAttribute("user");
         if (staff.getTitle().equals("doctor")) {
-            List<PatientCard> allPatients = patientCardsService.getAll();
+            List<PatientCard> allPatients = patientCardsService.getAllExceptDoctorsPatients(staff.getId());
             req.setAttribute("allPatients", allPatients);
             List<PatientCard> cards = patientCardsService.getAllByDoctorId(staff.getId());
             req.setAttribute("doctorsPatients", cards);

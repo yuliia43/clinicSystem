@@ -45,10 +45,10 @@ public class DischargePatientTransaction {
      * @return
      * @throws SQLException
      */
-    public boolean execute(int patientId, Connection connection) throws SQLException {
+    public boolean execute(int patientId, int doctorId, Connection connection) throws SQLException {
         try {
             connection.setAutoCommit(false);
-            List<Diagnosis> diagnoses = diagnosisService.getAllLastDiagnosesForPatient(patientId);
+            List<Diagnosis> diagnoses = diagnosisService.getAllLastDiagnosesForPatient(patientId, doctorId);
             List<Appointment> appointmentsToDelete = new ArrayList<>();
             for (Diagnosis diagnosis :
                     diagnoses) {

@@ -40,7 +40,7 @@ public class DischargePatientTransactionTest {
             when(resultSet.getInt(2)).thenReturn(1);
             when(resultSet.getString(3)).thenReturn("type");
             when(resultSet.getString(4)).thenReturn("details");
-            transactionApplier.execute(1, connection);
+            transactionApplier.execute(1,2, connection);
         } catch (SQLException e) {
             fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         } catch (NullPointerException e) {

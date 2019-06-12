@@ -18,4 +18,5 @@ public class PageName {
     public static final String NOT_FOUND_ERROR = "errorPages/404.jsp";
     public static final String ACCESS_ERROR = "errorPages/accessError.jsp";
     public static final String AUTHORISATION_ERROR = "errorPages/notAuthorisedError.jsp";
+    public static final String DISCHARGE_SUCCESS = "pages/dischargedSuccessfully.jsp";
 }

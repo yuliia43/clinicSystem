@@ -301,6 +301,10 @@
 
         }
 
+        a{
+            font-size: 20px;
+        }
+
         small {
             font-size: 0.3em;
         }

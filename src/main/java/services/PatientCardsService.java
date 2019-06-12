@@ -56,4 +56,15 @@ public class PatientCardsService extends Service {
             return patientCardsRepository.getAll(connection);
         }
     }
+
+    /**
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    public List<PatientCard> getAllExceptDoctorsPatients(int id) throws SQLException {
+        try (Connection connection = receiveConnection()) {
+            return patientCardsRepository.getAllExceptDoctorsPatients(id, connection);
+        }
+    }
 }

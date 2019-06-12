@@ -37,7 +37,7 @@ public class DiagnosisRepositoryTest {
         try {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             when(preparedStatement.executeQuery()).thenReturn(resultSet);
-            repository.getAllLastDiagnosesForPatient(1, connection);
+            repository.getAllLastDiagnosesByPatientIdAndDoctorId(1,2, connection);
         } catch (SQLException e) {
             fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         } catch (NullPointerException e) {

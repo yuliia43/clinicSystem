@@ -43,7 +43,7 @@ public class DiagnosisServiceTest {
     @Test
     public void checkIfConnectionIsClosedAfterGetDiagnosisForPatient() {
         try {
-            diagnosisService.getDiagnosisForPatient(1);
+            diagnosisService.getDiagnosisForPatient(1, 2);
             verify(connection).close();
         } catch (SQLException e) {
             fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
