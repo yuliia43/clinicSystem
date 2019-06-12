@@ -147,7 +147,7 @@
                                 </tr>
                                 <tr>
                                     <th>
-                                        <fmt:message key="label.days"/>: <input name="num_days" type="number" min="1"/>
+                                        <fmt:message key="label.days"/>: <input name="num_days" type="number" min="1" width="10px"/>
                                     </th>
                                 </tr>
                                 <tr>
@@ -158,7 +158,7 @@
                                                  src="https://png2.kisspng.com/sh/0a5ee08fd40f309cc81c62ff73edbd8a/L0KzQYm3U8E2N5poj5H0aYP2gLBuTgBtfaQyedDtLX3sfsb6TgNqb594RdV4bYD4hLb5Tflkd594RdV1aYCwccP7TgBtfaQyi9twbj24cbLohMg2P2Q7SdVrMj68RomAWMMzOWI6SqM6NEW8RIS5UsE4NqFzf3==/kisspng-plus-and-minus-signs-computer-icons-clip-art-plus-sign-5aaad857361cb2.9687832115211459432217.png">
                                         </button>
                                         <div name="timeHolder" class="time">
-                                            <input name="time" type="time"/>
+                                            <input name="time" type="time" value="00:00"/>
                                         </div>
                                     </th>
                                 </tr>
@@ -181,6 +181,10 @@
                                 </tr>
                                 <tr>
                                     <th height="80px">
+                                        <c:if test="${fail == loop.index}">
+                                            <p class="error"><fmt:message key="error.fieldsNotFilled"/>!</p>
+                                        </c:if>
+                                        <input type="hidden" value="${loop.index}" name="openedMenu">
                                         <input name="type" value="${type}" type="hidden">
                                         <input name="method" value="add_appointed" type="hidden"/>
                                         <button class="accept" name="diagnosisId" value="${diagnosis.getId()}"

@@ -1,6 +1,7 @@
 package controller;
 
 import converters.StringConverter;
+import exceptions.UnAuthorisedException;
 import models.ClinicStaff;
 import models.Diagnosis;
 import org.apache.log4j.Logger;
@@ -25,7 +26,7 @@ public class PatientsPostController implements Controller {
      * @throws SQLException
      */
     @Override
-    public String execute(HttpServletRequest req) throws SQLException, UnsupportedEncodingException {
+    public String execute(HttpServletRequest req) throws SQLException, UnsupportedEncodingException, UnAuthorisedException {
         int patientId = Integer.parseInt(req.getParameter("patientId"), 10);
         String diagnosis = StringConverter.convertToUTF8(req.getParameter("diagnosis"));
         int doctorId = ((ClinicStaff) req.getSession().getAttribute("user")).getId();

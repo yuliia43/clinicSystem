@@ -31,6 +31,10 @@
     </error-page>
     <error-page>
         <exception-type>java.lang.NullPointerException</exception-type>
+        <location>/errorPages/nullError.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>exceptions.UnAuthorisedException</exception-type>
         <location>/errorPages/notAuthorisedError.jsp</location>
     </error-page>
     <error-page>

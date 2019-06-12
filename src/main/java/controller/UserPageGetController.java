@@ -1,6 +1,8 @@
 package controller;
 
 import commonlyUsedStrings.PageName;
+import exceptions.UnAuthorisedException;
+import exceptions.Validator;
 import models.ClinicStaff;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,11 +19,9 @@ public class UserPageGetController implements Controller {
      * @throws SQLException
      */
     @Override
-    public String execute(HttpServletRequest request) throws SQLException {
+    public String execute(HttpServletRequest request) throws SQLException, UnAuthorisedException {
         ClinicStaff user = (ClinicStaff) request.getSession().getAttribute("user");
-        if (user != null)
+        Validator.checkIfAuthorised(user);
             return PageName.USER_PAGE;
-        else
-            return PageName.AUTHORISATION_ERROR;
     }
 }

@@ -1,6 +1,8 @@
 package controller;
 
 import commonlyUsedStrings.PageName;
+import exceptions.UnAuthorisedException;
+import exceptions.Validator;
 import models.ClinicStaff;
 import models.Diagnosis;
 import models.PatientCard;
@@ -31,8 +33,9 @@ public class PatientsDiagnosesGetController implements Controller {
      * @throws SQLException
      */
     @Override
-    public String execute(HttpServletRequest req) throws SQLException {
+    public String execute(HttpServletRequest req) throws SQLException, UnAuthorisedException {
         ClinicStaff clinicStaff = (ClinicStaff) req.getSession().getAttribute("user");
+        Validator.checkIfAuthorised(clinicStaff);
         int id = Integer.parseInt(req.getParameter("patientId"), 10);
         PatientCard patientCard = patientsCardsService.getOneById(id);
         req.setAttribute("patient", patientCard);

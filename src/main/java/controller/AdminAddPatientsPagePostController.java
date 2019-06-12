@@ -2,6 +2,7 @@ package controller;
 
 import commonlyUsedStrings.PageName;
 import converters.StringConverter;
+import exceptions.UnAuthorisedException;
 import models.PatientCard;
 import org.apache.log4j.Logger;
 import services.PatientCardsService;
@@ -18,7 +19,7 @@ import java.util.Date;
  * @author Yullia Shcherbakova
  * @project final
  */
-public class AdminPagePostController implements Controller {
+public class AdminAddPatientsPagePostController implements Controller {
 
     private static final Logger logger = Logger.getLogger(DispatcherServlet.class);
 
@@ -32,15 +33,16 @@ public class AdminPagePostController implements Controller {
         String firstName = StringConverter.convertToUTF8(req.getParameter("firstName"));
         String lastName = StringConverter.convertToUTF8(req.getParameter("lastName"));
         char sex = req.getParameter("sex").charAt(0);
+        String birthdayStr = req.getParameter("birthday");
         Date birthday = Date
                 .from(LocalDate
-                        .parse(req.getParameter("birthday"))
+                        .parse(birthdayStr)
                         .atStartOfDay(ZoneId.systemDefault())
                         .toInstant());
         PatientCard patientCard = new PatientCard(firstName, lastName, sex, birthday);
         PatientCardsService service = new PatientCardsService();
         service.add(patientCard);
         logger.info("Added patient " + firstName + " " + lastName);
-        return PageName.ADMIN_PAGE;
+        return new AdminShowPatientsPageGetController().execute(req);
     }
 }

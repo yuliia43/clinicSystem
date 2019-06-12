@@ -17,6 +17,15 @@ public class ControllerFactory {
             case ("admin"): {
                 return new AdminPageGetController();
             }
+            case ("adminAdd"): {
+                return new AdminAddPatientsPageGetController();
+            }
+            case ("adminShowPatients"): {
+                return new AdminShowPatientsPageGetController();
+            }
+            case ("adminShowStaff"): {
+                return new AdminShowStaffPageGetController();
+            }
             case (""): {
                 return new MainPageGetController();
             }
@@ -51,8 +60,8 @@ public class ControllerFactory {
      */
     public static Controller choosePostMethodController(String uri) {
         switch (uri) {
-            case ("admin"): {
-                return new AdminPagePostController();
+            case ("adminAdd"): {
+                return new AdminAddPatientsPagePostController();
             }
             case ("authorisation"): {
                 return new AuthorisationPostController();

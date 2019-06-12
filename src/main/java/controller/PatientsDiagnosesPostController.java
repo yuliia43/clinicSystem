@@ -2,6 +2,7 @@ package controller;
 
 import commonlyUsedStrings.PageName;
 import converters.StringConverter;
+import exceptions.UnAuthorisedException;
 import models.Appointment;
 import models.AppointingTimeAndPerson;
 import models.ClinicStaff;
@@ -22,6 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +46,7 @@ public class PatientsDiagnosesPostController implements Controller {
      * @throws SQLException
      */
     @Override
-    public String execute(HttpServletRequest req) throws SQLException, UnsupportedEncodingException {
+    public String execute(HttpServletRequest req) throws SQLException, UnsupportedEncodingException, UnAuthorisedException {
         String method = req.getParameter("method");
         switch (method) {
             case ("delete_recommendation"): {
@@ -101,18 +103,26 @@ public class PatientsDiagnosesPostController implements Controller {
 
     private void addAppointment(HttpServletRequest req) throws UnsupportedEncodingException, SQLException {
         String details = StringConverter.convertToUTF8(req.getParameter("details"));
-        int num_days = Integer.parseInt(req.getParameter("num_days"), 10);
+        String numDays = req.getParameter("num_days");
         String[] times = req.getParameterValues("time");
-        int performerId = Integer.parseInt(req.getParameter("performerId"), 10);
-        int diagnosisId = Integer.parseInt(req.getParameter("diagnosisId"), 10);
+        int performerId = Integer.parseInt(req.getParameter("performerId"));
+        int diagnosisId = Integer.parseInt(req.getParameter("diagnosisId"));
         String type = req.getParameter("type");
-        Appointment appointment =
-                setAppointment(details, num_days, times, performerId, diagnosisId, type);
-        AddAppointmentTransactionService addAppointmentTransactionService = new AddAppointmentTransactionService();
-        boolean success = addAppointmentTransactionService.addAppointment(appointment);
-        if (success)
-            logger.info("Added appointment");
-        req.removeAttribute("openedMenu");
+        if(details.isEmpty() || numDays.isEmpty() || type.isEmpty() || times[0].isEmpty()){
+            String openedMenu = req.getParameter("openedMenu");
+            req.setAttribute("fail", openedMenu);
+            req.setAttribute("openedMenu", openedMenu);
+        }
+        else{
+            Appointment appointment =
+                    setAppointment(details,Integer.parseInt(numDays), times,
+                            performerId, diagnosisId, type);
+            AddAppointmentTransactionService addAppointmentTransactionService = new AddAppointmentTransactionService();
+            boolean success = addAppointmentTransactionService.addAppointment(appointment);
+            if (success)
+                logger.info("Added appointment");
+            req.removeAttribute("openedMenu");
+        }
     }
 
 
@@ -131,9 +141,14 @@ public class PatientsDiagnosesPostController implements Controller {
         for (int i = 1; i <= num_days; i++) {
             LocalDate date = LocalDate.now().plusDays(i);
             for (int j = 0; j < times.length; j++) {
-                LocalDateTime time = LocalTime.parse(times[j]).atDate(date);
-                Timestamp dateTime = Timestamp.from(time.atZone(ZoneId.systemDefault()).toInstant());
-                list.add(new AppointingTimeAndPerson(dateTime, performerId));
+                try{
+                    LocalDateTime time = LocalTime.parse(times[j]).atDate(date);
+                    Timestamp dateTime = Timestamp.from(time.atZone(ZoneId.systemDefault()).toInstant());
+                    list.add(new AppointingTimeAndPerson(dateTime, performerId));
+                }
+                catch (DateTimeParseException e){
+
+                }
             }
         }
         appointment.setSchedule(list);

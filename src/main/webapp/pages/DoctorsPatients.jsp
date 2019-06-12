@@ -58,7 +58,16 @@
                 <li class="table-row">
                     <div class="col" style="flex-basis: 15%"><c:out value="${patient.getSurname()}"/></div>
                     <div class="col" style="flex-basis: 15%"><c:out value="${patient.getName()}"/></div>
-                    <div class="col" style="flex-basis: 10%"><c:out value="${patient.getSex()}"/></div>
+                    <div class="col" style="flex-basis: 10%">
+                        <c:if test="${patient.getSex()=='m'.charAt(0)}">
+                            <img height="20px"
+                                 src="https://png2.kisspng.com/sh/d221684860fecb4dce0cd30c9758cc40/L0KzQYm3VcE2N6h9iZH0aYP2gLBuTfNwdaF6jNd7LXnmf7B6TgN6dZN0hJ8AYXblRYeBV8Jia5Q3SpCCMEW8Rom7VME2Omc5SqM6Mke0R4a6TwBvbz==/kisspng-computer-icons-symbol-5afb56872acc22.7059684415264211271753.png">
+                        </c:if>
+                        <c:if test="${patient.getSex()=='f'.charAt(0)}">
+                            <img height="20px"
+                                 src="https://png2.kisspng.com/sh/abe9e124adc2e44a6295447ec3a4e667/L0KzQYm3U8MxN6NqfZH0aYP2gLBuTfNwdaF6jNd7LXnmf7B6TfZmdZJxfZ9yY3BxPbXskBlodl58h99qbj3pdb7ojPUuPZJnfdUDZEbkSbaAgckvOGU8S6MCOUK0RYO5VMUzPmo5TqsAOT7zfri=/kisspng-computer-icons-female-icon-design-woman-female-5abec8d6a9e7a9.0473179215224526946959.png">
+                        </c:if>
+                    </div>
                     <div class="col" style="flex-basis: 30%"><c:out value="${patient.getBirthday_date()}"/></div>
                     <div class="col" style="flex-basis: 20%">
                         <button class="accept" style=" margin: 0px" name="patientId"
