@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="system" uri="../WEB-INF/tags/currentDate.tld" %>
 
 <jsp:include page='mainPage.jsp'/>
 <fmt:setLocale value="${locale}"/>
@@ -13,6 +14,7 @@
     <c:if test="${type eq 'operation'}"><fmt:message key="menu.myEvents.operations"/></c:if>
     <c:if test="${type eq 'procedure'}"><fmt:message key="menu.myEvents.procedures"/></c:if>
         <small><fmt:message key="hint.checkmark"/></small>
+        <span style="float: right; font-size: 15px; padding-top: 10px"><system:date/></span>
     </h3>
     <form method="post">
         <ul class="responsive-table">
@@ -26,7 +28,7 @@
             <c:forEach items="${schedules}" var="schedule">
                 <li class="table-row">
                     <div class="col" style="flex-basis: 10%">
-                        <input class="checkbox" type="checkbox" name="appointment" value="${schedule.getScheduleId()}">
+                        <input class="checkbox" type="checkbox" name="appointed" value="${schedule.getScheduleId()}">
                     </div>
                     <div class="col" style="flex-basis: 30%"><c:out value="${schedule.getDetails()}"/></div>
                     <div class="col" style="flex-basis: 30%"><c:out value="${schedule.getPatient()}"/></div>

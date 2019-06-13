@@ -57,6 +57,12 @@ public class DischargePatientTransaction {
             for (Appointment appointment : appointmentsToDelete) {
                 appointingScheduleService.cancelAppointed(appointment.getId());
             }
+            if(diagnoses == null || diagnoses.size() == 0){
+                connection.rollback();
+                connection.setAutoCommit(true);
+                logger.error("Transaction of discharging patient rolled back!");
+                return false;
+            }
             diagnoses.get(0).setFinal(true);
             diagnosisService.update(diagnoses.get(0));
             connection.commit();

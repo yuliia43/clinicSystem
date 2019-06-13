@@ -117,7 +117,7 @@
                     <div class="box" name="add_appointment" align="left"
                          style="display: ${openedMenu == loop.index ? 'inline' : 'none'};
                                  width: auto; position: absolute; z-index: 999; font-size: 20px;
-                                 right: 200px;">
+                                 right: 200px">
                         <form method="get" style="display: inline;">
                             <input type="hidden" value="${patient.getId()}" name="patientId">
                             <input type="hidden" value="${loop.index}" name="openedMenu">
