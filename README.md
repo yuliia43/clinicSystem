@@ -12,6 +12,6 @@ can be discharged from the hospital, with the final diagnosis fixation.
 2. Run script "TablesCreating.sql" to install database
 
 #### _Launching instructions:_
-2. Open project in IDE
-3. Set Configurations to run program in tomcat
-4. Build program
+1. Open project in IDE
+2. Set Configurations to run program in tomcat
+3. Build program
