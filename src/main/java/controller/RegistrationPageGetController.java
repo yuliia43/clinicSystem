@@ -1,5 +1,7 @@
 package controller;
 
+import commonlyUsedStrings.PageName;
+
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 
@@ -15,6 +17,6 @@ public class RegistrationPageGetController implements Controller {
      */
     @Override
     public String execute(HttpServletRequest request) throws SQLException {
-        return "pages/registration.jsp";
+        return PageName.REGISTRATION;
     }
 }

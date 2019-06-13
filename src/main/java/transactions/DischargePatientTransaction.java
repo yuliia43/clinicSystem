@@ -1,9 +1,9 @@
 package transactions;
 
-import models.Appointed;
+import models.Appointment;
 import models.Diagnosis;
 import org.apache.log4j.Logger;
-import services.AppointedService;
+import services.AppointmentService;
 import services.AppointingScheduleService;
 import services.DiagnosisService;
 
@@ -22,8 +22,8 @@ public class DischargePatientTransaction {
     private static final DiagnosisService diagnosisService = new DiagnosisService();
     private static final AppointingScheduleService appointingScheduleService =
             new AppointingScheduleService();
-    private static final AppointedService appointedService =
-            new AppointedService();
+    private static final AppointmentService APPOINTMENT_SERVICE =
+            new AppointmentService();
 
     /**
      *
@@ -45,17 +45,23 @@ public class DischargePatientTransaction {
      * @return
      * @throws SQLException
      */
-    public boolean execute(int patientId, Connection connection) throws SQLException {
+    public boolean execute(int patientId, int doctorId, Connection connection) throws SQLException {
         try {
             connection.setAutoCommit(false);
-            List<Diagnosis> diagnoses = diagnosisService.getAllLastDiagnosesForPatient(patientId);
-            List<Appointed> appointmentsToDelete = new ArrayList<>();
+            List<Diagnosis> diagnoses = diagnosisService.getAllLastDiagnosesForPatient(patientId, doctorId);
+            List<Appointment> appointmentsToDelete = new ArrayList<>();
             for (Diagnosis diagnosis :
                     diagnoses) {
-                appointmentsToDelete.addAll(appointedService.getAllByDiagnosisId(diagnosis.getId()));
+                appointmentsToDelete.addAll(APPOINTMENT_SERVICE.getAllByDiagnosisId(diagnosis.getId()));
             }
-            for (Appointed appointed : appointmentsToDelete) {
-                appointingScheduleService.cancelAppointed(appointed.getId());
+            for (Appointment appointment : appointmentsToDelete) {
+                appointingScheduleService.cancelAppointed(appointment.getId());
+            }
+            if(diagnoses == null || diagnoses.size() == 0){
+                connection.rollback();
+                connection.setAutoCommit(true);
+                logger.error("Transaction of discharging patient rolled back!");
+                return false;
             }
             diagnoses.get(0).setFinal(true);
             diagnosisService.update(diagnoses.get(0));

@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=utf-8" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <fmt:setLocale value="${locale}"/>
@@ -11,6 +11,8 @@
     <title>NoAppointments</title>
 </head>
 <body>
-<h1><fmt:message key="patient.appointments.list.empty"/>!</h1>
+<div class="glassBox">
+<h1 style="padding-top: 90px"><fmt:message key="patient.appointments.list.empty"/>!</h1>
+</div>
 </body>
 </html>

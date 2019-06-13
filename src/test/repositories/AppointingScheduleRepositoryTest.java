@@ -1,7 +1,6 @@
 package repositories;
 
-import commonlyUsedStrings.CommonlyUsedStrings;
-import enums.AppointedTypes;
+import commonlyUsedStrings.ExceptionMessage;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -38,9 +37,9 @@ public class AppointingScheduleRepositoryTest {
             when(preparedStatement.executeQuery()).thenReturn(resultSet);
             repository.searchScheduleForToday(0, "", connection);
         }catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         } catch (NullPointerException e) {
-            fail(CommonlyUsedStrings.TESTING_NPE);
+            fail(ExceptionMessage.TESTING_NPE);
         }
     }
 
@@ -50,9 +49,9 @@ public class AppointingScheduleRepositoryTest {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             repository.doAppointment(anyInt(), connection);
         }catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         } catch (NullPointerException e) {
-            fail(CommonlyUsedStrings.TESTING_NPE);
+            fail(ExceptionMessage.TESTING_NPE);
         }
     }
 
@@ -62,9 +61,9 @@ public class AppointingScheduleRepositoryTest {
             when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
             repository.cancelAppointed(anyInt(), connection);
         }catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         } catch (NullPointerException e) {
-            fail(CommonlyUsedStrings.TESTING_NPE);
+            fail(ExceptionMessage.TESTING_NPE);
         }
     }
 }

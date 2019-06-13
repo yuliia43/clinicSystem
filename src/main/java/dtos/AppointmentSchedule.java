@@ -7,7 +7,7 @@ import java.sql.Time;
  * @author Yullia Shcherbakova
  * @project final
  */
-public class AppointedSchedule {
+public class AppointmentSchedule {
     private int scheduleId;
     private int performerId;
     private Time pursuanceTime;
@@ -21,7 +21,7 @@ public class AppointedSchedule {
      * @param details
      * @param patient
      */
-    public AppointedSchedule(int scheduleId, int performerId, Time pursuanceTime, String details, String patient) {
+    public AppointmentSchedule(int scheduleId, int performerId, Time pursuanceTime, String details, String patient) {
         this.scheduleId = scheduleId;
         this.performerId = performerId;
         this.pursuanceTime = pursuanceTime;
@@ -32,7 +32,7 @@ public class AppointedSchedule {
     /**
      *
      */
-    public AppointedSchedule() {
+    public AppointmentSchedule() {
     }
 
     /**

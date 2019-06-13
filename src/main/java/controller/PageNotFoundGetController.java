@@ -1,5 +1,7 @@
 package controller;
 
+import commonlyUsedStrings.PageName;
+
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 
@@ -16,6 +18,6 @@ public class PageNotFoundGetController implements Controller {
      */
     @Override
     public String execute(HttpServletRequest request) throws SQLException {
-        return "errorPages/404.jsp";
+        return PageName.NOT_FOUND_ERROR;
     }
 }

@@ -1,7 +1,7 @@
 package services;
 
-import dtos.AppointedSchedule;
-import enums.AppointedTypes;
+import dtos.AppointmentSchedule;
+import enums.AppointmentTypes;
 import repositories.AppointingScheduleRepository;
 
 import java.sql.Connection;
@@ -22,7 +22,7 @@ public class AppointingScheduleService extends Service {
      * @return
      * @throws SQLException
      */
-    public List<AppointedSchedule> searchScheduleForToday(int performerId, AppointedTypes type) throws SQLException {
+    public List<AppointmentSchedule> searchScheduleForToday(int performerId, AppointmentTypes type) throws SQLException {
         try (Connection connection = receiveConnection()) {
             String typeString = type.toString().toLowerCase();
             return appointingScheduleRepository

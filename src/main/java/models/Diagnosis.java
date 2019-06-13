@@ -14,7 +14,7 @@ public class Diagnosis {
     private int doctorId;
     private Date setDate;
     private boolean isFinal;
-    private List<Appointed> recommendations;
+    private List<Appointment> recommendations;
 
 
     /**
@@ -125,14 +125,14 @@ public class Diagnosis {
     /**
      * @return
      */
-    public List<Appointed> getRecommendations() {
+    public List<Appointment> getRecommendations() {
         return recommendations;
     }
 
     /**
      * @param recommendations
      */
-    public void setRecommendations(List<Appointed> recommendations) {
+    public void setRecommendations(List<Appointment> recommendations) {
         this.recommendations = recommendations;
     }
 

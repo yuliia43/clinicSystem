@@ -1,7 +1,8 @@
 package controller;
 
-import dtos.AppointedSchedule;
-import enums.AppointedTypes;
+import commonlyUsedStrings.PageName;
+import dtos.AppointmentSchedule;
+import enums.AppointmentTypes;
 import factories.AppointmentsFactory;
 import models.ClinicStaff;
 import services.AppointingScheduleService;
@@ -28,26 +29,26 @@ public class AppointmentGetController implements Controller {
     public String execute(HttpServletRequest req) throws SQLException {
         ClinicStaff clinicStaff = (ClinicStaff) req.getSession().getAttribute("user");
         String type = req.getParameter("type");
-        AppointedTypes appointedType = AppointmentsFactory.getAppointmentType(type);
-        if (!clinicStaff.getTitle().equals("doctor") && appointedType == AppointedTypes.OPERATION) {
-            return "errorPages/accessError.jsp";
+        AppointmentTypes appointedType = AppointmentsFactory.getAppointmentType(type);
+        if (!clinicStaff.getTitle().equals("doctor") && appointedType == AppointmentTypes.OPERATION) {
+            return PageName.ACCESS_ERROR;
         } else {
             int performerId = clinicStaff.getId();
-            List<AppointedSchedule> appointedSchedules = appointingScheduleService
+            List<AppointmentSchedule> appointmentSchedules = appointingScheduleService
                     .searchScheduleForToday(performerId, appointedType);
-            if (appointedSchedules.size() == 0) {
-                return "pages/emptyAppointmentsList.jsp";
+            if (appointmentSchedules.size() == 0) {
+                return PageName.EMPTY_APPOINTMENTS;
             } else {
                 int startingIndex = (int) req.getAttribute("startIdx");
                 int endIdx = (int) req.getAttribute("endIdx");
-                if(appointedSchedules.size()-startingIndex<=10){
+                if(appointmentSchedules.size()-startingIndex<=10){
                     req.setAttribute("endOfList", true);
-                    endIdx = appointedSchedules.size();
+                    endIdx = appointmentSchedules.size();
                 }
-                appointedSchedules = appointedSchedules.subList(startingIndex, endIdx);
-                req.setAttribute("schedules", appointedSchedules);
+                appointmentSchedules = appointmentSchedules.subList(startingIndex, endIdx);
+                req.setAttribute("schedules", appointmentSchedules);
                 req.setAttribute("type", type);
-                return "pages/appointments.jsp";
+                return PageName.APPOINTMENTS;
 
             }
         }

@@ -1,11 +1,14 @@
 package controller;
 
+import commonlyUsedStrings.PageName;
+import converters.StringConverter;
 import dtos.ClinicStaffWithPasswords;
 import org.apache.log4j.Logger;
 import services.ClinicStaffService;
 import servlets.DispatcherServlet;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 
 /**
@@ -24,7 +27,7 @@ public class RegistrationPagePostController implements Controller {
      * @throws SQLException
      */
     @Override
-    public String execute(HttpServletRequest req) throws SQLException {
+    public String execute(HttpServletRequest req) throws SQLException, UnsupportedEncodingException {
         String name = req.getParameter("firstName");
         String surname = req.getParameter("lastName");
         String email = req.getParameter("email");
@@ -32,21 +35,21 @@ public class RegistrationPagePostController implements Controller {
         String password = req.getParameter("password");
         if (!password.equals(req.getParameter("confirmedPassword"))) {
             req.setAttribute("notEqual", true);
-            return "pages/registration.jsp";
+            return PageName.REGISTRATION;
         } else if (name.isEmpty() || surname.isEmpty() || email.isEmpty()
                 || title == null || password.isEmpty()) {
             req.setAttribute("fail", true);
-            return "pages/registration.jsp";
+            return PageName.REGISTRATION;
         } else {
             ClinicStaffWithPasswords clinicStaff = new ClinicStaffWithPasswords();
-            clinicStaff.setName(name);
-            clinicStaff.setSurname(surname);
+            clinicStaff.setName(StringConverter.convertToUTF8(name));
+            clinicStaff.setSurname(StringConverter.convertToUTF8(surname));
             clinicStaff.setTitle(title);
-            clinicStaff.setEmail(email);
-            clinicStaff.setPassword(password);
+            clinicStaff.setEmail(StringConverter.convertToUTF8(email));
+            clinicStaff.setPassword(StringConverter.convertToUTF8(password));
             clinicStaffService.add(clinicStaff);
             logger.info("Clinic staff " + name + " " + surname + " added");
-            return "pages/successfulRegistration.jsp";
+            return PageName.SUCCESSFUL_REGISTRATION;
         }
     }
 }

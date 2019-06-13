@@ -48,7 +48,7 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
      */
     private void addItem(Diagnosis item, Connection connection) throws SQLException {
         String sqlAddDiagnosis = "INSERT INTO " +
-                "diagnosis(patient_card_id, doctor_id, diagnosis, is_final_diagnosis, set_date)" +
+                "diagnosis(patient_card_id, doctor_id, diagnosis, is_final_diagnosis, set_date) " +
                 "VALUES(?, ? , ?, false, CURDATE());";
         PreparedStatement statement = connection.prepareStatement(sqlAddDiagnosis);
         statement.setInt(1, item.getCardId());
@@ -197,14 +197,20 @@ public class DiagnosisRepository implements Repository<Diagnosis> {
      * @return
      * @throws SQLException
      */
-    public List<Diagnosis> getAllLastDiagnosesForPatient(int patientId, Connection connection) throws SQLException {
-        String sqlSelect = "SELECT * FROM diagnosis WHERE patient_card_id = ? " +
-                "and (diagnosis_id > (SELECT MAX(diagnosis_id) FROM diagnosis " +
-                "WHERE patient_card_id = ? and is_final_diagnosis = 1) or diagnosis_id>0)" +
-                "Order by diagnosis_id desc;";
+    public List<Diagnosis> getAllLastDiagnosesByPatientIdAndDoctorId(int patientId, int doctorId, Connection connection) throws SQLException {
+        String sqlSelect = "SELECT * FROM diagnosis WHERE patient_card_id = ? and doctor_id=?\n" +
+                "                and diagnosis_id > (SELECT MAX(diagnosis_id) FROM diagnosis \n" +
+                "                WHERE patient_card_id = ? and is_final_diagnosis = 1) \n" +
+                "UNION\n" +
+                "SELECT * FROM diagnosis WHERE patient_card_id = ? and doctor_id=?\n" +
+                "                GROUP BY patient_card_id HAVING SUM(is_final_diagnosis) = 0\n" +
+                "                Order by diagnosis_id desc;";
         PreparedStatement preparedStatement = connection.prepareStatement(sqlSelect);
         preparedStatement.setInt(1, patientId);
-        preparedStatement.setInt(2, patientId);
+        preparedStatement.setInt(2, doctorId);
+        preparedStatement.setInt(3, patientId);
+        preparedStatement.setInt(4, patientId);
+        preparedStatement.setInt(5, doctorId);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<Diagnosis> diagnoses = getDiagnosis(resultSet);
         return diagnoses;

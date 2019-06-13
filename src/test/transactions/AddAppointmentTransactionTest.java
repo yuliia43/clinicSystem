@@ -1,7 +1,7 @@
 package transactions;
 
-import commonlyUsedStrings.CommonlyUsedStrings;
-import models.Appointed;
+import commonlyUsedStrings.ExceptionMessage;
+import models.Appointment;
 import models.AppointingTimeAndPerson;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,14 +44,14 @@ public class AddAppointmentTransactionTest {
             when(resultSet.getInt(2)).thenReturn(1);
             when(resultSet.getString(3)).thenReturn("type");
             when(resultSet.getString(4)).thenReturn("details");
-            Appointed appointed = new Appointed();
-            appointed.setSchedule(new ArrayList<AppointingTimeAndPerson>());
-            transactionApplier.execute(appointed, connection);
+            Appointment appointment = new Appointment();
+            appointment.setSchedule(new ArrayList<AppointingTimeAndPerson>());
+            transactionApplier.execute(appointment, connection);
         } catch (SQLException e) {
-            fail(CommonlyUsedStrings.TESTING_SQL_EXCEPTION);
+            fail(ExceptionMessage.TESTING_SQL_EXCEPTION);
         }
         catch (NullPointerException e){
-            fail(CommonlyUsedStrings.TESTING_NPE);
+            fail(ExceptionMessage.TESTING_NPE);
         }
     }
 }

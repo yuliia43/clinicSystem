@@ -1,5 +1,8 @@
 package controller;
 
+import commonlyUsedStrings.PageName;
+import exceptions.UnAuthorisedException;
+import exceptions.Validator;
 import models.ClinicStaff;
 import models.PatientCard;
 import services.PatientCardsService;
@@ -21,18 +24,17 @@ public class PatientsGetController implements Controller {
      * @throws SQLException
      */
     @Override
-    public String execute(HttpServletRequest req) throws SQLException {
+    public String execute(HttpServletRequest req) throws SQLException, UnAuthorisedException {
         ClinicStaff staff = (ClinicStaff) req.getSession().getAttribute("user");
+        Validator.checkIfAuthorised(staff);
         if (staff.getTitle().equals("doctor")) {
-            List<PatientCard> allPatients = patientCardsService.getAll();
-            if(allPatients.size() == 0)
-                return "pages/noPatients.jsp";
+            List<PatientCard> allPatients = patientCardsService.getAllExceptDoctorsPatients(staff.getId());
             req.setAttribute("allPatients", allPatients);
             List<PatientCard> cards = patientCardsService.getAllByDoctorId(staff.getId());
             req.setAttribute("doctorsPatients", cards);
-            return "pages/DoctorsPatients.jsp";
+            return PageName.DOCTORS_PATIENTS;
         } else {
-            return "errorPages/accessError.jsp";
+            return PageName.ACCESS_ERROR;
         }
     }
 }

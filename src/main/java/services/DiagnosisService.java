@@ -1,8 +1,8 @@
 package services;
 
-import models.Appointed;
+import models.Appointment;
 import models.Diagnosis;
-import repositories.AppointedRepository;
+import repositories.AppointmentRepository;
 import repositories.DiagnosisRepository;
 
 import java.sql.Connection;
@@ -16,22 +16,22 @@ import java.util.List;
 public class DiagnosisService extends Service {
     private static final DiagnosisRepository diagnosisRepository =
             DiagnosisRepository.getDiagnosisRepository();
-    private static final AppointedRepository appointedRepository =
-            AppointedRepository.getAppointedRepository();
+    private static final AppointmentRepository APPOINTMENT_REPOSITORY =
+            AppointmentRepository.getAppointmentRepository();
 
     /**
      * @param patientId
      * @return
      * @throws SQLException
      */
-    public List<Diagnosis> getDiagnosisForPatient(int patientId) throws SQLException {
+    public List<Diagnosis> getDiagnosisForPatient(int patientId, int doctorId) throws SQLException {
         try (Connection connection = receiveConnection()) {
             List<Diagnosis> diagnoses = diagnosisRepository
-                    .getAllLastDiagnosesForPatient(patientId, connection);
+                    .getAllLastDiagnosesByPatientIdAndDoctorId(patientId, doctorId, connection);
             for (Diagnosis diagnosis : diagnoses) {
-                List<Appointed> appointeds = appointedRepository
+                List<Appointment> appointments = APPOINTMENT_REPOSITORY
                         .getAllByDiagnosisId(diagnosis.getId(), connection);
-                diagnosis.setRecommendations(appointeds);
+                diagnosis.setRecommendations(appointments);
             }
             return diagnoses;
         }
@@ -53,9 +53,9 @@ public class DiagnosisService extends Service {
      * @return
      * @throws SQLException
      */
-    public List<Diagnosis> getAllLastDiagnosesForPatient(int patientId) throws SQLException {
+    public List<Diagnosis> getAllLastDiagnosesForPatient(int patientId, int doctorId) throws SQLException {
         try (Connection connection = receiveConnection()) {
-            return diagnosisRepository.getAllLastDiagnosesForPatient(patientId, connection);
+            return diagnosisRepository.getAllLastDiagnosesByPatientIdAndDoctorId(patientId, doctorId, connection);
         }
     }
 

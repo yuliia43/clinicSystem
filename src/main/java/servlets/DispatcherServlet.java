@@ -1,6 +1,8 @@
 package servlets;
 
+import commonlyUsedStrings.PageName;
 import controller.Controller;
+import exceptions.UnAuthorisedException;
 import factories.ControllerFactory;
 import org.apache.log4j.Logger;
 
@@ -31,7 +33,10 @@ public class DispatcherServlet extends HttpServlet {
             page = controller.execute(req);
         } catch (SQLException e) {
             logger.error("Sql error occured!");
-            page = "errorPages/SQlError.jsp";
+            page = PageName.SQL_ERROR;
+        }
+        catch (UnAuthorisedException e){
+            page = PageName.NOT_AUTHORISED_ERROR;
         }
         req.getRequestDispatcher(page)
                 .forward(req, resp);

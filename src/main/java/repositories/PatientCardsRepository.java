@@ -177,14 +177,36 @@ public class PatientCardsRepository implements Repository<PatientCard> {
      */
     public List<PatientCard> getAllByDoctorId(int id, Connection connection) throws SQLException {
         String sqlSearchPatients = "SELECT * FROM patients_cards WHERE patient_card_id in\n" +
-                " (SELECT  patient_card_id  FROM diagnosis WHERE doctor_id = ? and is_final_diagnosis = 0\n" +
-                " and diagnosis_id in (Select MAX(diagnosis_id) FROM  diagnosis GROUP BY(patient_card_id)));\n";
+                "(SELECT patient_card_id FROM diagnosis WHERE doctor_id = ? and diagnosis_id in (\n" +
+                "SELECT MAX(diagnosis_id) FROM diagnosis WHERE doctor_id = ? GROUP BY(patient_card_id))\n" +
+                "AND is_final_diagnosis=0);";
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlSearchPatients);
+        preparedStatement.setInt(1, id);
+        preparedStatement.setInt(2, id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<PatientCard> patientCards = getPatientCards(resultSet);
+        return patientCards;
+    }
+
+    /**
+     * @param id
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
+    public List<PatientCard> getAllExceptDoctorsPatients(int id, Connection connection) throws SQLException {
+        String sqlSearchPatients = "SELECT * FROM patients_cards\n" +
+                "WHERE patient_card_id NOT IN(SELECT patient_card_id FROM patients_cards WHERE patient_card_id in\n" +
+                "(SELECT patient_card_id FROM diagnosis WHERE diagnosis_id in (\n" +
+                "SELECT MAX(diagnosis_id) FROM diagnosis WHERE doctor_id = ? GROUP BY(patient_card_id))\n" +
+                "AND is_final_diagnosis=0));";
         PreparedStatement preparedStatement = connection.prepareStatement(sqlSearchPatients);
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<PatientCard> patientCards = getPatientCards(resultSet);
         return patientCards;
     }
+
 
     /**
      * @param id
